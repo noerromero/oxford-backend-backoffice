@@ -1,0 +1,29 @@
+export class StudentFileDto {
+  public studentFileId: string = ""; 
+  public studentId: string = "";
+  public studentDni: string = "";
+  public studentName: string = "";
+  public studentSurname: string = "";
+  public studentSecondSurname: string = "";
+  public studentEmail: string = "";
+  public studentPhone: string = "";
+  public studentBirthdate: string = "";
+  public studentCellphone: string = "";
+  public addressId: string = "";
+  public addressStreet: string = "";
+  public addressNeighborhood: string = "";
+  public addressCity: string = "";
+  public addressState: string = "";
+  public addressReference: string = "";
+  public academicInstitution: string = "";
+  public workplace: string = "";
+  public isOtherEnglishCertification: boolean = false;
+  public englishCertification: string = "";
+  public comment: string = "";
+  public legalRepresentativeId: string = "";
+  public legalRepresentativeName: string = "";
+  public legalRepresentativeSurname: string = "";
+  public legalRepresentativeSecondSurname: string = "";
+  public legalRepresentativePhone: string = "";
+  public legalRepresentativeCellphone: string = "";
+}
