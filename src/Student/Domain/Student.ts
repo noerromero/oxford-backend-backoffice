@@ -6,10 +6,14 @@ import { Phone } from "../../Shared/Domain/ValueObject/PersonalData/Phone";
 import { Birthdate } from "../../Shared/Domain/ValueObject/PersonalData/Birthdate";
 import { Cellphone } from "../../Shared/Domain/ValueObject/PersonalData/Cellphone";
 import { Address } from "./Address";
-import { EntityBase } from "../../Shared/Domain/EntityBase";
 import { Uuid } from "../../Shared/Domain/ValueObject/Primitives/Uuid";
+import { AggregateRoot } from "../../Shared/Domain/AggregateRoot";
+import { IStudentRepository } from "./IStudentRepository";
+import { DomainResponse } from "../../Shared/Domain/DomainResponse";
+import { LegalRepresentative } from "./LegalRepresentative";
+import { StudentFile } from "./StudentFile";
 
-export class Student extends EntityBase<Uuid> {
+export class Student extends AggregateRoot<Uuid> {
   protected dni: PersonId;
   protected name: FirstName;
   protected surname: Surname;
@@ -19,8 +23,11 @@ export class Student extends EntityBase<Uuid> {
   protected birthdate: Birthdate;
   protected cellphone: Cellphone;
   protected address: Address;
+  protected legalRepresentative: LegalRepresentative;
+  protected studentFile: StudentFile;
 
   constructor(
+    repository: IStudentRepository,
     id: Uuid,
     dni: PersonId,
     name: FirstName,
@@ -30,9 +37,11 @@ export class Student extends EntityBase<Uuid> {
     phone: Phone,
     birthdate: Birthdate,
     cellphone: Cellphone,
-    address: Address
+    address: Address,
+    legalRepresentative: LegalRepresentative,
+    studentFile: StudentFile
   ) {
-    super(id);
+    super(repository, id);
     this.dni = dni;
     this.name = name;
     this.surname = surname;
@@ -42,6 +51,8 @@ export class Student extends EntityBase<Uuid> {
     this.birthdate = birthdate;
     this.cellphone = cellphone;
     this.address = address;
+    this.legalRepresentative = legalRepresentative;
+    this.studentFile = studentFile;
     this.recoveryDomainErrors();
   }
 
@@ -55,5 +66,12 @@ export class Student extends EntityBase<Uuid> {
     this.addDomainErrors(this.birthdate.getDomainErrors());
     this.addDomainErrors(this.cellphone.getDomainErrors());
     this.addDomainErrors(this.address.getDomainErrors());
+    this.addDomainErrors(this.legalRepresentative.getDomainErrors());
+    this.addDomainErrors(this.studentFile.getDomainErrors());
+  }
+
+  protected async handleSave(): Promise<DomainResponse> {
+    await this.repository.save(this);
+    return new DomainResponse(true, []);
   }
 }

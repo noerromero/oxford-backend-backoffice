@@ -1,5 +1,5 @@
-export class StudentFileDto {
-  public studentFileId: string = ""; 
+export class StudentDto {
+  public studentFileId: string = "";
   public studentId: string = "";
   public studentDni: string = "";
   public studentName: string = "";

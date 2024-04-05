@@ -2,14 +2,14 @@ import { DomainResponse } from "../../Shared/Domain/DomainResponse";
 import { PersonId } from "../../Shared/Domain/ValueObject/PersonalData/PersonId";
 import { FirstName } from "../../Shared/Domain/ValueObject/PersonalData/FirstName";
 import { Student } from "../Domain/Student";
-import { IStudentFileRepository } from "../Domain/IStudentFileRepository";
+import { IStudentRepository } from "../Domain/IStudentRepository";
 import { Surname } from "../../Shared/Domain/ValueObject/PersonalData/Surname";
 import { Email } from "../../Shared/Domain/ValueObject/PersonalData/Email";
 import { Phone } from "../../Shared/Domain/ValueObject/PersonalData/Phone";
 import { Birthdate } from "../../Shared/Domain/ValueObject/PersonalData/Birthdate";
 import { Cellphone } from "../../Shared/Domain/ValueObject/PersonalData/Cellphone";
 import { Address } from "../Domain/Address";
-import { StudentFileDto } from "./Dto/StudentFileDto";
+import { StudentDto } from "./Dto/StudentDto";
 import { Street } from "../../Shared/Domain/ValueObject/Address/Street";
 import { Neighborhood } from "../../Shared/Domain/ValueObject/Address/Neighborhood";
 import { City } from "../../Shared/Domain/ValueObject/Address/City";
@@ -23,15 +23,36 @@ import { Comment } from "../Domain/ValueObject/Comment";
 import { LegalRepresentative } from "../Domain/LegalRepresentative";
 import { Uuid } from "../../Shared/Domain/ValueObject/Primitives/Uuid";
 
-export class StudentFileCreator {
-  private repository: IStudentFileRepository;
+export class StudentCreator {
+  private repository: IStudentRepository;
 
-  constructor(repository: IStudentFileRepository) {
+  constructor(repository: IStudentRepository) {
     this.repository = repository;
   }
 
-  async run(studentFileDto: StudentFileDto): Promise<DomainResponse> {
+  async run(studentFileDto: StudentDto): Promise<DomainResponse> {
+    const legalRepresentative = new LegalRepresentative(
+      new Uuid(studentFileDto.legalRepresentativeId),
+      new FirstName(studentFileDto.legalRepresentativeName),
+      new Surname(studentFileDto.legalRepresentativeSurname),
+      new Surname(studentFileDto.legalRepresentativeSecondSurname, true),
+      new Phone(studentFileDto.legalRepresentativePhone, true),
+      new Cellphone(studentFileDto.legalRepresentativeCellphone, true)
+    );
+
+    const studentFile = new StudentFile(
+      new Uuid(studentFileDto.studentFileId),
+      new AcademicInstitution(studentFileDto.academicInstitution),
+      new Workplace(studentFileDto.workplace),
+      new EnglishCertification(
+        studentFileDto.englishCertification,
+        studentFileDto.isOtherEnglishCertification
+      ),
+      new Comment(studentFileDto.comment)
+    );
+
     const student = new Student(
+      this.repository,
       new Uuid(studentFileDto.studentId),
       new PersonId(studentFileDto.studentDni),
       new FirstName(studentFileDto.studentName),
@@ -48,32 +69,10 @@ export class StudentFileCreator {
         new City(studentFileDto.addressCity),
         new State(studentFileDto.addressState),
         new Reference(studentFileDto.addressReference, true)
-      )
-    );
-
-    const legalRepresentative = new LegalRepresentative(
-      new Uuid(studentFileDto.legalRepresentativeId),
-      new FirstName(studentFileDto.legalRepresentativeName),
-      new Surname(studentFileDto.legalRepresentativeSurname),
-      new Surname(studentFileDto.legalRepresentativeSecondSurname, true),
-      new Phone(studentFileDto.legalRepresentativePhone, true),
-      new Cellphone(studentFileDto.legalRepresentativeCellphone, true)
-    );
-
-    const studentFile = new StudentFile(
-      this.repository,
-      new Uuid(studentFileDto.studentFileId),
-      student,
-      legalRepresentative,
-      new AcademicInstitution(studentFileDto.academicInstitution),
-      new Workplace(studentFileDto.workplace),
-      new EnglishCertification(
-        studentFileDto.englishCertification,
-        studentFileDto.isOtherEnglishCertification
       ),
-      new Comment(studentFileDto.comment)
+      legalRepresentative,
+      studentFile
     );
-
-    return await studentFile.save();
+    return await student.save();
   }
 }

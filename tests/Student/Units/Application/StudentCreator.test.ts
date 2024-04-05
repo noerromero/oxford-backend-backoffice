@@ -1,17 +1,17 @@
-import { StudentFileDto } from "../../../../src/Student/Application/Dto/StudentFileDto";
-import { StudentFileCreator } from "../../../../src/Student/Application/StudentFileCreator";
+import { StudentDto } from "../../../../src/Student/Application/Dto/StudentDto";
+import { StudentCreator } from "../../../../src/Student/Application/StudentCreator";
 import { Uuid } from "../../../../src/Shared/Domain/ValueObject/Primitives/Uuid";
 
 describe("StudentFileCreator", () => {
   let studentRepository = { save: jest.fn() };
-  let studentFileCreator: StudentFileCreator;
+  let studentFileCreator: StudentCreator;
 
   beforeEach(() => {
-    studentFileCreator = new StudentFileCreator(studentRepository as any);
+    studentFileCreator = new StudentCreator(studentRepository as any);
   });
 
-  let studentFileDto = new StudentFileDto();
-  studentFileDto = {
+  let studentDto = new StudentDto();
+  studentDto = {
     studentFileId: Uuid.random().toString(),
     studentId: Uuid.random().toString(),
     studentDni: "12345678",
@@ -42,7 +42,7 @@ describe("StudentFileCreator", () => {
   };
 
   test("with all the correct data it should response successfully", () => {
-    let response = studentFileCreator.run(studentFileDto);
+    let response = studentFileCreator.run(studentDto);
 
     response.then((response) => {
       expect(response.success).toBe(true);
@@ -52,7 +52,7 @@ describe("StudentFileCreator", () => {
   });
 
   test("with incorrect dni it should response with an error", () => {
-    let studentFileDtoCopy = structuredClone(studentFileDto);
+    let studentFileDtoCopy = structuredClone(studentDto);
     studentFileDtoCopy.studentDni = "1234567";
 
     let response = studentFileCreator.run(studentFileDtoCopy);
@@ -67,7 +67,7 @@ describe("StudentFileCreator", () => {
   });
 
   test("with incorrect email it should response with an error", () => {
-    let studentFileDtoCopy = structuredClone(studentFileDto);
+    let studentFileDtoCopy = structuredClone(studentDto);
     studentFileDtoCopy.studentEmail = "jhon.smithgmail.com";
 
     let response = studentFileCreator.run(studentFileDtoCopy);
@@ -82,7 +82,7 @@ describe("StudentFileCreator", () => {
   });
 
   test("with incorrect birthdate it should response with an error", () => {
-    let studentFileDtoCopy = structuredClone(studentFileDto);
+    let studentFileDtoCopy = structuredClone(studentDto);
     studentFileDtoCopy.studentBirthdate = "2019-13-01";
 
     let response = studentFileCreator.run(studentFileDtoCopy);
@@ -95,7 +95,7 @@ describe("StudentFileCreator", () => {
   });
 
   test("with incorrect cellphone it should response with an error", () => {
-    let studentFileDtoCopy = structuredClone(studentFileDto);
+    let studentFileDtoCopy = structuredClone(studentDto);
     studentFileDtoCopy.studentCellphone = "12345";
 
     let response = studentFileCreator.run(studentFileDtoCopy);
@@ -110,7 +110,7 @@ describe("StudentFileCreator", () => {
   });
 
   test("with incorrect english certification it should response with an error", () => {
-    let studentFileDtoCopy = structuredClone(studentFileDto);
+    let studentFileDtoCopy = structuredClone(studentDto);
     studentFileDtoCopy.englishCertification = "TOEFL";
     studentFileDtoCopy.isOtherEnglishCertification = false;
 
