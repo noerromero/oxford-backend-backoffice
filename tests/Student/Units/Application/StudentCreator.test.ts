@@ -124,4 +124,28 @@ describe("StudentFileCreator", () => {
       expect(studentRepository.save).toHaveBeenCalled();
     });
   });
+
+  test("with more than one error it should response with all the errors", () => {
+    let studentFileDtoCopy = structuredClone(studentDto);
+    studentFileDtoCopy.studentDni = "1234567";
+    studentFileDtoCopy.studentEmail = "jhon.smithgmail.com";
+    studentFileDtoCopy.studentBirthdate = "2019-13-01";
+    studentFileDtoCopy.studentCellphone = "12345";
+    studentFileDtoCopy.studentEnglishCertification = "TOEFL";
+    studentFileDtoCopy.studentIsOtherEnglishCertification = false;
+
+    let response = studentFileCreator.run(studentFileDtoCopy);
+
+    response.then((response) => {
+      expect(response.success).toBe(false);
+      expect(response.data).toEqual([
+        `Person ID ${studentFileDtoCopy.studentDni} is invalid`,
+        `Email ${studentFileDtoCopy.studentEmail} is invalid`,
+        `Invalid birthdate format`,
+        `Cellphone ${studentFileDtoCopy.studentCellphone} is invalid`,
+        "English certification value is not valid",
+      ]);
+      expect(studentRepository.save).toHaveBeenCalled();
+    });
+  });
 });
