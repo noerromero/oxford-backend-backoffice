@@ -1,4 +1,4 @@
-export class StudentDto {
+export class StudentCreateDto {
   public studentFileId: string = "";
   public studentId: string = "";
   public studentDni: string = "";
@@ -9,17 +9,17 @@ export class StudentDto {
   public studentPhone: string = "";
   public studentBirthdate: string = "";
   public studentCellphone: string = "";
-  public addressId: string = "";
-  public addressStreet: string = "";
-  public addressNeighborhood: string = "";
-  public addressCity: string = "";
-  public addressState: string = "";
-  public addressReference: string = "";
-  public academicInstitution: string = "";
-  public workplace: string = "";
-  public isOtherEnglishCertification: boolean = false;
-  public englishCertification: string = "";
-  public comment: string = "";
+  public studentAddressId: string = "";
+  public studentAddressStreet: string = "";
+  public studentAddressNeighborhood: string = "";
+  public studentAddressCity: string = "";
+  public studentAddressState: string = "";
+  public studentAddressReference: string = "";
+  public studentAcademicInstitution: string = "";
+  public studentWorkplace: string = "";
+  public studentIsOtherEnglishCertification: boolean = false;
+  public studentEnglishCertification: string = "";
+  public studentComment: string = "";
   public legalRepresentativeId: string = "";
   public legalRepresentativeName: string = "";
   public legalRepresentativeSurname: string = "";

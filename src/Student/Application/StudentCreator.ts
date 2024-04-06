@@ -9,7 +9,7 @@ import { Phone } from "../../Shared/Domain/ValueObject/PersonalData/Phone";
 import { Birthdate } from "../../Shared/Domain/ValueObject/PersonalData/Birthdate";
 import { Cellphone } from "../../Shared/Domain/ValueObject/PersonalData/Cellphone";
 import { Address } from "../Domain/Address";
-import { StudentDto } from "./Dto/StudentDto";
+import { StudentCreateDto } from "./Dto/StudentCreateDto";
 import { Street } from "../../Shared/Domain/ValueObject/Address/Street";
 import { Neighborhood } from "../../Shared/Domain/ValueObject/Address/Neighborhood";
 import { City } from "../../Shared/Domain/ValueObject/Address/City";
@@ -30,46 +30,48 @@ export class StudentCreator {
     this.repository = repository;
   }
 
-  async run(studentFileDto: StudentDto): Promise<DomainResponse> {
+  async run(studentCreateDto: StudentCreateDto): Promise<DomainResponse> {
     const legalRepresentative = new LegalRepresentative(
-      new Uuid(studentFileDto.legalRepresentativeId),
-      new FirstName(studentFileDto.legalRepresentativeName),
-      new Surname(studentFileDto.legalRepresentativeSurname),
-      new Surname(studentFileDto.legalRepresentativeSecondSurname, true),
-      new Phone(studentFileDto.legalRepresentativePhone, true),
-      new Cellphone(studentFileDto.legalRepresentativeCellphone, true)
+      new Uuid(studentCreateDto.legalRepresentativeId),
+      new FirstName(studentCreateDto.legalRepresentativeName),
+      new Surname(studentCreateDto.legalRepresentativeSurname),
+      new Surname(studentCreateDto.legalRepresentativeSecondSurname, true),
+      new Phone(studentCreateDto.legalRepresentativePhone, true),
+      new Cellphone(studentCreateDto.legalRepresentativeCellphone, true)
     );
 
     const studentFile = new StudentFile(
-      new Uuid(studentFileDto.studentFileId),
-      new AcademicInstitution(studentFileDto.academicInstitution),
-      new Workplace(studentFileDto.workplace),
+      new Uuid(studentCreateDto.studentFileId),
+      new AcademicInstitution(studentCreateDto.studentAcademicInstitution),
+      new Workplace(studentCreateDto.studentWorkplace),
       new EnglishCertification(
-        studentFileDto.englishCertification,
-        studentFileDto.isOtherEnglishCertification
+        studentCreateDto.studentEnglishCertification,
+        studentCreateDto.studentIsOtherEnglishCertification
       ),
-      new Comment(studentFileDto.comment)
+      new Comment(studentCreateDto.studentComment)
+    );
+
+    const address = new Address(
+      new Uuid(studentCreateDto.studentAddressId),
+      new Street(studentCreateDto.studentAddressStreet),
+      new Neighborhood(studentCreateDto.studentAddressNeighborhood, true),
+      new City(studentCreateDto.studentAddressCity),
+      new State(studentCreateDto.studentAddressState),
+      new Reference(studentCreateDto.studentAddressReference, true)
     );
 
     const student = new Student(
       this.repository,
-      new Uuid(studentFileDto.studentId),
-      new PersonId(studentFileDto.studentDni),
-      new FirstName(studentFileDto.studentName),
-      new Surname(studentFileDto.studentSurname),
-      new Surname(studentFileDto.studentSecondSurname, true),
-      new Email(studentFileDto.studentEmail, true),
-      new Phone(studentFileDto.studentPhone, true),
-      new Birthdate(studentFileDto.studentBirthdate),
-      new Cellphone(studentFileDto.studentCellphone, true),
-      new Address(
-        new Uuid(studentFileDto.addressId),
-        new Street(studentFileDto.addressStreet),
-        new Neighborhood(studentFileDto.addressNeighborhood, true),
-        new City(studentFileDto.addressCity),
-        new State(studentFileDto.addressState),
-        new Reference(studentFileDto.addressReference, true)
-      ),
+      new Uuid(studentCreateDto.studentId),
+      new PersonId(studentCreateDto.studentDni),
+      new FirstName(studentCreateDto.studentName),
+      new Surname(studentCreateDto.studentSurname),
+      new Surname(studentCreateDto.studentSecondSurname, true),
+      new Email(studentCreateDto.studentEmail, true),
+      new Phone(studentCreateDto.studentPhone, true),
+      new Birthdate(studentCreateDto.studentBirthdate),
+      new Cellphone(studentCreateDto.studentCellphone, true),
+      address,
       legalRepresentative,
       studentFile
     );

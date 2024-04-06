@@ -1,4 +1,4 @@
-import { StudentDto } from "../../../../src/Student/Application/Dto/StudentDto";
+import { StudentCreateDto } from "../../../../src/Student/Application/Dto/StudentCreateDto";
 import { StudentCreator } from "../../../../src/Student/Application/StudentCreator";
 import { Uuid } from "../../../../src/Shared/Domain/ValueObject/Primitives/Uuid";
 
@@ -10,7 +10,7 @@ describe("StudentFileCreator", () => {
     studentFileCreator = new StudentCreator(studentRepository as any);
   });
 
-  let studentDto = new StudentDto();
+  let studentDto = new StudentCreateDto();
   studentDto = {
     studentFileId: Uuid.random().toString(),
     studentId: Uuid.random().toString(),
@@ -22,17 +22,17 @@ describe("StudentFileCreator", () => {
     studentPhone: "123456",
     studentBirthdate: "2019-01-01",
     studentCellphone: "123456789",
-    addressId: Uuid.random().toString(),
-    addressStreet: "Street 123",
-    addressNeighborhood: "",
-    addressCity: "White City",
-    addressState: "New York",
-    addressReference: "at the corner of the street",
-    academicInstitution: "University of New York",
-    workplace: "Google",
-    isOtherEnglishCertification: true,
-    englishCertification: "TOEFL",
-    comment: "Good student",
+    studentAddressId: Uuid.random().toString(),
+    studentAddressStreet: "Street 123",
+    studentAddressNeighborhood: "",
+    studentAddressCity: "White City",
+    studentAddressState: "New York",
+    studentAddressReference: "at the corner of the street",
+    studentAcademicInstitution: "University of New York",
+    studentWorkplace: "Google",
+    studentIsOtherEnglishCertification: true,
+    studentEnglishCertification: "TOEFL",
+    studentComment: "Good student",
     legalRepresentativeId: Uuid.random().toString(),
     legalRepresentativeName: "Jane",
     legalRepresentativeSurname: "Doe",
@@ -111,8 +111,8 @@ describe("StudentFileCreator", () => {
 
   test("with incorrect english certification it should response with an error", () => {
     let studentFileDtoCopy = structuredClone(studentDto);
-    studentFileDtoCopy.englishCertification = "TOEFL";
-    studentFileDtoCopy.isOtherEnglishCertification = false;
+    studentFileDtoCopy.studentEnglishCertification = "TOEFL";
+    studentFileDtoCopy.studentIsOtherEnglishCertification = false;
 
     let response = studentFileCreator.run(studentFileDtoCopy);
 
