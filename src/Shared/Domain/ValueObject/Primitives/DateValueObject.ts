@@ -11,8 +11,8 @@ export abstract class DateValueObject extends ValueObject<Date> {
       this.addDomainError(
         new InvalidArgumentException(customMessageError === "" ? "Invalid date format" : customMessageError)
       );
-      return;
     }
+    this.checkIfItIsEmpty();
   }
 
   protected hasValidFormat(): boolean {
@@ -32,5 +32,17 @@ export abstract class DateValueObject extends ValueObject<Date> {
       return false;
     }
     return true;
+  }
+
+  protected checkIfItIsEmpty(): void {
+    this.setEmpty(this.input === "" || this.input === null || this.input === undefined);
+  }
+
+  public getYear(): number {
+    return this.value.getFullYear();
+  }
+
+  public getMonth(): number { 
+    return this.value.getMonth();
   }
 }

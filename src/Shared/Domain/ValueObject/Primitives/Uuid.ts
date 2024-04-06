@@ -1,21 +1,30 @@
-import {v4 as uuid} from 'uuid';
-import validate from 'uuid-validate';
-import { InvalidArgumentException } from '../../DomainException/InvalidArgumentException';
-import { ValueObject } from './ValueObject';
+import { v4 as uuid } from "uuid";
+import validate from "uuid-validate";
+import { InvalidArgumentException } from "../../DomainException/InvalidArgumentException";
+import { ValueObject } from "./ValueObject";
 
 export class Uuid extends ValueObject<string> {
-    constructor(value: string) {
-      super(value);
-      this.ensureIsValidUuid(value);
-    }
-  
-    static random(): Uuid {
-      return new Uuid(uuid());
-    }
-  
-    private ensureIsValidUuid(id: string): void {
-      if (!validate(id)) {
-        throw new InvalidArgumentException(`<${this.constructor.name}> does not allow the value <${id}>`);
-      }
+  constructor(value: string) {
+    super(value);
+    this.ensureIsValidUuid(value);
+    this.checkIfItIsEmpty();
+  }
+
+  static random(): Uuid {
+    return new Uuid(uuid());
+  }
+
+  private ensureIsValidUuid(id: string): void {
+    if (!validate(id)) {
+      this.addDomainError(
+        new InvalidArgumentException(
+          `<${this.constructor.name}> does not allow the value <${id}>`
+        )
+      );
     }
   }
+
+  protected checkIfItIsEmpty(): void {
+    this.setEmpty(this.value === "" || this.value === null || this.value === undefined);
+  }
+}

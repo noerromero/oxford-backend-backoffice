@@ -5,7 +5,7 @@ import { Phone } from "../../Shared/Domain/ValueObject/PersonalData/Phone";
 import { Surname } from "../../Shared/Domain/ValueObject/PersonalData/Surname";
 import { Uuid } from "../../Shared/Domain/ValueObject/Primitives/Uuid";
 
-export class LegalRepresentative extends EntityBase<Uuid> {
+export class LegalRepresentative extends EntityBase<Uuid> {  
   protected name: FirstName;
   protected surname: Surname;
   protected secondSurname: Surname;
@@ -26,14 +26,27 @@ export class LegalRepresentative extends EntityBase<Uuid> {
     this.secondSurname = secondSurname;
     this.phone = phone;
     this.cellphone = cellphone;
-    this.recoveryDomainErrors();
+    this.checkIfItIsEmpty();
   }
 
-  protected recoveryDomainErrors(): void {
+  public recoveryDomainErrors(): void {
+    if(this.isEmpty()) return;
+
     this.addDomainErrors(this.name.getDomainErrors());
     this.addDomainErrors(this.surname.getDomainErrors());
     this.addDomainErrors(this.secondSurname.getDomainErrors());
     this.addDomainErrors(this.phone.getDomainErrors());
     this.addDomainErrors(this.cellphone.getDomainErrors());
+  }
+
+  protected checkIfItIsEmpty(): void {
+    this.setEmpty(
+      this.id.isEmpty() &&
+        this.name.isEmpty() &&
+        this.surname.isEmpty() &&
+        this.secondSurname.isEmpty() &&
+        this.phone.isEmpty() &&
+        this.cellphone.isEmpty()
+    );
   }
 }

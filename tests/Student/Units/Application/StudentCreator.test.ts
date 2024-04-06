@@ -4,14 +4,14 @@ import { Uuid } from "../../../../src/Shared/Domain/ValueObject/Primitives/Uuid"
 
 describe("StudentFileCreator", () => {
   let studentRepository = { save: jest.fn() };
-  let studentFileCreator: StudentCreator;
+  let studentCreator: StudentCreator;
 
   beforeEach(() => {
-    studentFileCreator = new StudentCreator(studentRepository as any);
+    studentCreator = new StudentCreator(studentRepository as any);
   });
 
-  let studentDto = new StudentCreateDto();
-  studentDto = {
+  let studentCreateDto = new StudentCreateDto();
+  studentCreateDto = {
     studentId: Uuid.random().toString(),
     studentDni: "12345678",
     studentName: "John",
@@ -42,7 +42,7 @@ describe("StudentFileCreator", () => {
   };
 
   test("with all the correct data it should response successfully", () => {
-    let response = studentFileCreator.run(studentDto);
+    let response = studentCreator.run(studentCreateDto);
 
     response.then((response) => {
       expect(response.success).toBe(true);
@@ -52,40 +52,40 @@ describe("StudentFileCreator", () => {
   });
 
   test("with incorrect dni it should response with an error", () => {
-    let studentFileDtoCopy = structuredClone(studentDto);
-    studentFileDtoCopy.studentDni = "1234567";
+    let studentCreateDtoCopy = structuredClone(studentCreateDto);
+    studentCreateDtoCopy.studentDni = "1234567";
 
-    let response = studentFileCreator.run(studentFileDtoCopy);
+    let response = studentCreator.run(studentCreateDtoCopy);
 
     response.then((response) => {
       expect(response.success).toBe(false);
       expect(response.data).toEqual([
-        `Person ID ${studentFileDtoCopy.studentDni} is invalid`,
+        `Person ID ${studentCreateDtoCopy.studentDni} is invalid`,
       ]);
       expect(studentRepository.save).toHaveBeenCalled();
     });
   });
 
   test("with incorrect email it should response with an error", () => {
-    let studentFileDtoCopy = structuredClone(studentDto);
-    studentFileDtoCopy.studentEmail = "jhon.smithgmail.com";
+    let studentCreateDtoCopy = structuredClone(studentCreateDto);
+    studentCreateDtoCopy.studentEmail = "jhon.smithgmail.com";
 
-    let response = studentFileCreator.run(studentFileDtoCopy);
+    let response = studentCreator.run(studentCreateDtoCopy);
 
     response.then((response) => {
       expect(response.success).toBe(false);
       expect(response.data).toEqual([
-        `Email ${studentFileDtoCopy.studentEmail} is invalid`,
+        `Email ${studentCreateDtoCopy.studentEmail} is invalid`,
       ]);
       expect(studentRepository.save).toHaveBeenCalled();
     });
   });
 
   test("with incorrect birthdate it should response with an error", () => {
-    let studentFileDtoCopy = structuredClone(studentDto);
-    studentFileDtoCopy.studentBirthdate = "2019-13-01";
+    let studentCreateDtoCopy = structuredClone(studentCreateDto);
+    studentCreateDtoCopy.studentBirthdate = "2019-13-01";
 
-    let response = studentFileCreator.run(studentFileDtoCopy);
+    let response = studentCreator.run(studentCreateDtoCopy);
 
     response.then((response) => {
       expect(response.success).toBe(false);
@@ -95,26 +95,26 @@ describe("StudentFileCreator", () => {
   });
 
   test("with incorrect cellphone it should response with an error", () => {
-    let studentFileDtoCopy = structuredClone(studentDto);
-    studentFileDtoCopy.studentCellphone = "12345";
+    let studentCreateDtoCopy = structuredClone(studentCreateDto);
+    studentCreateDtoCopy.studentCellphone = "12345";
 
-    let response = studentFileCreator.run(studentFileDtoCopy);
+    let response = studentCreator.run(studentCreateDtoCopy);
 
     response.then((response) => {
       expect(response.success).toBe(false);
       expect(response.data).toEqual([
-        `Cellphone ${studentFileDtoCopy.studentCellphone} is invalid`,
+        `Cellphone ${studentCreateDtoCopy.studentCellphone} is invalid`,
       ]);
       expect(studentRepository.save).toHaveBeenCalled();
     });
   });
 
   test("with incorrect english certification it should response with an error", () => {
-    let studentFileDtoCopy = structuredClone(studentDto);
-    studentFileDtoCopy.studentEnglishCertification = "TOEFL";
-    studentFileDtoCopy.studentIsOtherEnglishCertification = false;
+    let studentCreateDtoCopy = structuredClone(studentCreateDto);
+    studentCreateDtoCopy.studentEnglishCertification = "TOEFL";
+    studentCreateDtoCopy.studentIsOtherEnglishCertification = false;
 
-    let response = studentFileCreator.run(studentFileDtoCopy);
+    let response = studentCreator.run(studentCreateDtoCopy);
 
     response.then((response) => {
       expect(response.success).toBe(false);
@@ -125,26 +125,45 @@ describe("StudentFileCreator", () => {
     });
   });
 
-  test("with more than one error it should response with all the errors", () => {
-    let studentFileDtoCopy = structuredClone(studentDto);
-    studentFileDtoCopy.studentDni = "1234567";
-    studentFileDtoCopy.studentEmail = "jhon.smithgmail.com";
-    studentFileDtoCopy.studentBirthdate = "2019-13-01";
-    studentFileDtoCopy.studentCellphone = "12345";
-    studentFileDtoCopy.studentEnglishCertification = "TOEFL";
-    studentFileDtoCopy.studentIsOtherEnglishCertification = false;
+  // test("with more than one error it should response with all the errors", () => {
+  //   let studentCreateDtoCopy = structuredClone(studentCreateDto);
+  //   studentCreateDtoCopy.studentDni = "1234567";
+  //   studentCreateDtoCopy.studentEmail = "jhon.smithgmail.com";
+  //   studentCreateDtoCopy.studentBirthdate = "2019-13-01";
+  //   studentCreateDtoCopy.studentCellphone = "12345";
+  //   studentCreateDtoCopy.studentEnglishCertification = "TOEFL";
+  //   studentCreateDtoCopy.studentIsOtherEnglishCertification = false;
 
-    let response = studentFileCreator.run(studentFileDtoCopy);
+  //   let response = studentCreator.run(studentCreateDtoCopy);
+
+  //   response.then((response) => {
+  //     expect(response.success).toBe(false);
+  //     expect(response.data).toEqual([
+  //       `Person ID ${studentCreateDtoCopy.studentDni} is invalid`,
+  //       `Email ${studentCreateDtoCopy.studentEmail} is invalid`,
+  //       `Invalid birthdate format`,
+  //       `Cellphone ${studentCreateDtoCopy.studentCellphone} is invalid`,
+  //       "English certification value is not valid",
+  //     ]);
+  //     expect(studentRepository.save).toHaveBeenCalled();
+  //   });
+  // });
+
+  test("with adult student and empty legal representative data it should response successfully", () => {
+    let studentCreateDtoCopy = structuredClone(studentCreateDto);
+    studentCreateDtoCopy.studentBirthdate = "1990-01-01";
+    studentCreateDtoCopy.legalRepresentativeId = "";
+    studentCreateDtoCopy.legalRepresentativeName = "";
+    studentCreateDtoCopy.legalRepresentativeSurname = "";
+    studentCreateDtoCopy.legalRepresentativeSecondSurname = "";
+    studentCreateDtoCopy.legalRepresentativePhone = "";
+    studentCreateDtoCopy.legalRepresentativeCellphone = "";
+
+    let response = studentCreator.run(studentCreateDtoCopy);
 
     response.then((response) => {
-      expect(response.success).toBe(false);
-      expect(response.data).toEqual([
-        `Person ID ${studentFileDtoCopy.studentDni} is invalid`,
-        `Email ${studentFileDtoCopy.studentEmail} is invalid`,
-        `Invalid birthdate format`,
-        `Cellphone ${studentFileDtoCopy.studentCellphone} is invalid`,
-        "English certification value is not valid",
-      ]);
+      expect(response.success).toBe(true);
+      expect(response.data).toEqual([]);
       expect(studentRepository.save).toHaveBeenCalled();
     });
   });

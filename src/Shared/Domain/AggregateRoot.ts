@@ -14,6 +14,7 @@ export abstract class AggregateRoot<TId> extends EntityBase<TId> {
   protected abstract handleSave(): Promise<DomainResponse>;
 
   public async save(): Promise<DomainResponse> {
+    this.recoveryDomainErrors();
     if (this.hasDomainErrors()) {
       return Promise.resolve(
         new DomainResponse(

@@ -32,4 +32,8 @@ export abstract class ValueObject<T extends Primitives> extends DomainBase {
   public toString(): string {
     return this.value.toString();
   }
+
+  public getValue(): T {
+    return this.value;
+  }
 }

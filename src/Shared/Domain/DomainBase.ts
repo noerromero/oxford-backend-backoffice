@@ -1,27 +1,43 @@
 export abstract class DomainBase {
-  private domainErrors: Array<Error>;
+  private _isEmpty: boolean;
+  private _domainErrors: Array<Error>;
 
   constructor() {
-    this.domainErrors = [];
+    this._domainErrors = [];
+    this._isEmpty = false;
   }
 
+  protected abstract checkIfItIsEmpty(): void;
+
   public getDomainErrors(): Array<Error> {
-    return this.domainErrors;
+    return this._domainErrors;
   }
 
   public addDomainError(error: Error): void {
-    this.domainErrors.push(error);
+    this._domainErrors.push(error);
   }
 
   public addDomainErrors(errors: Array<Error>): void {
-    this.domainErrors.push(...errors);
+    this._domainErrors.push(...errors);
+  }
+
+  public resetDomainErrors(): void {
+    this._domainErrors = [];
   }
 
   public hasDomainErrors(): boolean {
-    return this.domainErrors.length > 0;
+    return this._domainErrors.length > 0;
   }
-  
+
   public toStringArray(): Array<string> {
-    return this.domainErrors.map((error) => error.message);
+    return this._domainErrors.map((error) => error.message);
+  }
+
+  public isEmpty(): boolean {
+    return this._isEmpty;
+  }
+
+  public setEmpty(isEmpty: boolean): void {
+    this._isEmpty = isEmpty;
   }
 }

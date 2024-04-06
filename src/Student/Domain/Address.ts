@@ -6,7 +6,7 @@ import { State } from "../../Shared/Domain/ValueObject/Address/State";
 import { Street } from "../../Shared/Domain/ValueObject/Address/Street";
 import { Uuid } from "../../Shared/Domain/ValueObject/Primitives/Uuid";
 
-export class Address extends EntityBase<Uuid> {
+export class Address extends EntityBase<Uuid> {  
   protected street: Street;
   protected neighborhood: Neighborhood;
   protected city: City;
@@ -27,14 +27,27 @@ export class Address extends EntityBase<Uuid> {
     this.city = city;
     this.state = state;
     this.reference = reference;
-    this.recoveryDomainErrors();
+    this.checkIfItIsEmpty();
   }
 
-  protected recoveryDomainErrors(): void {
+  public recoveryDomainErrors(): void {
+    if(this.isEmpty()) return;
+
     this.addDomainErrors(this.street.getDomainErrors());
     this.addDomainErrors(this.neighborhood.getDomainErrors());
     this.addDomainErrors(this.city.getDomainErrors());
     this.addDomainErrors(this.state.getDomainErrors());
     this.addDomainErrors(this.reference.getDomainErrors());
+  }
+  
+  protected checkIfItIsEmpty(): void {
+    this.setEmpty(
+      this.id.isEmpty() &&
+      this.street.isEmpty() &&
+      this.neighborhood.isEmpty() &&
+      this.city.isEmpty() &&
+      this.state.isEmpty() &&
+      this.reference.isEmpty()
+    );
   }
 }
