@@ -12,7 +12,6 @@ describe("StudentFileCreator", () => {
 
   let studentDto = new StudentCreateDto();
   studentDto = {
-    studentFileId: Uuid.random().toString(),
     studentId: Uuid.random().toString(),
     studentDni: "12345678",
     studentName: "John",
@@ -28,6 +27,7 @@ describe("StudentFileCreator", () => {
     studentAddressCity: "White City",
     studentAddressState: "New York",
     studentAddressReference: "at the corner of the street",
+    studentFileId: Uuid.random().toString(),
     studentAcademicInstitution: "University of New York",
     studentWorkplace: "Google",
     studentIsOtherEnglishCertification: true,
