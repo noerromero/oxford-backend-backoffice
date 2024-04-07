@@ -4,7 +4,7 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable(
-      "studentFiles",
+      "student_file",
       {
         id: {
           type: Sequelize.STRING,
@@ -36,6 +36,6 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("backoffice.studentFiles");
+    await queryInterface.dropTable("backoffice.student_file");
   },
 };
