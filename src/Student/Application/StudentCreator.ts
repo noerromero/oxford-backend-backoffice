@@ -1,5 +1,5 @@
 import { DomainResponse } from "../../Shared/Domain/DomainResponse";
-import { PersonId } from "../../Shared/Domain/ValueObject/PersonalData/PersonId";
+import { Dni } from "../../Shared/Domain/ValueObject/PersonalData/Dni";
 import { FirstName } from "../../Shared/Domain/ValueObject/PersonalData/FirstName";
 import { Student } from "../Domain/Student";
 import { IStudentRepository } from "../Domain/IStudentRepository";
@@ -63,7 +63,7 @@ export class StudentCreator {
     const student = new Student(
       this.repository,
       new Uuid(studentCreateDto.studentId),
-      new PersonId(studentCreateDto.studentDni),
+      new Dni(studentCreateDto.studentDni),
       new FirstName(studentCreateDto.studentName),
       new Surname(studentCreateDto.studentSurname),
       new Surname(studentCreateDto.studentSecondSurname, true),

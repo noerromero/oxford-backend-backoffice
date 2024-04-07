@@ -1,10 +1,7 @@
 import { InvalidArgumentException } from "../../DomainException/InvalidArgumentException";
 import { StringValueObject } from "../Primitives/StringValueObject";
 
-/**
- * @class PersonId is like a DNI (Documento Nacional de Identidad) in Peru
- */
-export class PersonId extends StringValueObject {
+export class Dni extends StringValueObject {
   constructor(value: string) {
     super(value);
     if (!this.hasValidFormat(value)) {

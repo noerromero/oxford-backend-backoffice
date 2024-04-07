@@ -1,4 +1,4 @@
-import { PersonId } from "../../Shared/Domain/ValueObject/PersonalData/PersonId";
+import { Dni } from "../../Shared/Domain/ValueObject/PersonalData/Dni";
 import { FirstName } from "../../Shared/Domain/ValueObject/PersonalData/FirstName";
 import { Surname } from "../../Shared/Domain/ValueObject/PersonalData/Surname";
 import { Email } from "../../Shared/Domain/ValueObject/PersonalData/Email";
@@ -14,7 +14,7 @@ import { LegalRepresentative } from "./LegalRepresentative";
 import { StudentFile } from "./StudentFile";
 
 export class Student extends AggregateRoot<Uuid> {
-  protected dni: PersonId;
+  protected dni: Dni;
   protected name: FirstName;
   protected surname: Surname;
   protected secondSurname: Surname;
@@ -29,7 +29,7 @@ export class Student extends AggregateRoot<Uuid> {
   constructor(
     repository: IStudentRepository,
     id: Uuid,
-    dni: PersonId,
+    dni: Dni,
     name: FirstName,
     surname: Surname,
     secondSurname: Surname,
@@ -57,7 +57,7 @@ export class Student extends AggregateRoot<Uuid> {
   }
 
   protected recoveryDomainErrors(): void {
-    if(this.isEmpty()) return;
+    if (this.isEmpty()) return;
 
     this.address.recoveryDomainErrors();
     this.legalRepresentative.recoveryDomainErrors();
@@ -101,10 +101,6 @@ export class Student extends AggregateRoot<Uuid> {
   }
 
   private validateLegalRepresentativeForMinorStudent(): Array<Error> {
-    // if (this.legalRepresentative.isEmpty()) {
-    //   this.legalRepresentative.resetDomainErrors();
-    // }
-
     let domainErros: Array<Error> = [];
     if (!this.isAdult()) {
       if (this.legalRepresentative.isEmpty()) {

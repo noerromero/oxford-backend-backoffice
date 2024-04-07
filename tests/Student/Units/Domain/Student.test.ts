@@ -9,7 +9,7 @@ import { Birthdate } from "../../../../src/Shared/Domain/ValueObject/PersonalDat
 import { Cellphone } from "../../../../src/Shared/Domain/ValueObject/PersonalData/Cellphone";
 import { Email } from "../../../../src/Shared/Domain/ValueObject/PersonalData/Email";
 import { FirstName } from "../../../../src/Shared/Domain/ValueObject/PersonalData/FirstName";
-import { PersonId } from "../../../../src/Shared/Domain/ValueObject/PersonalData/PersonId";
+import { Dni } from "../../../../src/Shared/Domain/ValueObject/PersonalData/Dni";
 import { Phone } from "../../../../src/Shared/Domain/ValueObject/PersonalData/Phone";
 import { Surname } from "../../../../src/Shared/Domain/ValueObject/PersonalData/Surname";
 import { Uuid } from "../../../../src/Shared/Domain/ValueObject/Primitives/Uuid";
@@ -28,7 +28,7 @@ describe("Student - isAdult Property", () => {
     student = new Student(
       studentRepository as any,
       Uuid.random(),
-      new PersonId("12345678"),
+      new Dni("12345678"),
       new FirstName("John"),
       new Surname("Doe"),
       new Surname("Smith"),
@@ -58,14 +58,15 @@ describe("Student - isAdult Property", () => {
         new Workplace("Google"),
         new EnglishCertification("TOEFL", false),
         new Comment("Good student")
-      ))
+      )
+    );
   });
 
   test("with minor birthdate it should response false", () => {
     let date: Date = new Date();
     date.setFullYear(date.getFullYear() - 17);
     let formattedDate: string = date.toISOString().slice(0, 10);
-    
+
     student.setBirthdate(new Birthdate(formattedDate));
     expect(student.isAdult()).toBe(false);
   });
