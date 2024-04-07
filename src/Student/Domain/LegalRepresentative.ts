@@ -49,4 +49,15 @@ export class LegalRepresentative extends EntityBase<Uuid> {
         this.cellphone.isEmpty()
     );
   }
+
+  public static getEmptyObject(): LegalRepresentative {
+    return new LegalRepresentative(
+      new Uuid(""),
+      new FirstName(""),
+      new Surname(""),
+      new Surname(""),
+      new Phone(""),
+      new Cellphone("")
+    );
+  }
 }

@@ -56,6 +56,38 @@ export class Student extends AggregateRoot<Uuid> {
     this.checkIfItIsEmpty();
   }
 
+  public getId(): Uuid {
+    return this.id;
+  }
+
+  public getDni(): Dni {
+    return this.dni;
+  }
+
+  public getName(): FirstName {
+    return this.name;
+  }
+
+  public getSurname(): Surname {
+    return this.surname;
+  }
+
+  public getEmail(): Email {
+    return this.email;
+  }
+
+  public getPhone(): Phone {
+    return this.phone;
+  }
+
+  public getBirthdate(): Birthdate {
+    return this.birthdate;
+  }
+
+  public getCellphone(): Cellphone {
+    return this.cellphone;
+  }
+
   protected recoveryDomainErrors(): void {
     if (this.isEmpty()) return;
 

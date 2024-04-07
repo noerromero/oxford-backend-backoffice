@@ -44,4 +44,14 @@ export class StudentFile extends EntityBase<Uuid> {
         this.comment.isEmpty()
     );
   }
+
+  public static getEmptyObject(): StudentFile {
+    return new StudentFile(
+      new Uuid(""),
+      new AcademicInstitution(""),
+      new Workplace(""),
+      new EnglishCertificate("", false),
+      new Comment("")
+    );
+  }
 }

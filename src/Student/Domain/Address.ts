@@ -50,4 +50,15 @@ export class Address extends EntityBase<Uuid> {
       this.reference.isEmpty()
     );
   }
+
+  public static getEmptyObject(): Address {
+    return new Address(
+      new Uuid(""),
+      new Street(""),
+      new Neighborhood(""),
+      new City(""),
+      new State(""),
+      new Reference("")
+    );
+  }
 }
