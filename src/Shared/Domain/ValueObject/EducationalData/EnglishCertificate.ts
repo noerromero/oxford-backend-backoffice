@@ -1,7 +1,7 @@
 import { InvalidArgumentException } from "../../DomainException/InvalidArgumentException";
 import { StringValueObject } from "../Primitives/StringValueObject";
 
-export class EnglishCertification extends StringValueObject {
+export class EnglishCertificate extends StringValueObject {
   public static readonly FCE = "FCE";
   public static readonly CPE = "CPE";
   public static readonly PET = "PET";
@@ -21,12 +21,10 @@ export class EnglishCertification extends StringValueObject {
       );
     }
     if (!this.hasValidValue()) {
-        this.addDomainError(
-          new InvalidArgumentException(
-            "English certification value is not valid"
-          )
-        );
-      }
+      this.addDomainError(
+        new InvalidArgumentException("English certification value is not valid")
+      );
+    }
   }
 
   protected hasValidLenght(): boolean {
@@ -36,20 +34,20 @@ export class EnglishCertification extends StringValueObject {
   protected hasValidValue(): boolean {
     if (this.isOther) {
       return (
-        this.value !== EnglishCertification.FCE &&
-        this.value !== EnglishCertification.CPE &&
-        this.value !== EnglishCertification.PET &&
-        this.value !== EnglishCertification.CAE &&
-        this.value !== EnglishCertification.KET
+        this.value !== EnglishCertificate.FCE &&
+        this.value !== EnglishCertificate.CPE &&
+        this.value !== EnglishCertificate.PET &&
+        this.value !== EnglishCertificate.CAE &&
+        this.value !== EnglishCertificate.KET
       );
     }
 
     return (
-      this.value === EnglishCertification.FCE ||
-      this.value === EnglishCertification.CPE ||
-      this.value === EnglishCertification.PET ||
-      this.value === EnglishCertification.CAE ||
-      this.value === EnglishCertification.KET
+      this.value === EnglishCertificate.FCE ||
+      this.value === EnglishCertificate.CPE ||
+      this.value === EnglishCertificate.PET ||
+      this.value === EnglishCertificate.CAE ||
+      this.value === EnglishCertificate.KET
     );
   }
 }

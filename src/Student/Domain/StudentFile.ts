@@ -1,21 +1,21 @@
 import { AcademicInstitution } from "../../Shared/Domain/ValueObject/EducationalData/AcademicInstitution";
-import { EnglishCertification } from "../../Shared/Domain/ValueObject/EducationalData/EnglishCertification";
+import { EnglishCertificate } from "../../Shared/Domain/ValueObject/EducationalData/EnglishCertificate";
 import { Workplace } from "../../Shared/Domain/ValueObject/Workplace/Workplace";
 import { Comment } from "./ValueObject/Comment";
 import { Uuid } from "../../Shared/Domain/ValueObject/Primitives/Uuid";
 import { EntityBase } from "../../Shared/Domain/EntityBase";
 
-export class StudentFile extends EntityBase<Uuid> {  
+export class StudentFile extends EntityBase<Uuid> {
   protected academicInstitution: AcademicInstitution;
   protected workplace: Workplace;
-  protected englishCertification: EnglishCertification;
+  protected englishCertification: EnglishCertificate;
   protected comment: Comment;
 
   public constructor(
     id: Uuid,
     academicInstitution: AcademicInstitution,
     workplace: Workplace,
-    englishCertification: EnglishCertification,
+    englishCertification: EnglishCertificate,
     comment: Comment
   ) {
     super(id);
@@ -27,7 +27,7 @@ export class StudentFile extends EntityBase<Uuid> {
   }
 
   public recoveryDomainErrors(): void {
-    if(this.isEmpty()) return;
+    if (this.isEmpty()) return;
 
     this.addDomainErrors(this.academicInstitution.getDomainErrors());
     this.addDomainErrors(this.workplace.getDomainErrors());
@@ -38,10 +38,10 @@ export class StudentFile extends EntityBase<Uuid> {
   protected checkIfItIsEmpty(): void {
     this.setEmpty(
       this.id.isEmpty() &&
-      this.academicInstitution.isEmpty() &&
-      this.workplace.isEmpty() &&
-      this.englishCertification.isEmpty() &&
-      this.comment.isEmpty()
+        this.academicInstitution.isEmpty() &&
+        this.workplace.isEmpty() &&
+        this.englishCertification.isEmpty() &&
+        this.comment.isEmpty()
     );
   }
 }

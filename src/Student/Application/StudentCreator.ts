@@ -18,7 +18,7 @@ import { Reference } from "../../Shared/Domain/ValueObject/Address/Reference";
 import { StudentFile } from "../Domain/StudentFile";
 import { AcademicInstitution } from "../../Shared/Domain/ValueObject/EducationalData/AcademicInstitution";
 import { Workplace } from "../../Shared/Domain/ValueObject/Workplace/Workplace";
-import { EnglishCertification } from "../../Shared/Domain/ValueObject/EducationalData/EnglishCertification";
+import { EnglishCertificate } from "../../Shared/Domain/ValueObject/EducationalData/EnglishCertificate";
 import { Comment } from "../Domain/ValueObject/Comment";
 import { LegalRepresentative } from "../Domain/LegalRepresentative";
 import { Uuid } from "../../Shared/Domain/ValueObject/Primitives/Uuid";
@@ -44,7 +44,7 @@ export class StudentCreator {
       new Uuid(studentCreateDto.studentFileId),
       new AcademicInstitution(studentCreateDto.studentAcademicInstitution),
       new Workplace(studentCreateDto.studentWorkplace),
-      new EnglishCertification(
+      new EnglishCertificate(
         studentCreateDto.studentEnglishCertification,
         studentCreateDto.studentIsOtherEnglishCertification
       ),

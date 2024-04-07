@@ -4,7 +4,7 @@ import { Reference } from "../../../../src/Shared/Domain/ValueObject/Address/Ref
 import { State } from "../../../../src/Shared/Domain/ValueObject/Address/State";
 import { Street } from "../../../../src/Shared/Domain/ValueObject/Address/Street";
 import { AcademicInstitution } from "../../../../src/Shared/Domain/ValueObject/EducationalData/AcademicInstitution";
-import { EnglishCertification } from "../../../../src/Shared/Domain/ValueObject/EducationalData/EnglishCertification";
+import { EnglishCertificate } from "../../../../src/Shared/Domain/ValueObject/EducationalData/EnglishCertificate";
 import { Birthdate } from "../../../../src/Shared/Domain/ValueObject/PersonalData/Birthdate";
 import { Cellphone } from "../../../../src/Shared/Domain/ValueObject/PersonalData/Cellphone";
 import { Email } from "../../../../src/Shared/Domain/ValueObject/PersonalData/Email";
@@ -56,7 +56,7 @@ describe("Student - isAdult Property", () => {
         Uuid.random(),
         new AcademicInstitution("University of New York"),
         new Workplace("Google"),
-        new EnglishCertification("TOEFL", false),
+        new EnglishCertificate("TOEFL", false),
         new Comment("Good student")
       )
     );
