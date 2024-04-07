@@ -125,29 +125,29 @@ describe("StudentFileCreator", () => {
     });
   });
 
-  // test("with more than one error it should response with all the errors", () => {
-  //   let studentCreateDtoCopy = structuredClone(studentCreateDto);
-  //   studentCreateDtoCopy.studentDni = "1234567";
-  //   studentCreateDtoCopy.studentEmail = "jhon.smithgmail.com";
-  //   studentCreateDtoCopy.studentBirthdate = "2019-13-01";
-  //   studentCreateDtoCopy.studentCellphone = "12345";
-  //   studentCreateDtoCopy.studentEnglishCertification = "TOEFL";
-  //   studentCreateDtoCopy.studentIsOtherEnglishCertification = false;
+  test("with more than one error it should response with all the errors", () => {
+    let studentCreateDtoCopy = structuredClone(studentCreateDto);
+    studentCreateDtoCopy.studentDni = "1234567";
+    studentCreateDtoCopy.studentEmail = "jhon.smithgmail.com";
+    studentCreateDtoCopy.studentBirthdate = "2019-13-01";
+    studentCreateDtoCopy.studentCellphone = "12345";
+    studentCreateDtoCopy.studentEnglishCertification = "TOEFL";
+    studentCreateDtoCopy.studentIsOtherEnglishCertification = false;
 
-  //   let response = studentCreator.run(studentCreateDtoCopy);
+    let response = studentCreator.run(studentCreateDtoCopy);
 
-  //   response.then((response) => {
-  //     expect(response.success).toBe(false);
-  //     expect(response.data).toEqual([
-  //       `Person ID ${studentCreateDtoCopy.studentDni} is invalid`,
-  //       `Email ${studentCreateDtoCopy.studentEmail} is invalid`,
-  //       `Invalid birthdate format`,
-  //       `Cellphone ${studentCreateDtoCopy.studentCellphone} is invalid`,
-  //       "English certification value is not valid",
-  //     ]);
-  //     expect(studentRepository.save).toHaveBeenCalled();
-  //   });
-  // });
+    response.then((response) => {
+      expect(response.success).toBe(false);
+      expect(response.data).toEqual([
+        `Person ID ${studentCreateDtoCopy.studentDni} is invalid`,
+        `Email ${studentCreateDtoCopy.studentEmail} is invalid`,
+        `Invalid birthdate format`,
+        `Cellphone ${studentCreateDtoCopy.studentCellphone} is invalid`,
+        "English certification value is not valid",
+      ]);
+      expect(studentRepository.save).toHaveBeenCalled();
+    });
+  });
 
   test("with adult student and empty legal representative data it should response successfully", () => {
     let studentCreateDtoCopy = structuredClone(studentCreateDto);
@@ -164,6 +164,27 @@ describe("StudentFileCreator", () => {
     response.then((response) => {
       expect(response.success).toBe(true);
       expect(response.data).toEqual([]);
+      expect(studentRepository.save).toHaveBeenCalled();
+    });
+  });
+
+  test("with minor student and empty legal representative data it should response with an error", () => {
+    let studentCreateDtoCopy = structuredClone(studentCreateDto);
+    studentCreateDtoCopy.studentBirthdate = "2010-01-01";
+    studentCreateDtoCopy.legalRepresentativeId = "";
+    studentCreateDtoCopy.legalRepresentativeName = "";
+    studentCreateDtoCopy.legalRepresentativeSurname = "";
+    studentCreateDtoCopy.legalRepresentativeSecondSurname = "";
+    studentCreateDtoCopy.legalRepresentativePhone = "";
+    studentCreateDtoCopy.legalRepresentativeCellphone = "";
+
+    let response = studentCreator.run(studentCreateDtoCopy);
+
+    response.then((response) => {
+      expect(response.success).toBe(false);
+      expect(response.data).toEqual([
+        "Legal representative data is required",
+      ]);
       expect(studentRepository.save).toHaveBeenCalled();
     });
   });
