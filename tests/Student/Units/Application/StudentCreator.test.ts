@@ -183,7 +183,7 @@ describe("StudentFileCreator", () => {
     response.then((response) => {
       expect(response.success).toBe(false);
       expect(response.data).toEqual([
-        "Legal representative data is required",
+        "Legal representative is required for minor students",
       ]);
       expect(studentRepository.save).toHaveBeenCalled();
     });
