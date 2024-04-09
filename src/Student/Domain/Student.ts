@@ -72,6 +72,10 @@ export class Student extends AggregateRoot<Uuid> {
     return this.surname;
   }
 
+  public getSecondSurname(): Surname {
+    return this.secondSurname;
+  }
+
   public getEmail(): Email {
     return this.email;
   }

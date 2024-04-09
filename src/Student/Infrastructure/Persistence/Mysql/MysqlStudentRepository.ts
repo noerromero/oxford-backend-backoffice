@@ -10,7 +10,7 @@ export class MysqlStudentRepository implements IStudentRepository {
       dni: student.getDni().toString(),
       name: student.getName().toString(),
       surname: student.getSurname().toString(),
-      second_surname: student.getSurname().toString(),
+      second_surname: student.getSecondSurname().toString(),
       email: student.getEmail().toString(),
       phone: student.getPhone().toString(),
       bhirtdate: student.getBirthdate().getValue(),
