@@ -111,7 +111,8 @@ export class Student extends AggregateRoot<Uuid> {
     this.addDomainErrors(this.legalRepresentative.getDomainErrors());
     this.addDomainErrors(this.studentFile.getDomainErrors());
 
-    this.addDomainErrors(this.validateLegalRepresentativeForMinorStudent());
+    this.addDomainErrors(this.ensureMinorStudentHasLegalRepresentative());
+    this.addDomainErrors(this.ensureStudentIsNotDuplicate());
   }
 
   protected async handleSave(): Promise<DomainResponse> {
@@ -136,7 +137,7 @@ export class Student extends AggregateRoot<Uuid> {
     );
   }
 
-  private validateLegalRepresentativeForMinorStudent(): Array<Error> {
+  private ensureMinorStudentHasLegalRepresentative(): Array<Error> {
     let domainErros: Array<Error> = [];
     if (!this.isAdult()) {
       if (this.legalRepresentative.isEmpty()) {
@@ -145,6 +146,12 @@ export class Student extends AggregateRoot<Uuid> {
         );
       }
     }
+    return domainErros;
+  }
+
+  private ensureStudentIsNotDuplicate(): Array<Error> {
+    let domainErros: Array<Error> = [];
+    //TODO: Check if student is duplicate
     return domainErros;
   }
 
