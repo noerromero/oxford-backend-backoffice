@@ -1,5 +1,4 @@
 export class StudentCreateDto {
-  public studentFileId: string = "";
   public studentId: string = "";
   public studentDni: string = "";
   public studentName: string = "";
@@ -15,6 +14,7 @@ export class StudentCreateDto {
   public studentAddressCity: string = "";
   public studentAddressState: string = "";
   public studentAddressReference: string = "";
+  public studentFileId: string = "";
   public studentAcademicInstitution: string = "";
   public studentWorkplace: string = "";
   public studentIsOtherEnglishCertification: boolean = false;
