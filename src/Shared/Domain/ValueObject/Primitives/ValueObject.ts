@@ -6,18 +6,22 @@ export type Primitives = String | string | number | Boolean | boolean | Date;
 export abstract class ValueObject<T extends Primitives> extends DomainBase {
   protected readonly value: T;
   protected readonly isOptional: boolean;
+  protected readonly ownerEntity: string;
 
-  constructor(value: T, isOptional: boolean = false) {
+  constructor(value: T, ownerEntity: string, isOptional: boolean = false) {
     super();
-    this.ensureValueIsDefined(value);
+    this.ownerEntity = ownerEntity;
     this.value = value;
     this.isOptional = isOptional;
+    this.ensureValueIsDefined(value);
   }
 
   private ensureValueIsDefined(value: T): void {
     if (value === null || value === undefined) {
       this.addDomainError(
-        new InvalidArgumentException("Value must be defined")
+        new InvalidArgumentException(
+          this.formatErrorMessage("Value must be defined")
+        )
       );
     }
   }
@@ -35,5 +39,9 @@ export abstract class ValueObject<T extends Primitives> extends DomainBase {
 
   public getValue(): T {
     return this.value;
+  }
+
+  protected formatErrorMessage(error: string): string {
+    return this.ownerEntity + " - " + error;
   }
 }

@@ -3,13 +3,24 @@ import { ValueObject } from "./ValueObject";
 export abstract class DateValueObject extends ValueObject<Date> {
   protected input: string;
 
-  constructor(input: string, isOptional: boolean = false, customMessageError: string = "") {
+  constructor(
+    input: string,
+    ownerEntity: string,
+    isOptional: boolean = false,
+    customMessageError: string = "",
+  ) {
     const date = input !== "" ? new Date(input) : new Date(0);
-    super(date, isOptional);
+    super(date, ownerEntity, isOptional);
     this.input = input;
     if (!this.hasValidFormat()) {
       this.addDomainError(
-        new InvalidArgumentException(customMessageError === "" ? "Invalid date format" : customMessageError)
+        new InvalidArgumentException(
+          this.formatErrorMessage(
+            customMessageError === ""
+              ? "Invalid date format"
+              : customMessageError
+          )
+        )
       );
     }
     this.checkIfItIsEmpty();
@@ -35,14 +46,16 @@ export abstract class DateValueObject extends ValueObject<Date> {
   }
 
   protected checkIfItIsEmpty(): void {
-    this.setEmpty(this.input === "" || this.input === null || this.input === undefined);
+    this.setEmpty(
+      this.input === "" || this.input === null || this.input === undefined
+    );
   }
 
   public getYear(): number {
     return this.value.getFullYear();
   }
 
-  public getMonth(): number { 
+  public getMonth(): number {
     return this.value.getMonth();
   }
 }

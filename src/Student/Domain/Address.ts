@@ -33,6 +33,7 @@ export class Address extends EntityBase<Uuid> {
   public recoveryDomainErrors(): void {
     if(this.isEmpty()) return;
 
+    this.addDomainErrors(this.id.getDomainErrors());
     this.addDomainErrors(this.street.getDomainErrors());
     this.addDomainErrors(this.neighborhood.getDomainErrors());
     this.addDomainErrors(this.city.getDomainErrors());
@@ -53,12 +54,15 @@ export class Address extends EntityBase<Uuid> {
 
   public static getEmptyObject(): Address {
     return new Address(
-      new Uuid(""),
-      new Street(""),
-      new Neighborhood(""),
-      new City(""),
-      new State(""),
-      new Reference("")
+      new Uuid("", Address.getEntityName()),
+      new Street("", Address.getEntityName()),
+      new Neighborhood("", Address.getEntityName()),
+      new City("", Address.getEntityName()),
+      new State("", Address.getEntityName()),
+      new Reference("", Address.getEntityName())
     );
+  }
+  static getEntityName(): string {
+    return "Address";
   }
 }

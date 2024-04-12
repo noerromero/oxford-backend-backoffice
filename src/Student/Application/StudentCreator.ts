@@ -32,45 +32,46 @@ export class StudentCreator {
 
   async run(studentCreateDto: StudentCreateDto): Promise<DomainResponse> {
     const legalRepresentative = new LegalRepresentative(
-      new Uuid(studentCreateDto.legalRepresentativeId),
-      new FirstName(studentCreateDto.legalRepresentativeName),
-      new Surname(studentCreateDto.legalRepresentativeSurname),
-      new Surname(studentCreateDto.legalRepresentativeSecondSurname, true),
-      new Phone(studentCreateDto.legalRepresentativePhone, true),
-      new Cellphone(studentCreateDto.legalRepresentativeCellphone, true)
+      new Uuid(studentCreateDto.legalRepresentativeId, LegalRepresentative.getEntityName()),
+      new FirstName(studentCreateDto.legalRepresentativeName, LegalRepresentative.getEntityName()),
+      new Surname(studentCreateDto.legalRepresentativeSurname, LegalRepresentative.getEntityName()),
+      new Surname(studentCreateDto.legalRepresentativeSecondSurname, LegalRepresentative.getEntityName(), true),
+      new Phone(studentCreateDto.legalRepresentativePhone, LegalRepresentative.getEntityName(), true),
+      new Cellphone(studentCreateDto.legalRepresentativeCellphone, LegalRepresentative.getEntityName(), true)
     );
 
     const studentFile = new StudentFile(
-      new Uuid(studentCreateDto.studentFileId),
-      new AcademicInstitution(studentCreateDto.studentAcademicInstitution),
-      new Workplace(studentCreateDto.studentWorkplace),
+      new Uuid(studentCreateDto.studentFileId, StudentFile.getEntityName()),
+      new AcademicInstitution(studentCreateDto.studentAcademicInstitution, StudentFile.getEntityName()),
+      new Workplace(studentCreateDto.studentWorkplace, StudentFile.getEntityName()),
       new EnglishCertificate(
         studentCreateDto.studentEnglishCertification,
-        studentCreateDto.studentIsOtherEnglishCertification
+        studentCreateDto.studentIsOtherEnglishCertification,
+        StudentFile.getEntityName()
       ),
-      new Comment(studentCreateDto.studentComment)
+      new Comment(studentCreateDto.studentComment, StudentFile.getEntityName())
     );
 
     const address = new Address(
-      new Uuid(studentCreateDto.studentAddressId),
-      new Street(studentCreateDto.studentAddressStreet),
-      new Neighborhood(studentCreateDto.studentAddressNeighborhood, true),
-      new City(studentCreateDto.studentAddressCity),
-      new State(studentCreateDto.studentAddressState),
-      new Reference(studentCreateDto.studentAddressReference, true)
+      new Uuid(studentCreateDto.studentAddressId, Address.getEntityName()),
+      new Street(studentCreateDto.studentAddressStreet, Address.getEntityName()),
+      new Neighborhood(studentCreateDto.studentAddressNeighborhood, Address.getEntityName(), true),
+      new City(studentCreateDto.studentAddressCity, Address.getEntityName()),
+      new State(studentCreateDto.studentAddressState, Address.getEntityName()),
+      new Reference(studentCreateDto.studentAddressReference, Address.getEntityName(), true)
     );
 
     const student = new Student(
       this.repository,
-      new Uuid(studentCreateDto.studentId),
-      new Dni(studentCreateDto.studentDni),
-      new FirstName(studentCreateDto.studentName),
-      new Surname(studentCreateDto.studentSurname),
-      new Surname(studentCreateDto.studentSecondSurname, true),
-      new Email(studentCreateDto.studentEmail, true),
-      new Phone(studentCreateDto.studentPhone, true),
-      new Birthdate(studentCreateDto.studentBirthdate),
-      new Cellphone(studentCreateDto.studentCellphone, true),
+      new Uuid(studentCreateDto.studentId, Student.getEntityName()),
+      new Dni(studentCreateDto.studentDni, Student.getEntityName()),
+      new FirstName(studentCreateDto.studentName, Student.getEntityName()),
+      new Surname(studentCreateDto.studentSurname, Student.getEntityName()),
+      new Surname(studentCreateDto.studentSecondSurname, Student.getEntityName(), true),
+      new Email(studentCreateDto.studentEmail, Student.getEntityName(), true),
+      new Phone(studentCreateDto.studentPhone, Student.getEntityName(), true),
+      new Birthdate(studentCreateDto.studentBirthdate, Student.getEntityName()),
+      new Cellphone(studentCreateDto.studentCellphone, Student.getEntityName(), true),
       address,
       legalRepresentative,
       studentFile

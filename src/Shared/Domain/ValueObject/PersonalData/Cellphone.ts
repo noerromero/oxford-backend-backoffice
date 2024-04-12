@@ -2,11 +2,17 @@ import { InvalidArgumentException } from "../../DomainException/InvalidArgumentE
 import { StringValueObject } from "../Primitives/StringValueObject";
 
 export class Cellphone extends StringValueObject {
-  constructor(value: string, isOptional: boolean = false) {
-    super(value, isOptional);
+  constructor(
+    value: string,
+    ownerEntity: string,
+    isOptional: boolean = false
+  ) {
+    super(value, ownerEntity, isOptional);
     if (!this.hasValidFormat(value)) {
       this.addDomainError(
-        new InvalidArgumentException(`Cellphone ${value} is invalid`)
+        new InvalidArgumentException(
+          this.formatErrorMessage(`Cellphone ${value} is invalid`)
+        )
       );
     }
   }

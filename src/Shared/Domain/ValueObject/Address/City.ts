@@ -2,11 +2,13 @@ import { InvalidArgumentException } from "../../DomainException/InvalidArgumentE
 import { StringValueObject } from "../Primitives/StringValueObject";
 
 export class City extends StringValueObject {
-  constructor(value: string, isOptional: boolean = false) {
-    super(value, isOptional);
+  constructor(value: string, ownerEntity: string, isOptional: boolean = false) {
+    super(value, ownerEntity, isOptional);
     if (!this.hasValidLenght(value)) {
       this.addDomainError(
-        new InvalidArgumentException("City must have a valid length")
+        new InvalidArgumentException(
+          this.formatErrorMessage("City must have a valid length")
+        )
       );
     }
   }

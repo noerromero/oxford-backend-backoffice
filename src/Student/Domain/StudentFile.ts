@@ -29,6 +29,7 @@ export class StudentFile extends EntityBase<Uuid> {
   public recoveryDomainErrors(): void {
     if (this.isEmpty()) return;
 
+    this.addDomainErrors(this.id.getDomainErrors());
     this.addDomainErrors(this.academicInstitution.getDomainErrors());
     this.addDomainErrors(this.workplace.getDomainErrors());
     this.addDomainErrors(this.englishCertification.getDomainErrors());
@@ -47,11 +48,15 @@ export class StudentFile extends EntityBase<Uuid> {
 
   public static getEmptyObject(): StudentFile {
     return new StudentFile(
-      new Uuid(""),
-      new AcademicInstitution(""),
-      new Workplace(""),
-      new EnglishCertificate("", false),
-      new Comment("")
+      new Uuid("", StudentFile.getEntityName()),
+      new AcademicInstitution("", StudentFile.getEntityName()),
+      new Workplace("", StudentFile.getEntityName()),
+      new EnglishCertificate("", false, StudentFile.getEntityName()),
+      new Comment("", StudentFile.getEntityName())
     );
+  }
+
+  static getEntityName(): string {
+    return "Student File";
   }
 }

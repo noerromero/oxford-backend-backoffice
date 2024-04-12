@@ -2,11 +2,13 @@ import { InvalidArgumentException } from "../../../Shared/Domain/DomainException
 import { StringValueObject } from "../../../Shared/Domain/ValueObject/Primitives/StringValueObject";
 
 export class Comment extends StringValueObject {
-  constructor(value: string, isOptional: boolean = false) {
-    super(value, isOptional);
+  constructor(value: string, ownerEntity: string, isOptional: boolean = false) {
+    super(value, ownerEntity, isOptional);
     if (!this.hasValidLenght()) {
       this.addDomainError(
-        new InvalidArgumentException("Comment must have a valid length")
+        new InvalidArgumentException(
+          this.formatErrorMessage("Comment must have a valid length")
+        )
       );
     }
   }

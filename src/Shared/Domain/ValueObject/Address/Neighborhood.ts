@@ -1,20 +1,22 @@
-import { StringValueObject } from '../Primitives/StringValueObject';
-import { InvalidArgumentException } from '../../DomainException/InvalidArgumentException';
+import { StringValueObject } from "../Primitives/StringValueObject";
+import { InvalidArgumentException } from "../../DomainException/InvalidArgumentException";
 
 export class Neighborhood extends StringValueObject {
-    constructor(value: string, isOptional: boolean = false) {
-        super(value, isOptional);
-        if (!this.hasValidLenght(value)) {
-        this.addDomainError(
-            new InvalidArgumentException('Neighborhood must have a valid length')
-        );
-        }
+  constructor(value: string, ownerEntity: string, isOptional: boolean = false) {
+    super(value, ownerEntity, isOptional);
+    if (!this.hasValidLenght(value)) {
+      this.addDomainError(
+        new InvalidArgumentException(
+          this.formatErrorMessage("Neighborhood must have a valid length")
+        )
+      );
     }
-    
-    protected hasValidLenght(value: string): boolean {
-        if (!this.shouldBeValidated()) {
-            return true;
-          }
-        return value.length > 0 && value.length <= 50;
-    }    
+  }
+
+  protected hasValidLenght(value: string): boolean {
+    if (!this.shouldBeValidated()) {
+      return true;
+    }
+    return value.length > 0 && value.length <= 50;
+  }
 }

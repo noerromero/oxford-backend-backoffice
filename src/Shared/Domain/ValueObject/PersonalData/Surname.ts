@@ -2,11 +2,13 @@ import { StringValueObject } from "../Primitives/StringValueObject";
 import { InvalidArgumentException } from "../../DomainException/InvalidArgumentException";
 
 export class Surname extends StringValueObject {
-  constructor(value: string, isOptional: boolean = false) {
-    super(value, isOptional);
+  constructor(value: string, ownerEntity: string, isOptional: boolean = false) {
+    super(value, ownerEntity, isOptional);
     if (!this.hasValidLenght(value)) {
       this.addDomainError(
-        new InvalidArgumentException("Person surname must have a valid length")
+        new InvalidArgumentException(
+          this.formatErrorMessage("Person surname must have a valid length")
+        )
       );
     }
   }

@@ -32,6 +32,7 @@ export class LegalRepresentative extends EntityBase<Uuid> {
   public recoveryDomainErrors(): void {
     if(this.isEmpty()) return;
 
+    this.addDomainErrors(this.id.getDomainErrors());
     this.addDomainErrors(this.name.getDomainErrors());
     this.addDomainErrors(this.surname.getDomainErrors());
     this.addDomainErrors(this.secondSurname.getDomainErrors());
@@ -52,12 +53,16 @@ export class LegalRepresentative extends EntityBase<Uuid> {
 
   public static getEmptyObject(): LegalRepresentative {
     return new LegalRepresentative(
-      new Uuid(""),
-      new FirstName(""),
-      new Surname(""),
-      new Surname(""),
-      new Phone(""),
-      new Cellphone("")
+      new Uuid("", LegalRepresentative.getEntityName()),
+      new FirstName("", LegalRepresentative.getEntityName()),
+      new Surname("", LegalRepresentative.getEntityName()),
+      new Surname("", LegalRepresentative.getEntityName()),
+      new Phone("", LegalRepresentative.getEntityName()),
+      new Cellphone("", LegalRepresentative.getEntityName())
     );
   }
+
+  static getEntityName(): string {
+    return "Legal Representative";
+  } 
 }

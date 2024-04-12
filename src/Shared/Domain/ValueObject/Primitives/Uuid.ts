@@ -4,27 +4,31 @@ import { InvalidArgumentException } from "../../DomainException/InvalidArgumentE
 import { ValueObject } from "./ValueObject";
 
 export class Uuid extends ValueObject<string> {
-  constructor(value: string) {
-    super(value);
+  constructor(value: string, ownerEntity: string, isOptional: boolean = false) {
+    super(value, ownerEntity, isOptional);
     this.ensureIsValidUuid(value);
     this.checkIfItIsEmpty();
   }
 
   static random(): Uuid {
-    return new Uuid(uuid());
+    return new Uuid(uuid(), "");
   }
 
   private ensureIsValidUuid(id: string): void {
     if (!validate(id)) {
       this.addDomainError(
         new InvalidArgumentException(
-          `<${this.constructor.name}> does not allow the value <${id}>`
+          this.formatErrorMessage(
+            `<${this.constructor.name}> does not allow the value <${id}>`
+          )
         )
       );
     }
   }
 
   protected checkIfItIsEmpty(): void {
-    this.setEmpty(this.value === "" || this.value === null || this.value === undefined);
+    this.setEmpty(
+      this.value === "" || this.value === null || this.value === undefined
+    );
   }
 }

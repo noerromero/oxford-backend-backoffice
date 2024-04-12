@@ -1,8 +1,12 @@
 import { ValueObject } from "./ValueObject";
 
 export abstract class StringValueObject extends ValueObject<string> {
-  constructor(value: string, isOptional: boolean = false) {
-    super(value, isOptional);
+  constructor(
+    value: string,
+    ownerEntity: string,
+    isOptional: boolean = false
+  ) {
+    super(value, ownerEntity, isOptional);
     this.checkIfItIsEmpty();
   }
 
@@ -14,6 +18,8 @@ export abstract class StringValueObject extends ValueObject<string> {
   }
 
   protected checkIfItIsEmpty(): void {
-    this.setEmpty(this.value === "" || this.value === null || this.value === undefined);
+    this.setEmpty(
+      this.value === "" || this.value === null || this.value === undefined
+    );
   }
 }

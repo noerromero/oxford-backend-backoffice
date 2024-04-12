@@ -2,11 +2,13 @@ import { InvalidArgumentException } from "../../DomainException/InvalidArgumentE
 import { StringValueObject } from "../Primitives/StringValueObject";
 
 export class Dni extends StringValueObject {
-  constructor(value: string) {
-    super(value);
+  constructor(value: string, ownerEntity: string, isOptional: boolean = false) {
+    super(value, ownerEntity, isOptional);
     if (!this.hasValidFormat(value)) {
       this.addDomainError(
-        new InvalidArgumentException(`Person ID ${value} is invalid`)
+        new InvalidArgumentException(
+          this.formatErrorMessage(`DNI ${value} is invalid`)
+        )
       );
     }
   }

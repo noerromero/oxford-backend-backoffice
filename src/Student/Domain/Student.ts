@@ -99,6 +99,7 @@ export class Student extends AggregateRoot<Uuid> {
     this.legalRepresentative.recoveryDomainErrors();
     this.studentFile.recoveryDomainErrors();
 
+    this.addDomainErrors(this.id.getDomainErrors());
     this.addDomainErrors(this.dni.getDomainErrors());
     this.addDomainErrors(this.name.getDomainErrors());
     this.addDomainErrors(this.surname.getDomainErrors());
@@ -170,5 +171,9 @@ export class Student extends AggregateRoot<Uuid> {
 
   public setBirthdate(birthdate: Birthdate): void {
     this.birthdate = birthdate;
+  }
+
+  static getEntityName(): string {
+    return "Student";
   }
 }

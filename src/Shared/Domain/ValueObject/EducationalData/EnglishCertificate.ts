@@ -10,19 +10,23 @@ export class EnglishCertificate extends StringValueObject {
 
   private readonly isOther: boolean;
 
-  constructor(value: string, isOther: boolean, isOptional: boolean = false) {
-    super(value, isOptional);
+  constructor(value: string, isOther: boolean, ownerEntity: string, isOptional: boolean = false) {
+    super(value, ownerEntity, isOptional);
     this.isOther = isOther;
     if (!this.hasValidLenght()) {
       this.addDomainError(
         new InvalidArgumentException(
-          "English certification must have a valid length"
+          this.formatErrorMessage(
+            "English certification must have a valid length"
+          )
         )
       );
     }
     if (!this.hasValidValue()) {
       this.addDomainError(
-        new InvalidArgumentException("English certification value is not valid")
+        new InvalidArgumentException(
+          this.formatErrorMessage("English certification value is not valid")
+        )
       );
     }
   }
