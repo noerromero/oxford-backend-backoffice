@@ -64,6 +64,13 @@ export const postStudent = async (req: any, res: any) => {
   studentCreateDto.legalRepresentativeCellphone = legalRepresentativeCellphone;
 
   const studentCreator = new StudentCreator(new MysqlStudentRepository());
-  const response = await studentCreator.run(studentCreateDto);
-  res.json(response);
+  try {
+    const response = await studentCreator.run(studentCreateDto);
+    if (!response.success) {
+      return res.status(400).json(response);
+    }
+    return res.status(201).json(response);
+  } catch (e) {
+    return res.status(500).json({ success: false, message: "Internal server error" });
+  }
 };
