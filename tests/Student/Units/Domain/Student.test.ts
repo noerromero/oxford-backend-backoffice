@@ -28,36 +28,36 @@ describe("Student - isAdult Property", () => {
     student = new Student(
       studentRepository as any,
       Uuid.random(),
-      new Dni("12345678"),
-      new FirstName("John"),
-      new Surname("Doe"),
-      new Surname("Smith"),
-      new Email("jhon.doe@gmail.com"),
-      new Phone("123456"),
-      new Birthdate("2019-01-01"),
-      new Cellphone("123456789"),
+      new Dni("12345678", Student.getEntityName()),
+      new FirstName("John", Student.getEntityName()),
+      new Surname("Doe", Student.getEntityName()),
+      new Surname("Smith", Student.getEntityName()),
+      new Email("jhon.doe@gmail.com", Student.getEntityName()),
+      new Phone("123456", Student.getEntityName()),
+      new Birthdate("2019-01-01", Student.getEntityName()),
+      new Cellphone("123456789", Student.getEntityName()),
       new Address(
         Uuid.random(),
-        new Street("Street 123"),
-        new Neighborhood(""),
-        new City("White City"),
-        new State("New York"),
-        new Reference("at the corner of the street")
+        new Street("Street 123", Address.getEntityName()),
+        new Neighborhood("", Address.getEntityName()),
+        new City("White City", Address.getEntityName()),
+        new State("New York", Address.getEntityName()),
+        new Reference("at the corner of the street", Address.getEntityName())
       ),
       new LegalRepresentative(
         Uuid.random(),
-        new FirstName("Jane"),
-        new Surname("Doe"),
-        new Surname("Smith"),
-        new Phone("123456"),
-        new Cellphone("123456789")
+        new FirstName("Jane", LegalRepresentative.getEntityName()),
+        new Surname("Doe", LegalRepresentative.getEntityName()),
+        new Surname("Smith", LegalRepresentative.getEntityName()),
+        new Phone("123456", LegalRepresentative.getEntityName()),
+        new Cellphone("123456789", LegalRepresentative.getEntityName())
       ),
       new StudentFile(
         Uuid.random(),
-        new AcademicInstitution("University of New York"),
-        new Workplace("Google"),
-        new EnglishCertificate("TOEFL", false),
-        new Comment("Good student")
+        new AcademicInstitution("University of New York", StudentFile.getEntityName()),
+        new Workplace("Google", StudentFile.getEntityName()),
+        new EnglishCertificate("TOEFL", false, StudentFile.getEntityName()),
+        new Comment("Good student", StudentFile.getEntityName())
       )
     );
   });
@@ -67,7 +67,7 @@ describe("Student - isAdult Property", () => {
     date.setFullYear(date.getFullYear() - 17);
     let formattedDate: string = date.toISOString().slice(0, 10);
 
-    student.setBirthdate(new Birthdate(formattedDate));
+    student.setBirthdate(new Birthdate(formattedDate, Student.getEntityName()));
     expect(student.isAdult()).toBe(false);
   });
 
@@ -76,7 +76,7 @@ describe("Student - isAdult Property", () => {
     date.setFullYear(date.getFullYear() - 18);
     let formattedDate: string = date.toISOString().slice(0, 10);
 
-    student.setBirthdate(new Birthdate(formattedDate));
+    student.setBirthdate(new Birthdate(formattedDate, Student.getEntityName()));
     expect(student.isAdult()).toBe(true);
   });
 });

@@ -21,21 +21,21 @@ describe("MysqlStudentRepository - save Method", () => {
     student = new Student(
       studentRepository,
       Uuid.random(),
-      new Dni("12345678"),
-      new FirstName("John"),
-      new Surname("Doe"),
-      new Surname("Smith"),
-      new Email("john.doe@gmail.com"),
-      new Phone("123456"),
-      new Birthdate("2019-01-01"),
-      new Cellphone("123456789"),
+      new Dni("12345678", Student.getEntityName()),
+      new FirstName("John", Student.getEntityName()),
+      new Surname("Doe", Student.getEntityName()),
+      new Surname("Smith", Student.getEntityName()),
+      new Email("john.doe@gmail.com", Student.getEntityName()),
+      new Phone("123456", Student.getEntityName()),
+      new Birthdate("2019-01-01", Student.getEntityName()),
+      new Cellphone("123456789", Student.getEntityName()),
       Address.getEmptyObject(),
       LegalRepresentative.getEmptyObject(),
       StudentFile.getEmptyObject()
     );
   });
 
-  test.skip("should save a student", async () => {
+  test.skip("should save a student successfully", async () => {
     const result = await studentRepository.save(student);
     expect(result).toBeUndefined();
   });

@@ -1,6 +1,8 @@
 import { StudentCreateDto } from "../../../../src/Student/Application/Dto/StudentCreateDto";
 import { StudentCreator } from "../../../../src/Student/Application/StudentCreator";
 import { Uuid } from "../../../../src/Shared/Domain/ValueObject/Primitives/Uuid";
+import { Student } from "../../../../src/Student/Domain/Student";
+import { StudentFile } from "../../../../src/Student/Domain/StudentFile";
 
 describe("StudentFileCreator", () => {
   let studentRepository = { save: jest.fn() };
@@ -60,7 +62,9 @@ describe("StudentFileCreator", () => {
     response.then((response) => {
       expect(response.success).toBe(false);
       expect(response.data).toEqual([
-        `Person ID ${studentCreateDtoCopy.studentDni} is invalid`,
+        `${Student.getEntityName()} - DNI ${
+          studentCreateDtoCopy.studentDni
+        } is invalid`,
       ]);
       expect(studentRepository.save).toHaveBeenCalled();
     });
@@ -75,7 +79,9 @@ describe("StudentFileCreator", () => {
     response.then((response) => {
       expect(response.success).toBe(false);
       expect(response.data).toEqual([
-        `Email ${studentCreateDtoCopy.studentEmail} is invalid`,
+        `${Student.getEntityName()} - Email ${
+          studentCreateDtoCopy.studentEmail
+        } is invalid`,
       ]);
       expect(studentRepository.save).toHaveBeenCalled();
     });
@@ -89,7 +95,9 @@ describe("StudentFileCreator", () => {
 
     response.then((response) => {
       expect(response.success).toBe(false);
-      expect(response.data).toEqual([`Invalid birthdate format`]);
+      expect(response.data).toEqual([
+        `${Student.getEntityName()} - Invalid birthdate format`,
+      ]);
       expect(studentRepository.save).toHaveBeenCalled();
     });
   });
@@ -103,7 +111,9 @@ describe("StudentFileCreator", () => {
     response.then((response) => {
       expect(response.success).toBe(false);
       expect(response.data).toEqual([
-        `Cellphone ${studentCreateDtoCopy.studentCellphone} is invalid`,
+        `${Student.getEntityName()} - Cellphone ${
+          studentCreateDtoCopy.studentCellphone
+        } is invalid`,
       ]);
       expect(studentRepository.save).toHaveBeenCalled();
     });
@@ -119,7 +129,7 @@ describe("StudentFileCreator", () => {
     response.then((response) => {
       expect(response.success).toBe(false);
       expect(response.data).toEqual([
-        "English certification value is not valid",
+        `${StudentFile.getEntityName()} - English certification value is not valid`,
       ]);
       expect(studentRepository.save).toHaveBeenCalled();
     });
@@ -139,11 +149,17 @@ describe("StudentFileCreator", () => {
     response.then((response) => {
       expect(response.success).toBe(false);
       expect(response.data).toEqual([
-        `Person ID ${studentCreateDtoCopy.studentDni} is invalid`,
-        `Email ${studentCreateDtoCopy.studentEmail} is invalid`,
-        `Invalid birthdate format`,
-        `Cellphone ${studentCreateDtoCopy.studentCellphone} is invalid`,
-        "English certification value is not valid",
+        `${Student.getEntityName()} - DNI ${
+          studentCreateDtoCopy.studentDni
+        } is invalid`,
+        `${Student.getEntityName()} - Email ${
+          studentCreateDtoCopy.studentEmail
+        } is invalid`,
+        `${Student.getEntityName()} - Invalid birthdate format`,
+        `${Student.getEntityName()} - Cellphone ${
+          studentCreateDtoCopy.studentCellphone
+        } is invalid`,
+        `${StudentFile.getEntityName()} - English certification value is not valid`,
       ]);
       expect(studentRepository.save).toHaveBeenCalled();
     });
@@ -183,7 +199,7 @@ describe("StudentFileCreator", () => {
     response.then((response) => {
       expect(response.success).toBe(false);
       expect(response.data).toEqual([
-        "Legal representative is required for minor students",
+        `Legal representative is required for minor students`,
       ]);
       expect(studentRepository.save).toHaveBeenCalled();
     });
