@@ -5,4 +5,5 @@ export interface IAddressDb {
     city?: string;
     state?: string;
     reference?: string;
+    student_id?: string;
 }

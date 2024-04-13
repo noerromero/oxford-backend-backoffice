@@ -11,6 +11,7 @@ export class LegalRepresentative extends EntityBase<Uuid> {
   protected secondSurname: Surname;
   protected phone: Phone;
   protected cellphone: Cellphone;
+  protected studentId: Uuid;
 
   constructor(
     id: Uuid,
@@ -18,7 +19,8 @@ export class LegalRepresentative extends EntityBase<Uuid> {
     surname: Surname,
     secondSurname: Surname,
     phone: Phone,
-    cellphone: Cellphone
+    cellphone: Cellphone,
+    studentId: Uuid
   ) {
     super(id);
     this.name = name;
@@ -26,6 +28,7 @@ export class LegalRepresentative extends EntityBase<Uuid> {
     this.secondSurname = secondSurname;
     this.phone = phone;
     this.cellphone = cellphone;
+    this.studentId = studentId;
     this.checkIfItIsEmpty();
   }
 
@@ -53,6 +56,10 @@ export class LegalRepresentative extends EntityBase<Uuid> {
     return this.cellphone;
   }
 
+  public getStudentId(): Uuid {
+    return this.studentId;
+  }
+
   public recoveryDomainErrors(): void {
     if(this.isEmpty()) return;
 
@@ -62,6 +69,7 @@ export class LegalRepresentative extends EntityBase<Uuid> {
     this.addDomainErrors(this.secondSurname.getDomainErrors());
     this.addDomainErrors(this.phone.getDomainErrors());
     this.addDomainErrors(this.cellphone.getDomainErrors());
+    this.addDomainErrors(this.studentId.getDomainErrors());
   }
 
   protected checkIfItIsEmpty(): void {
@@ -82,7 +90,8 @@ export class LegalRepresentative extends EntityBase<Uuid> {
       new Surname("", LegalRepresentative.getEntityName()),
       new Surname("", LegalRepresentative.getEntityName()),
       new Phone("", LegalRepresentative.getEntityName()),
-      new Cellphone("", LegalRepresentative.getEntityName())
+      new Cellphone("", LegalRepresentative.getEntityName()),
+      new Uuid("", LegalRepresentative.getEntityName())
     );
   }
 

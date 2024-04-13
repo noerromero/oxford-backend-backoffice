@@ -27,6 +27,7 @@ export class MysqlStudentRepository implements IStudentRepository {
       city: student.getAddress().getCity().toString(),
       state: student.getAddress().getState().toString(),
       reference: student.getAddress().getReference().toString(),
+      student_id: student.getAddress().getStudentId().toString(),
     };
 
     const legalRepresentativeDbEntity: ILegalRepresentativeDb = {
@@ -39,6 +40,7 @@ export class MysqlStudentRepository implements IStudentRepository {
         .toString(),
       phone: student.getLegalRepresentative().getPhone().toString(),
       cellphone: student.getLegalRepresentative().getCellphone().toString(),
+      student_id: student.getLegalRepresentative().getStudentId().toString(),
     };
 
     const studentFolderDbEntity: IStudentFolderDb = {
@@ -48,11 +50,12 @@ export class MysqlStudentRepository implements IStudentRepository {
         .getAcademicInstitution()
         .toString(),
       workplace: student.getStudentFolder().getWorkplace().toString(),
-      english_certification: student
+      english_certificate: student
         .getStudentFolder()
         .getEnglishCertification()
         .toString(),
       comment: student.getStudentFolder().getComment().toString(),
+      student_id: student.getStudentFolder().getStudentId().toString(),
     };
 
     const conn = await connect();

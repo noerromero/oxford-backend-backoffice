@@ -28,6 +28,10 @@ module.exports = {
           type: Sequelize.STRING(100),
           allowNull: true,
         },
+        comment: {
+          type: Sequelize.STRING(1000),
+          allowNull: true,
+        },
       },
       {
         schema: "backoffice",

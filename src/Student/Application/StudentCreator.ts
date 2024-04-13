@@ -58,7 +58,8 @@ export class StudentCreator {
         studentCreateDto.legalRepresentativeCellphone,
         LegalRepresentative.getEntityName(),
         true
-      )
+      ),
+      new Uuid(studentCreateDto.studentId, LegalRepresentative.getEntityName())
     );
 
     const studentFile = new StudentFolder(
@@ -79,7 +80,8 @@ export class StudentCreator {
       new Comment(
         studentCreateDto.studentComment,
         StudentFolder.getEntityName()
-      )
+      ),
+      new Uuid(studentCreateDto.studentId, LegalRepresentative.getEntityName())
     );
 
     const address = new Address(
@@ -99,7 +101,8 @@ export class StudentCreator {
         studentCreateDto.studentAddressReference,
         Address.getEntityName(),
         true
-      )
+      ),
+      new Uuid(studentCreateDto.studentId, LegalRepresentative.getEntityName())
     );
 
     const student = new Student(

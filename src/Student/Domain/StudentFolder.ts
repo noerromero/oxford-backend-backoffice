@@ -8,21 +8,24 @@ import { EntityBase } from "../../Shared/Domain/EntityBase";
 export class StudentFolder extends EntityBase<Uuid> {
   protected academicInstitution: AcademicInstitution;
   protected workplace: Workplace;
-  protected englishCertification: EnglishCertificate;
+  protected englishCertificate: EnglishCertificate;
   protected comment: Comment;
+  protected studentId: Uuid;
 
   public constructor(
     id: Uuid,
     academicInstitution: AcademicInstitution,
     workplace: Workplace,
-    englishCertification: EnglishCertificate,
-    comment: Comment
+    englishCertificate: EnglishCertificate,
+    comment: Comment,
+    studentId: Uuid
   ) {
     super(id);
     this.academicInstitution = academicInstitution;
     this.workplace = workplace;
-    this.englishCertification = englishCertification;
+    this.englishCertificate = englishCertificate;
     this.comment = comment;
+    this.studentId = studentId;
     this.checkIfItIsEmpty();
   }
 
@@ -39,11 +42,15 @@ export class StudentFolder extends EntityBase<Uuid> {
   }
 
   public getEnglishCertification(): EnglishCertificate {
-    return this.englishCertification;
+    return this.englishCertificate;
   }
 
   public getComment(): Comment {
     return this.comment;
+  }
+
+  public getStudentId(): Uuid {
+    return this.studentId;
   }
 
   public recoveryDomainErrors(): void {
@@ -52,8 +59,9 @@ export class StudentFolder extends EntityBase<Uuid> {
     this.addDomainErrors(this.id.getDomainErrors());
     this.addDomainErrors(this.academicInstitution.getDomainErrors());
     this.addDomainErrors(this.workplace.getDomainErrors());
-    this.addDomainErrors(this.englishCertification.getDomainErrors());
+    this.addDomainErrors(this.englishCertificate.getDomainErrors());
     this.addDomainErrors(this.comment.getDomainErrors());
+    this.addDomainErrors(this.studentId.getDomainErrors());
   }
 
   protected checkIfItIsEmpty(): void {
@@ -61,7 +69,7 @@ export class StudentFolder extends EntityBase<Uuid> {
       this.id.isEmpty() &&
         this.academicInstitution.isEmpty() &&
         this.workplace.isEmpty() &&
-        this.englishCertification.isEmpty() &&
+        this.englishCertificate.isEmpty() &&
         this.comment.isEmpty()
     );
   }
@@ -72,7 +80,8 @@ export class StudentFolder extends EntityBase<Uuid> {
       new AcademicInstitution("", StudentFolder.getEntityName()),
       new Workplace("", StudentFolder.getEntityName()),
       new EnglishCertificate("", false, StudentFolder.getEntityName()),
-      new Comment("", StudentFolder.getEntityName())
+      new Comment("", StudentFolder.getEntityName()),
+      new Uuid("", StudentFolder.getEntityName())
     );
   }
 

@@ -5,4 +5,5 @@ export interface ILegalRepresentativeDb {
     second_surname?: string;
     phone?: string;
     cellphone?: string;
+    student_id?: string;
 }
