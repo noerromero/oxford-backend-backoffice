@@ -17,7 +17,7 @@ import { Workplace } from "../../../../src/Shared/Domain/ValueObject/Workplace/W
 import { Address } from "../../../../src/Student/Domain/Address";
 import { LegalRepresentative } from "../../../../src/Student/Domain/LegalRepresentative";
 import { Student } from "../../../../src/Student/Domain/Student";
-import { StudentFile } from "../../../../src/Student/Domain/StudentFile";
+import { StudentFolder } from "../../../../src/Student/Domain/StudentFolder";
 import { Comment } from "../../../../src/Student/Domain/ValueObject/Comment";
 
 describe("Student - isAdult Property", () => {
@@ -52,12 +52,15 @@ describe("Student - isAdult Property", () => {
         new Phone("123456", LegalRepresentative.getEntityName()),
         new Cellphone("123456789", LegalRepresentative.getEntityName())
       ),
-      new StudentFile(
+      new StudentFolder(
         Uuid.random(),
-        new AcademicInstitution("University of New York", StudentFile.getEntityName()),
-        new Workplace("Google", StudentFile.getEntityName()),
-        new EnglishCertificate("TOEFL", false, StudentFile.getEntityName()),
-        new Comment("Good student", StudentFile.getEntityName())
+        new AcademicInstitution(
+          "University of New York",
+          StudentFolder.getEntityName()
+        ),
+        new Workplace("Google", StudentFolder.getEntityName()),
+        new EnglishCertificate("TOEFL", false, StudentFolder.getEntityName()),
+        new Comment("Good student", StudentFolder.getEntityName())
       )
     );
   });

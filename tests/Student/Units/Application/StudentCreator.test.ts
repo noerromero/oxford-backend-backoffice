@@ -2,7 +2,7 @@ import { StudentCreateDto } from "../../../../src/Student/Application/Dto/Studen
 import { StudentCreator } from "../../../../src/Student/Application/StudentCreator";
 import { Uuid } from "../../../../src/Shared/Domain/ValueObject/Primitives/Uuid";
 import { Student } from "../../../../src/Student/Domain/Student";
-import { StudentFile } from "../../../../src/Student/Domain/StudentFile";
+import { StudentFolder } from "../../../../src/Student/Domain/StudentFolder";
 
 describe("StudentFileCreator", () => {
   let studentRepository = { save: jest.fn() };
@@ -129,7 +129,7 @@ describe("StudentFileCreator", () => {
     response.then((response) => {
       expect(response.success).toBe(false);
       expect(response.data).toEqual([
-        `${StudentFile.getEntityName()} - English certification value is not valid`,
+        `${StudentFolder.getEntityName()} - English certification value is not valid`,
       ]);
       expect(studentRepository.save).toHaveBeenCalled();
     });
@@ -159,7 +159,7 @@ describe("StudentFileCreator", () => {
         `${Student.getEntityName()} - Cellphone ${
           studentCreateDtoCopy.studentCellphone
         } is invalid`,
-        `${StudentFile.getEntityName()} - English certification value is not valid`,
+        `${StudentFolder.getEntityName()} - English certification value is not valid`,
       ]);
       expect(studentRepository.save).toHaveBeenCalled();
     });

@@ -30,6 +30,30 @@ export class Address extends EntityBase<Uuid> {
     this.checkIfItIsEmpty();
   }
 
+  public getId(): Uuid {
+    return this.id;
+  }
+
+  public getStreet(): Street {
+    return this.street;
+  }
+
+  public getNeighborhood(): Neighborhood {
+    return this.neighborhood;
+  }
+
+  public getCity(): City {
+    return this.city;
+  }
+
+  public getState(): State {
+    return this.state;
+  }
+
+  public getReference(): Reference {
+    return this.reference;
+  }
+
   public recoveryDomainErrors(): void {
     if(this.isEmpty()) return;
 

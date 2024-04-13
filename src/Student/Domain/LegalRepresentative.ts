@@ -29,6 +29,30 @@ export class LegalRepresentative extends EntityBase<Uuid> {
     this.checkIfItIsEmpty();
   }
 
+  public getId(): Uuid {
+    return this.id;
+  }
+
+  public getName(): FirstName {
+    return this.name;
+  }
+
+  public getSurname(): Surname {
+    return this.surname;
+  }
+
+  public getSecondSurname(): Surname {
+    return this.secondSurname;
+  }
+
+  public getPhone(): Phone {
+    return this.phone;
+  }
+
+  public getCellphone(): Cellphone {
+    return this.cellphone;
+  }
+
   public recoveryDomainErrors(): void {
     if(this.isEmpty()) return;
 

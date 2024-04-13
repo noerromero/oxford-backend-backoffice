@@ -11,7 +11,7 @@ import { AggregateRoot } from "../../Shared/Domain/AggregateRoot";
 import { IStudentRepository } from "./IStudentRepository";
 import { DomainResponse } from "../../Shared/Domain/DomainResponse";
 import { LegalRepresentative } from "./LegalRepresentative";
-import { StudentFile } from "./StudentFile";
+import { StudentFolder } from "./StudentFolder";
 
 export class Student extends AggregateRoot<Uuid> {
   protected dni: Dni;
@@ -24,7 +24,7 @@ export class Student extends AggregateRoot<Uuid> {
   protected cellphone: Cellphone;
   protected address: Address;
   protected legalRepresentative: LegalRepresentative;
-  protected studentFile: StudentFile;
+  protected studentFolder: StudentFolder;
 
   constructor(
     repository: IStudentRepository,
@@ -39,7 +39,7 @@ export class Student extends AggregateRoot<Uuid> {
     cellphone: Cellphone,
     address: Address,
     legalRepresentative: LegalRepresentative,
-    studentFile: StudentFile
+    studentFolder: StudentFolder
   ) {
     super(repository, id);
     this.dni = dni;
@@ -52,7 +52,7 @@ export class Student extends AggregateRoot<Uuid> {
     this.cellphone = cellphone;
     this.address = address;
     this.legalRepresentative = legalRepresentative;
-    this.studentFile = studentFile;
+    this.studentFolder = studentFolder;
     this.checkIfItIsEmpty();
   }
 
@@ -92,12 +92,24 @@ export class Student extends AggregateRoot<Uuid> {
     return this.cellphone;
   }
 
+  public getAddress(): Address {
+    return this.address;
+  }
+
+  public getLegalRepresentative(): LegalRepresentative {
+    return this.legalRepresentative;
+  }
+
+  public getStudentFolder(): StudentFolder {
+    return this.studentFolder;
+  }
+
   protected recoveryDomainErrors(): void {
     if (this.isEmpty()) return;
 
     this.address.recoveryDomainErrors();
     this.legalRepresentative.recoveryDomainErrors();
-    this.studentFile.recoveryDomainErrors();
+    this.studentFolder.recoveryDomainErrors();
 
     this.addDomainErrors(this.id.getDomainErrors());
     this.addDomainErrors(this.dni.getDomainErrors());
@@ -110,14 +122,14 @@ export class Student extends AggregateRoot<Uuid> {
     this.addDomainErrors(this.cellphone.getDomainErrors());
     this.addDomainErrors(this.address.getDomainErrors());
     this.addDomainErrors(this.legalRepresentative.getDomainErrors());
-    this.addDomainErrors(this.studentFile.getDomainErrors());
+    this.addDomainErrors(this.studentFolder.getDomainErrors());
 
     this.addDomainErrors(this.ensureMinorStudentHasLegalRepresentative());
     this.addDomainErrors(this.ensureStudentIsNotDuplicate());
   }
 
   protected async handleSave(): Promise<DomainResponse> {
-    await this.repository.save(this);
+    await this.repository.create(this);
     return new DomainResponse(true, []);
   }
 
@@ -134,7 +146,7 @@ export class Student extends AggregateRoot<Uuid> {
         this.cellphone.isEmpty() &&
         this.address.isEmpty() &&
         this.legalRepresentative.isEmpty() &&
-        this.studentFile.isEmpty()
+        this.studentFolder.isEmpty()
     );
   }
 

@@ -9,7 +9,7 @@ import { Uuid } from "../../../../../src/Shared/Domain/ValueObject/Primitives/Uu
 import { Address } from "../../../../../src/Student/Domain/Address";
 import { LegalRepresentative } from "../../../../../src/Student/Domain/LegalRepresentative";
 import { Student } from "../../../../../src/Student/Domain/Student";
-import { StudentFile } from "../../../../../src/Student/Domain/StudentFile";
+import { StudentFolder } from "../../../../../src/Student/Domain/StudentFolder";
 import { MysqlStudentRepository } from "../../../../../src/Student/Infrastructure/Persistence/Mysql/MysqlStudentRepository";
 
 describe("MysqlStudentRepository - save Method", () => {
@@ -31,12 +31,12 @@ describe("MysqlStudentRepository - save Method", () => {
       new Cellphone("123456789", Student.getEntityName()),
       Address.getEmptyObject(),
       LegalRepresentative.getEmptyObject(),
-      StudentFile.getEmptyObject()
+      StudentFolder.getEmptyObject()
     );
   });
 
   test.skip("should save a student successfully", async () => {
-    const result = await studentRepository.save(student);
+    const result = await studentRepository.create(student);
     expect(result).toBeUndefined();
   });
 });

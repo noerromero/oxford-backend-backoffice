@@ -5,7 +5,7 @@ import { Comment } from "./ValueObject/Comment";
 import { Uuid } from "../../Shared/Domain/ValueObject/Primitives/Uuid";
 import { EntityBase } from "../../Shared/Domain/EntityBase";
 
-export class StudentFile extends EntityBase<Uuid> {
+export class StudentFolder extends EntityBase<Uuid> {
   protected academicInstitution: AcademicInstitution;
   protected workplace: Workplace;
   protected englishCertification: EnglishCertificate;
@@ -24,6 +24,26 @@ export class StudentFile extends EntityBase<Uuid> {
     this.englishCertification = englishCertification;
     this.comment = comment;
     this.checkIfItIsEmpty();
+  }
+
+  public getId(): Uuid {
+    return this.id;
+  }
+
+  public getAcademicInstitution(): AcademicInstitution {
+    return this.academicInstitution;
+  }
+
+  public getWorkplace(): Workplace {
+    return this.workplace;
+  }
+
+  public getEnglishCertification(): EnglishCertificate {
+    return this.englishCertification;
+  }
+
+  public getComment(): Comment {
+    return this.comment;
   }
 
   public recoveryDomainErrors(): void {
@@ -46,17 +66,17 @@ export class StudentFile extends EntityBase<Uuid> {
     );
   }
 
-  public static getEmptyObject(): StudentFile {
-    return new StudentFile(
-      new Uuid("", StudentFile.getEntityName()),
-      new AcademicInstitution("", StudentFile.getEntityName()),
-      new Workplace("", StudentFile.getEntityName()),
-      new EnglishCertificate("", false, StudentFile.getEntityName()),
-      new Comment("", StudentFile.getEntityName())
+  public static getEmptyObject(): StudentFolder {
+    return new StudentFolder(
+      new Uuid("", StudentFolder.getEntityName()),
+      new AcademicInstitution("", StudentFolder.getEntityName()),
+      new Workplace("", StudentFolder.getEntityName()),
+      new EnglishCertificate("", false, StudentFolder.getEntityName()),
+      new Comment("", StudentFolder.getEntityName())
     );
   }
 
   static getEntityName(): string {
-    return "Student File";
+    return "Student Folder";
   }
 }
