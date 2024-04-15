@@ -53,7 +53,7 @@ export class StudentFolder extends EntityBase<Uuid> {
     return this.studentId;
   }
 
-  public recoveryDomainErrors(): void {
+  public recoverCommonDomainErrors(): void {
     if (this.isEmpty()) return;
 
     this.addDomainErrors(this.id.getDomainErrors());

@@ -1,7 +1,6 @@
 import { DomainBase } from "./DomainBase";
 
 export abstract class EntityBase<TId> extends DomainBase {
-
   protected id: TId;
 
   constructor(id: TId) {
@@ -9,5 +8,5 @@ export abstract class EntityBase<TId> extends DomainBase {
     this.id = id;
   }
 
-  protected abstract recoveryDomainErrors(): void;
+  protected abstract recoverCommonDomainErrors(): void;
 }

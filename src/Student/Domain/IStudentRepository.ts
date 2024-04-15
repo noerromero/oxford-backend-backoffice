@@ -2,5 +2,13 @@ import { Student } from "./Student";
 
 export interface IStudentRepository {
   create(entity: Student): Promise<void>;
-  //search(id: string): Promise<T | null>;
+  update(entity: Student): Promise<void>;
+  findById(
+    id: string,
+    includeAddress: boolean,
+    includeLegalRepresentative: boolean,
+    includeStudentFolder: boolean
+  ): Promise<Student | null>;
+  existsByDni(dni: string): Promise<boolean>;
+  existsById(id: string): Promise<boolean>;
 }

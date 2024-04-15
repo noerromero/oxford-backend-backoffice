@@ -56,6 +56,7 @@ export class Student extends AggregateRoot<Uuid> {
     this.checkIfItIsEmpty();
   }
 
+  //#region Getters
   public getId(): Uuid {
     return this.id;
   }
@@ -103,13 +104,35 @@ export class Student extends AggregateRoot<Uuid> {
   public getStudentFolder(): StudentFolder {
     return this.studentFolder;
   }
+  //#endregion Getters
 
-  protected recoveryDomainErrors(): void {
+  //#region Setters
+  public setBirthdate(birthdate: Birthdate): void {
+    this.birthdate = birthdate;
+  }
+
+  public setAddress(address: Address): void {
+    this.address = address;
+  }
+
+  public setLegalRepresentative(
+    legalRepresentative: LegalRepresentative
+  ): void {
+    this.legalRepresentative = legalRepresentative;
+  }
+
+  public setStudentFolder(studentFolder: StudentFolder): void {
+    this.studentFolder = studentFolder;
+  }
+  //#endregion Setters
+
+  //#region Validations
+  protected recoverCommonDomainErrors(): void {
     if (this.isEmpty()) return;
 
-    this.address.recoveryDomainErrors();
-    this.legalRepresentative.recoveryDomainErrors();
-    this.studentFolder.recoveryDomainErrors();
+    this.address.recoverCommonDomainErrors();
+    this.legalRepresentative.recoverCommonDomainErrors();
+    this.studentFolder.recoverCommonDomainErrors();
 
     this.addDomainErrors(this.id.getDomainErrors());
     this.addDomainErrors(this.dni.getDomainErrors());
@@ -125,12 +148,11 @@ export class Student extends AggregateRoot<Uuid> {
     this.addDomainErrors(this.studentFolder.getDomainErrors());
 
     this.addDomainErrors(this.ensureMinorStudentHasLegalRepresentative());
-    this.addDomainErrors(this.ensureStudentIsNotDuplicate());
+    this.addDomainErrors(this.ensureStudentIdIsTheSameInAllEntities());
   }
 
-  protected async handleSave(): Promise<DomainResponse> {
-    await this.repository.create(this);
-    return new DomainResponse(true, []);
+  protected async recoverDomainErrorsForUpdate(): Promise<void> {
+    this.addDomainErrors(await this.ensureIsAnExistingStudent());
   }
 
   protected checkIfItIsEmpty(): void {
@@ -162,9 +184,16 @@ export class Student extends AggregateRoot<Uuid> {
     return domainErros;
   }
 
-  private ensureStudentIsNotDuplicate(): Array<Error> {
+  private ensureStudentIdIsTheSameInAllEntities(): Array<Error> {
     let domainErros: Array<Error> = [];
-    //TODO: Check if student is duplicate
+    if (
+      this.address.getStudentId().getValue() !== this.id.getValue() ||
+      this.legalRepresentative.getStudentId().getValue() !==
+        this.id.getValue() ||
+      this.studentFolder.getStudentId().getValue() !== this.id.getValue()
+    ) {
+      domainErros.push(new Error("Student id is not the same in all entities"));
+    }
     return domainErros;
   }
 
@@ -181,11 +210,60 @@ export class Student extends AggregateRoot<Uuid> {
     return age >= Birthdate.ADULT_AGE;
   }
 
-  public setBirthdate(birthdate: Birthdate): void {
-    this.birthdate = birthdate;
+  protected async ensureIsAnExistingStudent(): Promise<Array<Error>> {
+    let domainErros: Array<Error> = [];
+    const existsByDni = await this.repository.exists(this.dni.getValue());
+    if (!existsByDni) {
+      this.addDomainError(new Error("Student DNI does not exist in the system"));
+    }
+    const existsById = await this.repository.existsById(this.id.toString());
+    if (!existsById) {
+      this.addDomainError(new Error("Student ID does not exist in the system"));
+    }
+    return domainErros;
   }
+  //#endregion Validations
 
+  //#region Static
   static getEntityName(): string {
     return "Student";
   }
+  //#endregion Static
+
+  //#region Operations
+  public async create(): Promise<DomainResponse> {
+    this.recoverCommonDomainErrors();
+    if (this.hasDomainErrors()) {
+      return Promise.resolve(
+        new DomainResponse(
+          false,
+          "Something went wrong with the student data",
+          this.toStringArray()
+        )
+      );
+    }
+
+    await this.repository.create(this);
+    return new DomainResponse(true, "Student created successfully", []);
+  }
+
+  public async update(): Promise<DomainResponse> {
+    this.recoverCommonDomainErrors();
+    await this.recoverDomainErrorsForUpdate();
+    
+    if (this.hasDomainErrors()) {
+      return Promise.resolve(
+        new DomainResponse(
+          false,
+          "Something went wrong with the student data",
+          this.toStringArray()
+        )
+      );
+    }
+    
+    await this.repository.update(this);
+    return new DomainResponse(true, "Student updated successfully", []);
+  }
+
+  //#endregion Operations
 }

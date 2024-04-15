@@ -5,7 +5,7 @@ import { Phone } from "../../Shared/Domain/ValueObject/PersonalData/Phone";
 import { Surname } from "../../Shared/Domain/ValueObject/PersonalData/Surname";
 import { Uuid } from "../../Shared/Domain/ValueObject/Primitives/Uuid";
 
-export class LegalRepresentative extends EntityBase<Uuid> {  
+export class LegalRepresentative extends EntityBase<Uuid> {
   protected name: FirstName;
   protected surname: Surname;
   protected secondSurname: Surname;
@@ -60,8 +60,8 @@ export class LegalRepresentative extends EntityBase<Uuid> {
     return this.studentId;
   }
 
-  public recoveryDomainErrors(): void {
-    if(this.isEmpty()) return;
+  public recoverCommonDomainErrors(): void {
+    if (this.isEmpty()) return;
 
     this.addDomainErrors(this.id.getDomainErrors());
     this.addDomainErrors(this.name.getDomainErrors());
@@ -97,5 +97,5 @@ export class LegalRepresentative extends EntityBase<Uuid> {
 
   static getEntityName(): string {
     return "Legal Representative";
-  } 
+  }
 }

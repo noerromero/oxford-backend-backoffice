@@ -128,6 +128,6 @@ export class StudentCreator {
       legalRepresentative,
       studentFile
     );
-    return await student.save();
+    return await student.create();
   }
 }
