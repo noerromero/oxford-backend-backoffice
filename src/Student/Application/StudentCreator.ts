@@ -15,7 +15,6 @@ import { Neighborhood } from "../../Shared/Domain/ValueObject/Address/Neighborho
 import { City } from "../../Shared/Domain/ValueObject/Address/City";
 import { State } from "../../Shared/Domain/ValueObject/Address/State";
 import { Reference } from "../../Shared/Domain/ValueObject/Address/Reference";
-import { StudentFolder } from "../Domain/StudentFolder";
 import { AcademicInstitution } from "../../Shared/Domain/ValueObject/EducationalData/AcademicInstitution";
 import { Workplace } from "../../Shared/Domain/ValueObject/Workplace/Workplace";
 import { EnglishCertificate } from "../../Shared/Domain/ValueObject/EducationalData/EnglishCertificate";
@@ -32,101 +31,87 @@ export class StudentCreator {
 
   async run(studentCreateDto: StudentCreateDto): Promise<DomainResponse> {
     const legalRepresentative = new LegalRepresentative(
-      new Uuid(
-        studentCreateDto.legalRepresentativeId,
-        LegalRepresentative.getEntityName()
-      ),
       new FirstName(
         studentCreateDto.legalRepresentativeName,
-        LegalRepresentative.getEntityName()
+        LegalRepresentative.getDomainTag()
       ),
       new Surname(
         studentCreateDto.legalRepresentativeSurname,
-        LegalRepresentative.getEntityName()
+        LegalRepresentative.getDomainTag()
       ),
       new Surname(
         studentCreateDto.legalRepresentativeSecondSurname,
-        LegalRepresentative.getEntityName(),
+        LegalRepresentative.getDomainTag(),
         true
       ),
       new Phone(
         studentCreateDto.legalRepresentativePhone,
-        LegalRepresentative.getEntityName(),
+        LegalRepresentative.getDomainTag(),
         true
       ),
       new Cellphone(
         studentCreateDto.legalRepresentativeCellphone,
-        LegalRepresentative.getEntityName(),
+        LegalRepresentative.getDomainTag(),
         true
-      ),
-      new Uuid(studentCreateDto.studentId, LegalRepresentative.getEntityName())
-    );
-
-    const studentFile = new StudentFolder(
-      new Uuid(studentCreateDto.studentFileId, StudentFolder.getEntityName()),
-      new AcademicInstitution(
-        studentCreateDto.studentAcademicInstitution,
-        StudentFolder.getEntityName()
-      ),
-      new Workplace(
-        studentCreateDto.studentWorkplace,
-        StudentFolder.getEntityName()
-      ),
-      new EnglishCertificate(
-        studentCreateDto.studentEnglishCertification,
-        studentCreateDto.studentIsOtherEnglishCertification,
-        StudentFolder.getEntityName()
-      ),
-      new Comment(
-        studentCreateDto.studentComment,
-        StudentFolder.getEntityName()
-      ),
-      new Uuid(studentCreateDto.studentId, LegalRepresentative.getEntityName())
+      )
     );
 
     const address = new Address(
-      new Uuid(studentCreateDto.studentAddressId, Address.getEntityName()),
-      new Street(
-        studentCreateDto.studentAddressStreet,
-        Address.getEntityName()
-      ),
+      new Uuid(studentCreateDto.studentAddressId, Address.getDomainTag()),
+      new Street(studentCreateDto.studentAddressStreet, Address.getDomainTag()),
       new Neighborhood(
         studentCreateDto.studentAddressNeighborhood,
-        Address.getEntityName(),
+        Address.getDomainTag(),
         true
       ),
-      new City(studentCreateDto.studentAddressCity, Address.getEntityName()),
-      new State(studentCreateDto.studentAddressState, Address.getEntityName()),
+      new City(studentCreateDto.studentAddressCity, Address.getDomainTag()),
+      new State(studentCreateDto.studentAddressState, Address.getDomainTag()),
       new Reference(
         studentCreateDto.studentAddressReference,
-        Address.getEntityName(),
+        Address.getDomainTag(),
         true
       ),
-      new Uuid(studentCreateDto.studentId, LegalRepresentative.getEntityName())
+      new Uuid(studentCreateDto.studentId, LegalRepresentative.getDomainTag())
     );
 
     const student = new Student(
       this.repository,
-      new Uuid(studentCreateDto.studentId, Student.getEntityName()),
-      new Dni(studentCreateDto.studentDni, Student.getEntityName()),
-      new FirstName(studentCreateDto.studentName, Student.getEntityName()),
-      new Surname(studentCreateDto.studentSurname, Student.getEntityName()),
+      new Uuid(studentCreateDto.studentId, Student.getDomainTag()),
+      new Dni(studentCreateDto.studentDni, Student.getDomainTag()),
+      new FirstName(studentCreateDto.studentName, Student.getDomainTag()),
+      new Surname(studentCreateDto.studentSurname, Student.getDomainTag()),
       new Surname(
         studentCreateDto.studentSecondSurname,
-        Student.getEntityName(),
+        Student.getDomainTag(),
         true
       ),
-      new Email(studentCreateDto.studentEmail, Student.getEntityName(), true),
-      new Phone(studentCreateDto.studentPhone, Student.getEntityName(), true),
-      new Birthdate(studentCreateDto.studentBirthdate, Student.getEntityName()),
+      new Email(studentCreateDto.studentEmail, Student.getDomainTag(), true),
+      new Phone(studentCreateDto.studentPhone, Student.getDomainTag(), true),
+      new Birthdate(studentCreateDto.studentBirthdate, Student.getDomainTag()),
       new Cellphone(
         studentCreateDto.studentCellphone,
-        Student.getEntityName(),
+        Student.getDomainTag(),
         true
       ),
+      new AcademicInstitution(
+        studentCreateDto.studentAcademicInstitution,
+        Student.getDomainTag()
+      ),
+      new Workplace(
+        studentCreateDto.studentWorkplace,
+        Student.getDomainTag()
+      ),
+      new EnglishCertificate(
+        studentCreateDto.studentEnglishCertification,
+        studentCreateDto.studentIsOtherEnglishCertification,
+        Student.getDomainTag()
+      ),
+      new Comment(
+        studentCreateDto.studentComment,
+        Student.getDomainTag()
+      ),
       address,
-      legalRepresentative,
-      studentFile
+      legalRepresentative
     );
     return await student.create();
   }

@@ -2,7 +2,7 @@ import { StudentCreateDto } from "../../../../src/Student/Application/Dto/Studen
 import { StudentCreator } from "../../../../src/Student/Application/StudentCreator";
 import { Uuid } from "../../../../src/Shared/Domain/ValueObject/Primitives/Uuid";
 import { Student } from "../../../../src/Student/Domain/Student";
-import { StudentFolder } from "../../../../src/Student/Domain/StudentFolder";
+import { AcademicInformation } from "../../../../src/Student/Domain/AcademicInformation";
 
 describe("StudentFileCreator", () => {
   let studentRepository = { save: jest.fn() };
@@ -62,7 +62,7 @@ describe("StudentFileCreator", () => {
     response.then((response) => {
       expect(response.success).toBe(false);
       expect(response.data).toEqual([
-        `${Student.getEntityName()} - DNI ${
+        `${Student.getDomainTag()} - DNI ${
           studentCreateDtoCopy.studentDni
         } is invalid`,
       ]);
@@ -79,7 +79,7 @@ describe("StudentFileCreator", () => {
     response.then((response) => {
       expect(response.success).toBe(false);
       expect(response.data).toEqual([
-        `${Student.getEntityName()} - Email ${
+        `${Student.getDomainTag()} - Email ${
           studentCreateDtoCopy.studentEmail
         } is invalid`,
       ]);
@@ -96,7 +96,7 @@ describe("StudentFileCreator", () => {
     response.then((response) => {
       expect(response.success).toBe(false);
       expect(response.data).toEqual([
-        `${Student.getEntityName()} - Invalid birthdate format`,
+        `${Student.getDomainTag()} - Invalid birthdate format`,
       ]);
       expect(studentRepository.save).toHaveBeenCalled();
     });
@@ -111,7 +111,7 @@ describe("StudentFileCreator", () => {
     response.then((response) => {
       expect(response.success).toBe(false);
       expect(response.data).toEqual([
-        `${Student.getEntityName()} - Cellphone ${
+        `${Student.getDomainTag()} - Cellphone ${
           studentCreateDtoCopy.studentCellphone
         } is invalid`,
       ]);
@@ -129,7 +129,7 @@ describe("StudentFileCreator", () => {
     response.then((response) => {
       expect(response.success).toBe(false);
       expect(response.data).toEqual([
-        `${StudentFolder.getEntityName()} - English certification value is not valid`,
+        `${AcademicInformation.getEntityName()} - English certification value is not valid`,
       ]);
       expect(studentRepository.save).toHaveBeenCalled();
     });
@@ -149,17 +149,17 @@ describe("StudentFileCreator", () => {
     response.then((response) => {
       expect(response.success).toBe(false);
       expect(response.data).toEqual([
-        `${Student.getEntityName()} - DNI ${
+        `${Student.getDomainTag()} - DNI ${
           studentCreateDtoCopy.studentDni
         } is invalid`,
-        `${Student.getEntityName()} - Email ${
+        `${Student.getDomainTag()} - Email ${
           studentCreateDtoCopy.studentEmail
         } is invalid`,
-        `${Student.getEntityName()} - Invalid birthdate format`,
-        `${Student.getEntityName()} - Cellphone ${
+        `${Student.getDomainTag()} - Invalid birthdate format`,
+        `${Student.getDomainTag()} - Cellphone ${
           studentCreateDtoCopy.studentCellphone
         } is invalid`,
-        `${StudentFolder.getEntityName()} - English certification value is not valid`,
+        `${AcademicInformation.getEntityName()} - English certification value is not valid`,
       ]);
       expect(studentRepository.save).toHaveBeenCalled();
     });

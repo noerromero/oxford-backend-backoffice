@@ -87,16 +87,16 @@ export class Address extends EntityBase<Uuid> {
 
   public static getEmptyObject(): Address {
     return new Address(
-      new Uuid("", Address.getEntityName()),
-      new Street("", Address.getEntityName()),
-      new Neighborhood("", Address.getEntityName()),
-      new City("", Address.getEntityName()),
-      new State("", Address.getEntityName()),
-      new Reference("", Address.getEntityName()),
-      new Uuid("", Address.getEntityName())
+      new Uuid("", Address.getDomainTag()),
+      new Street("", Address.getDomainTag()),
+      new Neighborhood("", Address.getDomainTag()),
+      new City("", Address.getDomainTag()),
+      new State("", Address.getDomainTag()),
+      new Reference("", Address.getDomainTag()),
+      new Uuid("", Address.getDomainTag())
     );
   }
-  static getEntityName(): string {
+  static getDomainTag(): string {
     return "Address";
   }
 }

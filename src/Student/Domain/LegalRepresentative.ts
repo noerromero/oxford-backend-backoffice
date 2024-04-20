@@ -1,39 +1,32 @@
-import { EntityBase } from "../../Shared/Domain/EntityBase";
 import { Cellphone } from "../../Shared/Domain/ValueObject/PersonalData/Cellphone";
 import { FirstName } from "../../Shared/Domain/ValueObject/PersonalData/FirstName";
 import { Phone } from "../../Shared/Domain/ValueObject/PersonalData/Phone";
 import { Surname } from "../../Shared/Domain/ValueObject/PersonalData/Surname";
 import { Uuid } from "../../Shared/Domain/ValueObject/Primitives/Uuid";
+import { ValueObjectBase } from "../../Shared/Domain/ValueObjectBase";
 
-export class LegalRepresentative extends EntityBase<Uuid> {
+export class LegalRepresentative extends ValueObjectBase {
   protected name: FirstName;
   protected surname: Surname;
   protected secondSurname: Surname;
   protected phone: Phone;
   protected cellphone: Cellphone;
-  protected studentId: Uuid;
 
   constructor(
-    id: Uuid,
     name: FirstName,
     surname: Surname,
     secondSurname: Surname,
     phone: Phone,
     cellphone: Cellphone,
-    studentId: Uuid
+    isOptional: boolean = false
   ) {
-    super(id);
+    super(isOptional);
     this.name = name;
     this.surname = surname;
     this.secondSurname = secondSurname;
     this.phone = phone;
     this.cellphone = cellphone;
-    this.studentId = studentId;
     this.checkIfItIsEmpty();
-  }
-
-  public getId(): Uuid {
-    return this.id;
   }
 
   public getName(): FirstName {
@@ -56,26 +49,19 @@ export class LegalRepresentative extends EntityBase<Uuid> {
     return this.cellphone;
   }
 
-  public getStudentId(): Uuid {
-    return this.studentId;
-  }
-
   public recoverCommonDomainErrors(): void {
     if (this.isEmpty()) return;
 
-    this.addDomainErrors(this.id.getDomainErrors());
     this.addDomainErrors(this.name.getDomainErrors());
     this.addDomainErrors(this.surname.getDomainErrors());
     this.addDomainErrors(this.secondSurname.getDomainErrors());
     this.addDomainErrors(this.phone.getDomainErrors());
     this.addDomainErrors(this.cellphone.getDomainErrors());
-    this.addDomainErrors(this.studentId.getDomainErrors());
   }
 
   protected checkIfItIsEmpty(): void {
     this.setEmpty(
-      this.id.isEmpty() &&
-        this.name.isEmpty() &&
+      this.name.isEmpty() &&
         this.surname.isEmpty() &&
         this.secondSurname.isEmpty() &&
         this.phone.isEmpty() &&
@@ -85,17 +71,37 @@ export class LegalRepresentative extends EntityBase<Uuid> {
 
   public static getEmptyObject(): LegalRepresentative {
     return new LegalRepresentative(
-      new Uuid("", LegalRepresentative.getEntityName()),
-      new FirstName("", LegalRepresentative.getEntityName()),
-      new Surname("", LegalRepresentative.getEntityName()),
-      new Surname("", LegalRepresentative.getEntityName()),
-      new Phone("", LegalRepresentative.getEntityName()),
-      new Cellphone("", LegalRepresentative.getEntityName()),
-      new Uuid("", LegalRepresentative.getEntityName())
+      new FirstName("", LegalRepresentative.getDomainTag()),
+      new Surname("", LegalRepresentative.getDomainTag()),
+      new Surname("", LegalRepresentative.getDomainTag()),
+      new Phone("", LegalRepresentative.getDomainTag()),
+      new Cellphone("", LegalRepresentative.getDomainTag())
     );
   }
 
-  static getEntityName(): string {
+  static getDomainTag(): string {
     return "Legal Representative";
+  }
+
+  public shouldBeValidated(): boolean {
+    if (this.isOptional && this.isEmpty()) {
+      return false;
+    }
+    return true;
+  }
+
+  public equals(other: LegalRepresentative): boolean {
+    return (
+      other.constructor.name === this.constructor.name &&
+      other.name === this.name &&
+      other.surname === this.surname &&
+      other.secondSurname === this.secondSurname &&
+      other.phone === this.phone &&
+      other.cellphone === this.cellphone
+    );
+  }
+
+  public toString(): string {
+    return `${this.name.toString()} ${this.surname.toString()} ${this.secondSurname.toString()}`;
   }
 }

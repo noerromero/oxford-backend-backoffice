@@ -9,7 +9,7 @@ import { Uuid } from "../../../../../src/Shared/Domain/ValueObject/Primitives/Uu
 import { Address } from "../../../../../src/Student/Domain/Address";
 import { LegalRepresentative } from "../../../../../src/Student/Domain/LegalRepresentative";
 import { Student } from "../../../../../src/Student/Domain/Student";
-import { StudentFolder } from "../../../../../src/Student/Domain/StudentFolder";
+import { AcademicInformation } from "../../../../../src/Student/Domain/AcademicInformation";
 import { MysqlStudentRepository } from "../../../../../src/Student/Infrastructure/Persistence/Mysql/MysqlStudentRepository";
 
 describe("MysqlStudentRepository - save Method", () => {
@@ -21,17 +21,17 @@ describe("MysqlStudentRepository - save Method", () => {
     student = new Student(
       studentRepository,
       Uuid.random(),
-      new Dni("12345678", Student.getEntityName()),
-      new FirstName("John", Student.getEntityName()),
-      new Surname("Doe", Student.getEntityName()),
-      new Surname("Smith", Student.getEntityName()),
-      new Email("john.doe@gmail.com", Student.getEntityName()),
-      new Phone("123456", Student.getEntityName()),
-      new Birthdate("2019-01-01", Student.getEntityName()),
-      new Cellphone("123456789", Student.getEntityName()),
+      new Dni("12345678", Student.getDomainTag()),
+      new FirstName("John", Student.getDomainTag()),
+      new Surname("Doe", Student.getDomainTag()),
+      new Surname("Smith", Student.getDomainTag()),
+      new Email("john.doe@gmail.com", Student.getDomainTag()),
+      new Phone("123456", Student.getDomainTag()),
+      new Birthdate("2019-01-01", Student.getDomainTag()),
+      new Cellphone("123456789", Student.getDomainTag()),
       Address.getEmptyObject(),
       LegalRepresentative.getEmptyObject(),
-      StudentFolder.getEmptyObject()
+      AcademicInformation.getEmptyObject()
     );
   });
 

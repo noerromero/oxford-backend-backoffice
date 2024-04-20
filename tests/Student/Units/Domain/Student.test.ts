@@ -17,7 +17,7 @@ import { Workplace } from "../../../../src/Shared/Domain/ValueObject/Workplace/W
 import { Address } from "../../../../src/Student/Domain/Address";
 import { LegalRepresentative } from "../../../../src/Student/Domain/LegalRepresentative";
 import { Student } from "../../../../src/Student/Domain/Student";
-import { StudentFolder } from "../../../../src/Student/Domain/StudentFolder";
+import { AcademicInformation } from "../../../../src/Student/Domain/AcademicInformation";
 import { Comment } from "../../../../src/Student/Domain/ValueObject/Comment";
 
 describe("Student - isAdult Property", () => {
@@ -28,39 +28,43 @@ describe("Student - isAdult Property", () => {
     student = new Student(
       studentRepository as any,
       Uuid.random(),
-      new Dni("12345678", Student.getEntityName()),
-      new FirstName("John", Student.getEntityName()),
-      new Surname("Doe", Student.getEntityName()),
-      new Surname("Smith", Student.getEntityName()),
-      new Email("jhon.doe@gmail.com", Student.getEntityName()),
-      new Phone("123456", Student.getEntityName()),
-      new Birthdate("2019-01-01", Student.getEntityName()),
-      new Cellphone("123456789", Student.getEntityName()),
+      new Dni("12345678", Student.getDomainTag()),
+      new FirstName("John", Student.getDomainTag()),
+      new Surname("Doe", Student.getDomainTag()),
+      new Surname("Smith", Student.getDomainTag()),
+      new Email("jhon.doe@gmail.com", Student.getDomainTag()),
+      new Phone("123456", Student.getDomainTag()),
+      new Birthdate("2019-01-01", Student.getDomainTag()),
+      new Cellphone("123456789", Student.getDomainTag()),
       new Address(
         Uuid.random(),
-        new Street("Street 123", Address.getEntityName()),
-        new Neighborhood("", Address.getEntityName()),
-        new City("White City", Address.getEntityName()),
-        new State("New York", Address.getEntityName()),
-        new Reference("at the corner of the street", Address.getEntityName())
+        new Street("Street 123", Address.getDomainTag()),
+        new Neighborhood("", Address.getDomainTag()),
+        new City("White City", Address.getDomainTag()),
+        new State("New York", Address.getDomainTag()),
+        new Reference("at the corner of the street", Address.getDomainTag())
       ),
       new LegalRepresentative(
         Uuid.random(),
-        new FirstName("Jane", LegalRepresentative.getEntityName()),
-        new Surname("Doe", LegalRepresentative.getEntityName()),
-        new Surname("Smith", LegalRepresentative.getEntityName()),
-        new Phone("123456", LegalRepresentative.getEntityName()),
-        new Cellphone("123456789", LegalRepresentative.getEntityName())
+        new FirstName("Jane", LegalRepresentative.getDomainTag()),
+        new Surname("Doe", LegalRepresentative.getDomainTag()),
+        new Surname("Smith", LegalRepresentative.getDomainTag()),
+        new Phone("123456", LegalRepresentative.getDomainTag()),
+        new Cellphone("123456789", LegalRepresentative.getDomainTag())
       ),
-      new StudentFolder(
+      new AcademicInformation(
         Uuid.random(),
         new AcademicInstitution(
           "University of New York",
-          StudentFolder.getEntityName()
+          AcademicInformation.getEntityName()
         ),
-        new Workplace("Google", StudentFolder.getEntityName()),
-        new EnglishCertificate("TOEFL", false, StudentFolder.getEntityName()),
-        new Comment("Good student", StudentFolder.getEntityName())
+        new Workplace("Google", AcademicInformation.getEntityName()),
+        new EnglishCertificate(
+          "TOEFL",
+          false,
+          AcademicInformation.getEntityName()
+        ),
+        new Comment("Good student", AcademicInformation.getEntityName())
       )
     );
   });
@@ -70,7 +74,7 @@ describe("Student - isAdult Property", () => {
     date.setFullYear(date.getFullYear() - 17);
     let formattedDate: string = date.toISOString().slice(0, 10);
 
-    student.setBirthdate(new Birthdate(formattedDate, Student.getEntityName()));
+    student.setBirthdate(new Birthdate(formattedDate, Student.getDomainTag()));
     expect(student.isAdult()).toBe(false);
   });
 
@@ -79,7 +83,7 @@ describe("Student - isAdult Property", () => {
     date.setFullYear(date.getFullYear() - 18);
     let formattedDate: string = date.toISOString().slice(0, 10);
 
-    student.setBirthdate(new Birthdate(formattedDate, Student.getEntityName()));
+    student.setBirthdate(new Birthdate(formattedDate, Student.getDomainTag()));
     expect(student.isAdult()).toBe(true);
   });
 });

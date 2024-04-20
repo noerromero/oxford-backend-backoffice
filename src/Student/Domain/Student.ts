@@ -11,7 +11,10 @@ import { AggregateRoot } from "../../Shared/Domain/AggregateRoot";
 import { IStudentRepository } from "./IStudentRepository";
 import { DomainResponse } from "../../Shared/Domain/DomainResponse";
 import { LegalRepresentative } from "./LegalRepresentative";
-import { StudentFolder } from "./StudentFolder";
+import { AcademicInstitution } from "../../Shared/Domain/ValueObject/EducationalData/AcademicInstitution";
+import { Workplace } from "../../Shared/Domain/ValueObject/Workplace/Workplace";
+import { EnglishCertificate } from "../../Shared/Domain/ValueObject/EducationalData/EnglishCertificate";
+import { Comment } from "./ValueObject/Comment";
 
 export class Student extends AggregateRoot<Uuid> {
   protected dni: Dni;
@@ -23,8 +26,11 @@ export class Student extends AggregateRoot<Uuid> {
   protected birthdate: Birthdate;
   protected cellphone: Cellphone;
   protected address: Address;
+  protected academicInstitution: AcademicInstitution;
+  protected workplace: Workplace;
+  protected englishCertificate: EnglishCertificate;
+  protected comment: Comment;
   protected legalRepresentative: LegalRepresentative;
-  protected studentFolder: StudentFolder;
 
   constructor(
     repository: IStudentRepository,
@@ -37,9 +43,12 @@ export class Student extends AggregateRoot<Uuid> {
     phone: Phone,
     birthdate: Birthdate,
     cellphone: Cellphone,
+    academicInstitution: AcademicInstitution,
+    workplace: Workplace,
+    englishCertificate: EnglishCertificate,
+    comment: Comment,
     address: Address,
-    legalRepresentative: LegalRepresentative,
-    studentFolder: StudentFolder
+    legalRepresentative: LegalRepresentative
   ) {
     super(repository, id);
     this.dni = dni;
@@ -50,9 +59,12 @@ export class Student extends AggregateRoot<Uuid> {
     this.phone = phone;
     this.birthdate = birthdate;
     this.cellphone = cellphone;
+    this.academicInstitution = academicInstitution;
+    this.workplace = workplace;
+    this.englishCertificate = englishCertificate;
+    this.comment = comment;
     this.address = address;
     this.legalRepresentative = legalRepresentative;
-    this.studentFolder = studentFolder;
     this.checkIfItIsEmpty();
   }
 
@@ -101,8 +113,20 @@ export class Student extends AggregateRoot<Uuid> {
     return this.legalRepresentative;
   }
 
-  public getStudentFolder(): StudentFolder {
-    return this.studentFolder;
+  public getAcademicInstitution(): AcademicInstitution {
+    return this.academicInstitution;
+  }
+
+  public getWorkplace(): Workplace {
+    return this.workplace;
+  }
+
+  public getEnglishCertification(): EnglishCertificate {
+    return this.englishCertificate;
+  }
+
+  public getComment(): Comment {
+    return this.comment;
   }
   //#endregion Getters
 
@@ -120,10 +144,6 @@ export class Student extends AggregateRoot<Uuid> {
   ): void {
     this.legalRepresentative = legalRepresentative;
   }
-
-  public setStudentFolder(studentFolder: StudentFolder): void {
-    this.studentFolder = studentFolder;
-  }
   //#endregion Setters
 
   //#region Validations
@@ -132,7 +152,6 @@ export class Student extends AggregateRoot<Uuid> {
 
     this.address.recoverCommonDomainErrors();
     this.legalRepresentative.recoverCommonDomainErrors();
-    this.studentFolder.recoverCommonDomainErrors();
 
     this.addDomainErrors(this.id.getDomainErrors());
     this.addDomainErrors(this.dni.getDomainErrors());
@@ -143,12 +162,15 @@ export class Student extends AggregateRoot<Uuid> {
     this.addDomainErrors(this.phone.getDomainErrors());
     this.addDomainErrors(this.birthdate.getDomainErrors());
     this.addDomainErrors(this.cellphone.getDomainErrors());
+    this.addDomainErrors(this.academicInstitution.getDomainErrors());
+    this.addDomainErrors(this.workplace.getDomainErrors());
+    this.addDomainErrors(this.englishCertificate.getDomainErrors());
+    this.addDomainErrors(this.comment.getDomainErrors());
     this.addDomainErrors(this.address.getDomainErrors());
     this.addDomainErrors(this.legalRepresentative.getDomainErrors());
-    this.addDomainErrors(this.studentFolder.getDomainErrors());
 
     this.addDomainErrors(this.ensureMinorStudentHasLegalRepresentative());
-    this.addDomainErrors(this.ensureStudentIdIsTheSameInAllEntities());
+    this.addDomainErrors(this.ensureStudentIdIsTheSameInAllAggregate());
   }
 
   protected async recoverDomainErrorsForUpdate(): Promise<void> {
@@ -167,8 +189,7 @@ export class Student extends AggregateRoot<Uuid> {
         this.birthdate.isEmpty() &&
         this.cellphone.isEmpty() &&
         this.address.isEmpty() &&
-        this.legalRepresentative.isEmpty() &&
-        this.studentFolder.isEmpty()
+        this.legalRepresentative.isEmpty()
     );
   }
 
@@ -184,15 +205,12 @@ export class Student extends AggregateRoot<Uuid> {
     return domainErros;
   }
 
-  private ensureStudentIdIsTheSameInAllEntities(): Array<Error> {
+  private ensureStudentIdIsTheSameInAllAggregate(): Array<Error> {
     let domainErros: Array<Error> = [];
-    if (
-      this.address.getStudentId().getValue() !== this.id.getValue() ||
-      this.legalRepresentative.getStudentId().getValue() !==
-        this.id.getValue() ||
-      this.studentFolder.getStudentId().getValue() !== this.id.getValue()
-    ) {
-      domainErros.push(new Error("Student id is not the same in all entities"));
+    if (this.address.getStudentId().getValue() !== this.id.getValue()) {
+      domainErros.push(
+        new Error("Student id is not the same in all aggregate")
+      );
     }
     return domainErros;
   }
@@ -214,7 +232,9 @@ export class Student extends AggregateRoot<Uuid> {
     let domainErros: Array<Error> = [];
     const existsByDni = await this.repository.exists(this.dni.getValue());
     if (!existsByDni) {
-      this.addDomainError(new Error("Student DNI does not exist in the system"));
+      this.addDomainError(
+        new Error("Student DNI does not exist in the system")
+      );
     }
     const existsById = await this.repository.existsById(this.id.toString());
     if (!existsById) {
@@ -225,7 +245,7 @@ export class Student extends AggregateRoot<Uuid> {
   //#endregion Validations
 
   //#region Static
-  static getEntityName(): string {
+  static getDomainTag(): string {
     return "Student";
   }
   //#endregion Static
@@ -250,7 +270,7 @@ export class Student extends AggregateRoot<Uuid> {
   public async update(): Promise<DomainResponse> {
     this.recoverCommonDomainErrors();
     await this.recoverDomainErrorsForUpdate();
-    
+
     if (this.hasDomainErrors()) {
       return Promise.resolve(
         new DomainResponse(
@@ -260,7 +280,7 @@ export class Student extends AggregateRoot<Uuid> {
         )
       );
     }
-    
+
     await this.repository.update(this);
     return new DomainResponse(true, "Student updated successfully", []);
   }

@@ -20,20 +20,12 @@ import { Address } from "../../../Domain/Address";
 import { IStudentRepository } from "../../../Domain/IStudentRepository";
 import { LegalRepresentative } from "../../../Domain/LegalRepresentative";
 import { Student } from "../../../Domain/Student";
-import { StudentFolder } from "../../../Domain/StudentFolder";
 import { Comment } from "../../../Domain/ValueObject/Comment";
 import { IAddressDb } from "./dbEntity/IAddressDb";
-import { ILegalRepresentativeDb } from "./dbEntity/ILegalRepresentativeDb";
 import IStudentDb from "./dbEntity/IStudentDb";
-import { IStudentFolderDb } from "./dbEntity/IStudentFolderDb";
 
 export class MysqlStudentRepository implements IStudentRepository {
-  public async findById(
-    id: string,
-    includeAddress: boolean = true,
-    includeLegalRepresentative: boolean = true,
-    includeStudentFolder: boolean = false
-  ): Promise<Student | null> {
+  public async findById(id: string): Promise<Student | null> {
     const conn = await connect();
     const studentRows = await conn.query(
       "SELECT * FROM `backoffice.student` WHERE id = ?",
@@ -47,43 +39,15 @@ export class MysqlStudentRepository implements IStudentRepository {
 
     let student = this.getStudentFromPrimitives(studentDbEntity[0]);
 
-    if (includeAddress) {
-      const addressRows = await conn.query(
-        "SELECT * FROM `backoffice.address` WHERE student_id = ?",
-        [id]
-      );
-      const addressDbEntity = JSON.parse(JSON.stringify(addressRows[0]));
-      const address = this.getAddressFromPrimitives(addressDbEntity[0]);
-      student.setAddress(address);
-    }
+    const addressRows = await conn.query(
+      "SELECT * FROM `backoffice.address` WHERE student_id = ?",
+      [id]
+    );
+    const addressDbEntity = JSON.parse(JSON.stringify(addressRows[0]));
+    const address = this.getAddressFromPrimitives(addressDbEntity[0]);
 
-    if (includeLegalRepresentative) {
-      const legalRepresentativeRows = await conn.query(
-        "SELECT * FROM `backoffice.legal_representative` WHERE student_id = ?",
-        [id]
-      );
-      const legalRepresentativeDbEntity = JSON.parse(
-        JSON.stringify(legalRepresentativeRows[0])
-      );
-      const legalRepresentative = this.getLegalRepresentativeFromPrimitives(
-        legalRepresentativeDbEntity[0]
-      );
-      student.setLegalRepresentative(legalRepresentative);
-    }
+    student.setAddress(address);
 
-    if (includeStudentFolder) {
-      const studentFolderRows = await conn.query(
-        "SELECT * FROM `backoffice.student_folder` WHERE student_id = ?",
-        [id]
-      );
-      const studentFolderDbEntity = JSON.parse(
-        JSON.stringify(studentFolderRows[0])
-      );
-      const studentFolder = this.getStudentFolderFromPrimitives(
-        studentFolderDbEntity[0]
-      );
-      student.setStudentFolder(studentFolder);
-    }
     return student;
   }
 
@@ -120,20 +84,10 @@ export class MysqlStudentRepository implements IStudentRepository {
 
     const addressDbEntity = this.getAddressDbEntityFromDomain(student);
 
-    const legalRepresentativeDbEntity =
-      this.getLegalRepresentativeDbEntityFromDomain(student);
-
-    const studentFolderDbEntity =
-      this.getStudentFolderDbEntityFromDomain(student);
-
     const conn = await connect();
     await this.updateStudent(studentDbEntity, conn);
     await this.deleteAddress(student.getId().toString(), conn);
-    await this.deleteLegalRepresentative(student.getId().toString(), conn);
-    await this.deleteStudentFolder(student.getId().toString(), conn);
     await this.insertAddress(addressDbEntity, conn);
-    await this.insertLegalRepresentative(legalRepresentativeDbEntity, conn);
-    await this.insertStudentFolder(studentFolderDbEntity, conn);
   }
 
   public async create(student: Student): Promise<void> {
@@ -141,43 +95,15 @@ export class MysqlStudentRepository implements IStudentRepository {
 
     const addressDbEntity = this.getAddressDbEntityFromDomain(student);
 
-    const legalRepresentativeDbEntity =
-      this.getLegalRepresentativeDbEntityFromDomain(student);
-
-    const studentFolderDbEntity =
-      this.getStudentFolderDbEntityFromDomain(student);
-
     const conn = await connect();
     await this.insertStudent(studentDbEntity, conn);
     await this.insertAddress(addressDbEntity, conn);
-    await this.insertLegalRepresentative(legalRepresentativeDbEntity, conn);
-    await this.insertStudentFolder(studentFolderDbEntity, conn);
   }
 
   private async deleteAddress(studentId: string, conn: Pool): Promise<void> {
     await conn.query("DELETE FROM `backoffice.address` WHERE student_id = ?", [
       studentId,
     ]);
-  }
-
-  private async deleteLegalRepresentative(
-    studentId: string,
-    conn: Pool
-  ): Promise<void> {
-    await conn.query(
-      "DELETE FROM `backoffice.legal_representative` WHERE student_id = ?",
-      [studentId]
-    );
-  }
-
-  private async deleteStudentFolder(
-    studentId: string,
-    conn: Pool
-  ): Promise<void> {
-    await conn.query(
-      "DELETE FROM `backoffice.student_folder` WHERE student_id = ?",
-      [studentId]
-    );
   }
 
   private async updateStudent(
@@ -208,104 +134,57 @@ export class MysqlStudentRepository implements IStudentRepository {
     ]);
   }
 
-  private async insertLegalRepresentative(
-    legalRepresentativeDbEntity: ILegalRepresentativeDb,
-    conn: Pool
-  ): Promise<void> {
-    await conn.query("INSERT INTO `backoffice.legal_representative` SET ?", [
-      legalRepresentativeDbEntity,
-    ]);
-  }
-
-  private async insertStudentFolder(
-    studentFolderDbEntity: IStudentFolderDb,
-    conn: Pool
-  ): Promise<void> {
-    await conn.query("INSERT INTO `backoffice.student_folder` SET ?", [
-      studentFolderDbEntity,
-    ]);
-  }
-
   private getStudentFromPrimitives(studentRow: any): Student {
     return new Student(
       this,
-      new Uuid(studentRow.id, Student.getEntityName()),
-      new Dni(studentRow.dni, Student.getEntityName()),
-      new FirstName(studentRow.name, Student.getEntityName()),
-      new Surname(studentRow.surname, Student.getEntityName()),
-      new Surname(studentRow.second_surname, Student.getEntityName(), true),
-      new Email(studentRow.email, Student.getEntityName(), true),
-      new Phone(studentRow.phone, Student.getEntityName(), true),
-      new Birthdate(studentRow.birthdate, Student.getEntityName()),
-      new Cellphone(studentRow.cellphone, Student.getEntityName(), true),
+      new Uuid(studentRow.id, Student.getDomainTag()),
+      new Dni(studentRow.dni, Student.getDomainTag()),
+      new FirstName(studentRow.name, Student.getDomainTag()),
+      new Surname(studentRow.surname, Student.getDomainTag()),
+      new Surname(studentRow.second_surname, Student.getDomainTag(), true),
+      new Email(studentRow.email, Student.getDomainTag(), true),
+      new Phone(studentRow.phone, Student.getDomainTag(), true),
+      new Birthdate(studentRow.birthdate, Student.getDomainTag()),
+      new Cellphone(studentRow.cellphone, Student.getDomainTag(), true),
+      new AcademicInstitution(
+        studentRow.academic_institution,
+        Student.getDomainTag()
+      ),
+      new Workplace(studentRow.workplace, Student.getDomainTag()),
+      new EnglishCertificate(
+        studentRow.english_certificate,
+        studentRow.is_other_english_certificate,
+        Student.getDomainTag()
+      ),
+      new Comment(studentRow.comment, Student.getDomainTag()),
       Address.getEmptyObject(),
-      LegalRepresentative.getEmptyObject(),
-      StudentFolder.getEmptyObject()
+      new LegalRepresentative(
+        new FirstName(studentRow.name, LegalRepresentative.getDomainTag()),
+        new Surname(studentRow.surname, LegalRepresentative.getDomainTag()),
+        new Surname(
+          studentRow.second_surname,
+          LegalRepresentative.getDomainTag(),
+          true
+        ),
+        new Phone(studentRow.phone, LegalRepresentative.getDomainTag(), true),
+        new Cellphone(
+          studentRow.cellphone,
+          LegalRepresentative.getDomainTag(),
+          true
+        )
+      )
     );
   }
 
   private getAddressFromPrimitives(addressRow: any): Address {
     return new Address(
-      new Uuid(addressRow.id, Address.getEntityName()),
-      new Street(addressRow.street, Address.getEntityName()),
-      new Neighborhood(addressRow.neighborhood, Address.getEntityName(), true),
-      new City(addressRow.city, Address.getEntityName()),
-      new State(addressRow.state, Address.getEntityName()),
-      new Reference(addressRow.reference, Address.getEntityName(), true),
-      new Uuid(addressRow.student_id, Address.getEntityName())
-    );
-  }
-
-  private getLegalRepresentativeFromPrimitives(
-    legalRepresentativeRow: any
-  ): LegalRepresentative {
-    return new LegalRepresentative(
-      new Uuid(legalRepresentativeRow.id, LegalRepresentative.getEntityName()),
-      new FirstName(
-        legalRepresentativeRow.name,
-        LegalRepresentative.getEntityName()
-      ),
-      new Surname(
-        legalRepresentativeRow.surname,
-        LegalRepresentative.getEntityName()
-      ),
-      new Surname(
-        legalRepresentativeRow.second_surname,
-        LegalRepresentative.getEntityName(),
-        true
-      ),
-      new Phone(
-        legalRepresentativeRow.phone,
-        LegalRepresentative.getEntityName(),
-        true
-      ),
-      new Cellphone(
-        legalRepresentativeRow.cellphone,
-        LegalRepresentative.getEntityName(),
-        true
-      ),
-      new Uuid(
-        legalRepresentativeRow.student_id,
-        LegalRepresentative.getEntityName()
-      )
-    );
-  }
-
-  private getStudentFolderFromPrimitives(studentFolderRow: any): StudentFolder {
-    return new StudentFolder(
-      new Uuid(studentFolderRow.id, StudentFolder.getEntityName()),
-      new AcademicInstitution(
-        studentFolderRow.academic_institution,
-        StudentFolder.getEntityName()
-      ),
-      new Workplace(studentFolderRow.workplace, StudentFolder.getEntityName()),
-      new EnglishCertificate(
-        studentFolderRow.english_certificate,
-        studentFolderRow.is_other_english_certificate,
-        StudentFolder.getEntityName()
-      ),
-      new Comment(studentFolderRow.comment, StudentFolder.getEntityName()),
-      new Uuid(studentFolderRow.student_id, StudentFolder.getEntityName())
+      new Uuid(addressRow.id, Address.getDomainTag()),
+      new Street(addressRow.street, Address.getDomainTag()),
+      new Neighborhood(addressRow.neighborhood, Address.getDomainTag(), true),
+      new City(addressRow.city, Address.getDomainTag()),
+      new State(addressRow.state, Address.getDomainTag()),
+      new Reference(addressRow.reference, Address.getDomainTag(), true),
+      new Uuid(addressRow.student_id, Address.getDomainTag())
     );
   }
 
@@ -320,6 +199,20 @@ export class MysqlStudentRepository implements IStudentRepository {
       phone: student.getPhone().toString() ?? null,
       bhirtdate: student.getBirthdate().getValue() ?? null,
       cellphone: student.getCellphone().toString() ?? null,
+      academic_institution: student.getAcademicInstitution().toString() ?? null,
+      workplace: student.getWorkplace().toString() ?? null,
+      english_certificate: student.getEnglishCertification().toString() ?? null,
+      comment: student.getComment().toString() ?? null,
+      legal_representative_name:
+        student.getLegalRepresentative().getName().toString() ?? null,
+      legal_representative_surname:
+        student.getLegalRepresentative().getSurname().toString() ?? null,
+      legal_representative_second_surname:
+        student.getLegalRepresentative().getSecondSurname().toString() ?? null,
+      legal_representative_phone:
+        student.getLegalRepresentative().getPhone().toString() ?? null,
+      legal_representative_cellphone:
+        student.getLegalRepresentative().getCellphone().toString() ?? null,
     };
     return studentDbEntity;
   }
@@ -335,39 +228,5 @@ export class MysqlStudentRepository implements IStudentRepository {
       student_id: student.getAddress().getStudentId().toString() ?? null,
     };
     return addressDbEntity;
-  }
-
-  private getLegalRepresentativeDbEntityFromDomain(
-    student: Student
-  ): ILegalRepresentativeDb {
-    const legalRepresentativeDbEntity: ILegalRepresentativeDb = {
-      id: student.getLegalRepresentative().getId().toString(),
-      name: student.getLegalRepresentative().getName().toString() ?? null,
-      surname: student.getLegalRepresentative().getSurname().toString() ?? null,
-      second_surname:
-        student.getLegalRepresentative().getSecondSurname().toString() ?? null,
-      phone: student.getLegalRepresentative().getPhone().toString() ?? null,
-      cellphone:
-        student.getLegalRepresentative().getCellphone().toString() ?? null,
-      student_id:
-        student.getLegalRepresentative().getStudentId().toString() ?? null,
-    };
-    return legalRepresentativeDbEntity;
-  }
-
-  private getStudentFolderDbEntityFromDomain(
-    student: Student
-  ): IStudentFolderDb {
-    const studentFolderDbEntity: IStudentFolderDb = {
-      id: student.getStudentFolder().getId().toString(),
-      academic_institution:
-        student.getStudentFolder().getAcademicInstitution().toString() ?? null,
-      workplace: student.getStudentFolder().getWorkplace().toString() ?? null,
-      english_certificate:
-        student.getStudentFolder().getEnglishCertification().toString() ?? null,
-      comment: student.getStudentFolder().getComment().toString() ?? null,
-      student_id: student.getStudentFolder().getStudentId().toString() ?? null,
-    };
-    return studentFolderDbEntity;
   }
 }

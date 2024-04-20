@@ -8,4 +8,13 @@ export default interface IStudentDb {
   phone?: string;
   bhirtdate?: Date;
   cellphone?: string;
+  academic_institution?: string;
+  workplace?: string;
+  english_certificate?: string;
+  comment?: string;
+  legal_representative_name?: string;
+  legal_representative_surname?: string;
+  legal_representative_second_surname?: string;
+  legal_representative_phone?: string;
+  legal_representative_cellphone?: string;
 }
