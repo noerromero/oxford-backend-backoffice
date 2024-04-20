@@ -12,7 +12,6 @@ export class Address extends EntityBase<Uuid> {
   protected city: City;
   protected state: State;
   protected reference: Reference;
-  protected studentId: Uuid;
 
   constructor(
     id: Uuid,
@@ -20,8 +19,7 @@ export class Address extends EntityBase<Uuid> {
     neighborhood: Neighborhood,
     city: City,
     state: State,
-    reference: Reference,
-    studentId: Uuid
+    reference: Reference
   ) {
     super(id);
     this.street = street;
@@ -29,7 +27,6 @@ export class Address extends EntityBase<Uuid> {
     this.city = city;
     this.state = state;
     this.reference = reference;
-    this.studentId = studentId;
     this.checkIfItIsEmpty();
   }
 
@@ -57,10 +54,6 @@ export class Address extends EntityBase<Uuid> {
     return this.reference;
   }
 
-  public getStudentId(): Uuid {
-    return this.studentId;
-  }
-
   public recoverCommonDomainErrors(): void {
     if (this.isEmpty()) return;
 
@@ -70,7 +63,6 @@ export class Address extends EntityBase<Uuid> {
     this.addDomainErrors(this.city.getDomainErrors());
     this.addDomainErrors(this.state.getDomainErrors());
     this.addDomainErrors(this.reference.getDomainErrors());
-    this.addDomainErrors(this.studentId.getDomainErrors());
   }
 
   protected checkIfItIsEmpty(): void {
@@ -80,8 +72,7 @@ export class Address extends EntityBase<Uuid> {
         this.neighborhood.isEmpty() &&
         this.city.isEmpty() &&
         this.state.isEmpty() &&
-        this.reference.isEmpty() &&
-        this.studentId.isEmpty()
+        this.reference.isEmpty()
     );
   }
 
@@ -93,7 +84,6 @@ export class Address extends EntityBase<Uuid> {
       new City("", Address.getDomainTag()),
       new State("", Address.getDomainTag()),
       new Reference("", Address.getDomainTag()),
-      new Uuid("", Address.getDomainTag())
     );
   }
   static getDomainTag(): string {

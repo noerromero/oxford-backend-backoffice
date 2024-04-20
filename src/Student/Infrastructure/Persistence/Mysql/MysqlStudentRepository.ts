@@ -183,8 +183,7 @@ export class MysqlStudentRepository implements IStudentRepository {
       new Neighborhood(addressRow.neighborhood, Address.getDomainTag(), true),
       new City(addressRow.city, Address.getDomainTag()),
       new State(addressRow.state, Address.getDomainTag()),
-      new Reference(addressRow.reference, Address.getDomainTag(), true),
-      new Uuid(addressRow.student_id, Address.getDomainTag())
+      new Reference(addressRow.reference, Address.getDomainTag(), true)
     );
   }
 
@@ -225,7 +224,6 @@ export class MysqlStudentRepository implements IStudentRepository {
       city: student.getAddress().getCity().toString() ?? null,
       state: student.getAddress().getState().toString() ?? null,
       reference: student.getAddress().getReference().toString() ?? null,
-      student_id: student.getAddress().getStudentId().toString() ?? null,
     };
     return addressDbEntity;
   }

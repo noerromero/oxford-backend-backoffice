@@ -2,7 +2,6 @@ import { Cellphone } from "../../Shared/Domain/ValueObject/PersonalData/Cellphon
 import { FirstName } from "../../Shared/Domain/ValueObject/PersonalData/FirstName";
 import { Phone } from "../../Shared/Domain/ValueObject/PersonalData/Phone";
 import { Surname } from "../../Shared/Domain/ValueObject/PersonalData/Surname";
-import { Uuid } from "../../Shared/Domain/ValueObject/Primitives/Uuid";
 import { ValueObjectBase } from "../../Shared/Domain/ValueObjectBase";
 
 export class LegalRepresentative extends ValueObjectBase {

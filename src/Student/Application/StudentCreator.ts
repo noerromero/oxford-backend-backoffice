@@ -70,8 +70,7 @@ export class StudentCreator {
         studentCreateDto.studentAddressReference,
         Address.getDomainTag(),
         true
-      ),
-      new Uuid(studentCreateDto.studentId, LegalRepresentative.getDomainTag())
+      )
     );
 
     const student = new Student(

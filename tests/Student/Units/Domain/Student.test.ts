@@ -17,7 +17,6 @@ import { Workplace } from "../../../../src/Shared/Domain/ValueObject/Workplace/W
 import { Address } from "../../../../src/Student/Domain/Address";
 import { LegalRepresentative } from "../../../../src/Student/Domain/LegalRepresentative";
 import { Student } from "../../../../src/Student/Domain/Student";
-import { AcademicInformation } from "../../../../src/Student/Domain/AcademicInformation";
 import { Comment } from "../../../../src/Student/Domain/ValueObject/Comment";
 
 describe("Student - isAdult Property", () => {
@@ -36,6 +35,17 @@ describe("Student - isAdult Property", () => {
       new Phone("123456", Student.getDomainTag()),
       new Birthdate("2019-01-01", Student.getDomainTag()),
       new Cellphone("123456789", Student.getDomainTag()),
+      new AcademicInstitution(
+        "University of New York",
+        Student.getDomainTag()
+      ),
+      new Workplace("Google", Student.getDomainTag()),
+      new EnglishCertificate(
+        "TOEFL",
+        false,
+        Student.getDomainTag()
+      ),
+      new Comment("Good student", Student.getDomainTag()),
       new Address(
         Uuid.random(),
         new Street("Street 123", Address.getDomainTag()),
@@ -45,26 +55,11 @@ describe("Student - isAdult Property", () => {
         new Reference("at the corner of the street", Address.getDomainTag())
       ),
       new LegalRepresentative(
-        Uuid.random(),
         new FirstName("Jane", LegalRepresentative.getDomainTag()),
         new Surname("Doe", LegalRepresentative.getDomainTag()),
         new Surname("Smith", LegalRepresentative.getDomainTag()),
         new Phone("123456", LegalRepresentative.getDomainTag()),
         new Cellphone("123456789", LegalRepresentative.getDomainTag())
-      ),
-      new AcademicInformation(
-        Uuid.random(),
-        new AcademicInstitution(
-          "University of New York",
-          AcademicInformation.getEntityName()
-        ),
-        new Workplace("Google", AcademicInformation.getEntityName()),
-        new EnglishCertificate(
-          "TOEFL",
-          false,
-          AcademicInformation.getEntityName()
-        ),
-        new Comment("Good student", AcademicInformation.getEntityName())
       )
     );
   });

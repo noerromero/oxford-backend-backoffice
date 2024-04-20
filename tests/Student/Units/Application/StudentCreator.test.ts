@@ -2,7 +2,6 @@ import { StudentCreateDto } from "../../../../src/Student/Application/Dto/Studen
 import { StudentCreator } from "../../../../src/Student/Application/StudentCreator";
 import { Uuid } from "../../../../src/Shared/Domain/ValueObject/Primitives/Uuid";
 import { Student } from "../../../../src/Student/Domain/Student";
-import { AcademicInformation } from "../../../../src/Student/Domain/AcademicInformation";
 
 describe("StudentFileCreator", () => {
   let studentRepository = { save: jest.fn() };
@@ -29,13 +28,11 @@ describe("StudentFileCreator", () => {
     studentAddressCity: "White City",
     studentAddressState: "New York",
     studentAddressReference: "at the corner of the street",
-    studentFileId: Uuid.random().toString(),
     studentAcademicInstitution: "University of New York",
     studentWorkplace: "Google",
     studentIsOtherEnglishCertification: true,
     studentEnglishCertification: "TOEFL",
     studentComment: "Good student",
-    legalRepresentativeId: Uuid.random().toString(),
     legalRepresentativeName: "Jane",
     legalRepresentativeSurname: "Doe",
     legalRepresentativeSecondSurname: "Smith",
@@ -129,7 +126,7 @@ describe("StudentFileCreator", () => {
     response.then((response) => {
       expect(response.success).toBe(false);
       expect(response.data).toEqual([
-        `${AcademicInformation.getEntityName()} - English certification value is not valid`,
+        `${Student.getDomainTag()} - English certification value is not valid`,
       ]);
       expect(studentRepository.save).toHaveBeenCalled();
     });
@@ -159,7 +156,7 @@ describe("StudentFileCreator", () => {
         `${Student.getDomainTag()} - Cellphone ${
           studentCreateDtoCopy.studentCellphone
         } is invalid`,
-        `${AcademicInformation.getEntityName()} - English certification value is not valid`,
+        `${Student.getDomainTag()} - English certification value is not valid`,
       ]);
       expect(studentRepository.save).toHaveBeenCalled();
     });
@@ -168,7 +165,6 @@ describe("StudentFileCreator", () => {
   test("with adult student and empty legal representative data it should response successfully", () => {
     let studentCreateDtoCopy = structuredClone(studentCreateDto);
     studentCreateDtoCopy.studentBirthdate = "1990-01-01";
-    studentCreateDtoCopy.legalRepresentativeId = "";
     studentCreateDtoCopy.legalRepresentativeName = "";
     studentCreateDtoCopy.legalRepresentativeSurname = "";
     studentCreateDtoCopy.legalRepresentativeSecondSurname = "";
@@ -187,7 +183,6 @@ describe("StudentFileCreator", () => {
   test("with minor student and empty legal representative data it should response with an error", () => {
     let studentCreateDtoCopy = structuredClone(studentCreateDto);
     studentCreateDtoCopy.studentBirthdate = "2010-01-01";
-    studentCreateDtoCopy.legalRepresentativeId = "";
     studentCreateDtoCopy.legalRepresentativeName = "";
     studentCreateDtoCopy.legalRepresentativeSurname = "";
     studentCreateDtoCopy.legalRepresentativeSecondSurname = "";

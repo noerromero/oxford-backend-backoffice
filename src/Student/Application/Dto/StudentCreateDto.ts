@@ -14,13 +14,11 @@ export class StudentCreateDto {
   public studentAddressCity: string = "";
   public studentAddressState: string = "";
   public studentAddressReference: string = "";
-  public studentFileId: string = "";
   public studentAcademicInstitution: string = "";
   public studentWorkplace: string = "";
   public studentIsOtherEnglishCertification: boolean = false;
   public studentEnglishCertification: string = "";
   public studentComment: string = "";
-  public legalRepresentativeId: string = "";
   public legalRepresentativeName: string = "";
   public legalRepresentativeSurname: string = "";
   public legalRepresentativeSecondSurname: string = "";

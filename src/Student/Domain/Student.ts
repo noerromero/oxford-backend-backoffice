@@ -170,7 +170,6 @@ export class Student extends AggregateRoot<Uuid> {
     this.addDomainErrors(this.legalRepresentative.getDomainErrors());
 
     this.addDomainErrors(this.ensureMinorStudentHasLegalRepresentative());
-    this.addDomainErrors(this.ensureStudentIdIsTheSameInAllAggregate());
   }
 
   protected async recoverDomainErrorsForUpdate(): Promise<void> {
@@ -201,16 +200,6 @@ export class Student extends AggregateRoot<Uuid> {
           new Error("Legal representative is required for minor students")
         );
       }
-    }
-    return domainErros;
-  }
-
-  private ensureStudentIdIsTheSameInAllAggregate(): Array<Error> {
-    let domainErros: Array<Error> = [];
-    if (this.address.getStudentId().getValue() !== this.id.getValue()) {
-      domainErros.push(
-        new Error("Student id is not the same in all aggregate")
-      );
     }
     return domainErros;
   }
