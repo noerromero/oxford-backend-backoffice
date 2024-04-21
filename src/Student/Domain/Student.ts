@@ -238,7 +238,7 @@ export class Student extends AggregateRoot<Uuid> {
 
   protected async ensureIsNotAnExistingStudentByDni(): Promise<Array<Error>> {
     let domainErros: Array<Error> = [];
-    const existsByDni = await this.repository.exists(this.dni.getValue());
+    const existsByDni = await this.repository.existsByDni(this.dni.getValue());
     if (existsByDni) {
       this.addDomainError(
         new Error("Student DNI is already registered in the system")
