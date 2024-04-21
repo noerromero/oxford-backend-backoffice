@@ -4,7 +4,7 @@ import { Uuid } from "../../../../src/Shared/Domain/ValueObject/Primitives/Uuid"
 import { Student } from "../../../../src/Student/Domain/Student";
 
 describe("StudentFileCreator", () => {
-  let studentRepository = { save: jest.fn() };
+  let studentRepository = { create: jest.fn() };
   let studentCreator: StudentCreator;
 
   beforeEach(() => {
@@ -46,7 +46,7 @@ describe("StudentFileCreator", () => {
     response.then((response) => {
       expect(response.success).toBe(true);
       expect(response.data).toEqual([]);
-      expect(studentRepository.save).toHaveBeenCalled();
+      expect(studentRepository.create).toHaveBeenCalled();
     });
   });
 
@@ -63,7 +63,7 @@ describe("StudentFileCreator", () => {
           studentCreateDtoCopy.studentDni
         } is invalid`,
       ]);
-      expect(studentRepository.save).toHaveBeenCalled();
+      expect(studentRepository.create).toHaveBeenCalled();
     });
   });
 
@@ -80,7 +80,7 @@ describe("StudentFileCreator", () => {
           studentCreateDtoCopy.studentEmail
         } is invalid`,
       ]);
-      expect(studentRepository.save).toHaveBeenCalled();
+      expect(studentRepository.create).toHaveBeenCalled();
     });
   });
 
@@ -95,7 +95,7 @@ describe("StudentFileCreator", () => {
       expect(response.data).toEqual([
         `${Student.getDomainTag()} - Invalid birthdate format`,
       ]);
-      expect(studentRepository.save).toHaveBeenCalled();
+      expect(studentRepository.create).toHaveBeenCalled();
     });
   });
 
@@ -112,7 +112,7 @@ describe("StudentFileCreator", () => {
           studentCreateDtoCopy.studentCellphone
         } is invalid`,
       ]);
-      expect(studentRepository.save).toHaveBeenCalled();
+      expect(studentRepository.create).toHaveBeenCalled();
     });
   });
 
@@ -128,7 +128,7 @@ describe("StudentFileCreator", () => {
       expect(response.data).toEqual([
         `${Student.getDomainTag()} - English certification value is not valid`,
       ]);
-      expect(studentRepository.save).toHaveBeenCalled();
+      expect(studentRepository.create).toHaveBeenCalled();
     });
   });
 
@@ -158,7 +158,7 @@ describe("StudentFileCreator", () => {
         } is invalid`,
         `${Student.getDomainTag()} - English certification value is not valid`,
       ]);
-      expect(studentRepository.save).toHaveBeenCalled();
+      expect(studentRepository.create).toHaveBeenCalled();
     });
   });
 
@@ -176,7 +176,7 @@ describe("StudentFileCreator", () => {
     response.then((response) => {
       expect(response.success).toBe(true);
       expect(response.data).toEqual([]);
-      expect(studentRepository.save).toHaveBeenCalled();
+      expect(studentRepository.create).toHaveBeenCalled();
     });
   });
 
@@ -196,7 +196,7 @@ describe("StudentFileCreator", () => {
       expect(response.data).toEqual([
         `Legal representative is required for minor students`,
       ]);
-      expect(studentRepository.save).toHaveBeenCalled();
+      expect(studentRepository.create).toHaveBeenCalled();
     });
   });
 });
