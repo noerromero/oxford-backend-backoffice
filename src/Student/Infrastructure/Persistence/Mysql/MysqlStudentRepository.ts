@@ -57,9 +57,9 @@ export class MysqlStudentRepository implements IStudentRepository {
       "SELECT 1 FROM `backoffice.student` WHERE dni = ?",
       [dni]
     );
+    
     const studentDbEntity = JSON.parse(JSON.stringify(studentRows[0]));
-
-    if (!studentDbEntity) {
+    if (Object.keys(studentDbEntity).length === 0) {
       return false;
     }
     return true;
@@ -73,7 +73,7 @@ export class MysqlStudentRepository implements IStudentRepository {
     );
     const studentDbEntity = JSON.parse(JSON.stringify(studentRows[0]));
 
-    if (!studentDbEntity) {
+    if (Object.keys(studentDbEntity).length === 0) {
       return false;
     }
     return true;
