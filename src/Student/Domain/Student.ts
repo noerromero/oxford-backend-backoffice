@@ -173,7 +173,11 @@ export class Student extends AggregateRoot<Uuid> {
   }
 
   protected async recoverDomainErrorsForUpdate(): Promise<void> {
-    this.addDomainErrors(await this.ensureIsAnExistingStudent());
+    this.addDomainErrors(await this.ensureIsAnExistingStudentByDniAndId());
+  }
+
+  protected async recoverDomainErrorsForCreate(): Promise<void> {
+    this.addDomainErrors(await this.ensureIsNotAnExistingStudentByDni());
   }
 
   protected checkIfItIsEmpty(): void {
@@ -217,7 +221,7 @@ export class Student extends AggregateRoot<Uuid> {
     return age >= Birthdate.ADULT_AGE;
   }
 
-  protected async ensureIsAnExistingStudent(): Promise<Array<Error>> {
+  protected async ensureIsAnExistingStudentByDniAndId(): Promise<Array<Error>> {
     let domainErros: Array<Error> = [];
     const existsByDni = await this.repository.exists(this.dni.getValue());
     if (!existsByDni) {
@@ -228,6 +232,17 @@ export class Student extends AggregateRoot<Uuid> {
     const existsById = await this.repository.existsById(this.id.toString());
     if (!existsById) {
       this.addDomainError(new Error("Student ID does not exist in the system"));
+    }
+    return domainErros;
+  }
+
+  protected async ensureIsNotAnExistingStudentByDni(): Promise<Array<Error>> {
+    let domainErros: Array<Error> = [];
+    const existsByDni = await this.repository.exists(this.dni.getValue());
+    if (existsByDni) {
+      this.addDomainError(
+        new Error("Student DNI is already registered in the system")
+      );
     }
     return domainErros;
   }
@@ -242,6 +257,8 @@ export class Student extends AggregateRoot<Uuid> {
   //#region Operations
   public async create(): Promise<DomainResponse> {
     this.recoverCommonDomainErrors();
+    await this.recoverDomainErrorsForCreate();
+
     if (this.hasDomainErrors()) {
       return Promise.resolve(
         new DomainResponse(

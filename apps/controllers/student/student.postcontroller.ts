@@ -19,13 +19,11 @@ export const postStudent = async (req: any, res: any) => {
     studentAddressCity,
     studentAddressState,
     studentAddressReference,
-    studentFileId,
     studentAcademicInstitution,
     studentWorkplace,
     studentIsOtherEnglishCertification,
     studentEnglishCertification,
     studentComment,
-    legalRepresentativeId,
     legalRepresentativeName,
     legalRepresentativeSurname,
     legalRepresentativeSecondSurname,
@@ -48,14 +46,12 @@ export const postStudent = async (req: any, res: any) => {
   studentCreateDto.studentAddressCity = studentAddressCity;
   studentCreateDto.studentAddressState = studentAddressState;
   studentCreateDto.studentAddressReference = studentAddressReference;
-  studentCreateDto.studentFileId = studentFileId;
   studentCreateDto.studentAcademicInstitution = studentAcademicInstitution;
   studentCreateDto.studentWorkplace = studentWorkplace;
   studentCreateDto.studentIsOtherEnglishCertification =
     studentIsOtherEnglishCertification;
   studentCreateDto.studentEnglishCertification = studentEnglishCertification;
   studentCreateDto.studentComment = studentComment;
-  studentCreateDto.legalRepresentativeId = legalRepresentativeId;
   studentCreateDto.legalRepresentativeName = legalRepresentativeName;
   studentCreateDto.legalRepresentativeSurname = legalRepresentativeSurname;
   studentCreateDto.legalRepresentativeSecondSurname =

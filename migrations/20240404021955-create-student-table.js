@@ -44,6 +44,42 @@ module.exports = {
           type: Sequelize.STRING(15),
           allowNull: true,
         },
+        academic_institution: {
+          type: Sequelize.STRING,
+          allowNull: true,
+        },
+        workplace: {
+          type: Sequelize.STRING,
+          allowNull: true,
+        },
+        english_certificate: {
+          type: Sequelize.STRING(100),
+          allowNull: true,
+        },
+        comment: {
+          type: Sequelize.STRING(1000),
+          allowNull: true,
+        },
+        legal_representative_name: {
+          type: Sequelize.STRING,
+          allowNull: true,
+        },
+        legal_representative_surname: {
+          type: Sequelize.STRING,
+          allowNull: true,
+        },
+        legal_representative_second_surname: {
+          type: Sequelize.STRING,
+          allowNull: true,
+        },
+        legal_representative_phone: {
+          type: Sequelize.STRING,
+          allowNull: true,
+        },
+        legal_representative_cellphone: {
+          type: Sequelize.STRING,
+          allowNull: true,
+        },
       },
       {
         schema: "backoffice",

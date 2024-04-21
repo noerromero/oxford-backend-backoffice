@@ -224,6 +224,7 @@ export class MysqlStudentRepository implements IStudentRepository {
       city: student.getAddress().getCity().toString() ?? null,
       state: student.getAddress().getState().toString() ?? null,
       reference: student.getAddress().getReference().toString() ?? null,
+      student_id: student.getId().toString(),
     };
     return addressDbEntity;
   }
