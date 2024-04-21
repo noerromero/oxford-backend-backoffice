@@ -1,4 +1,4 @@
-export class StudentCreateDto {
+export class StudentCreateRequest {
   public studentId: string = "";
   public studentDni: string = "";
   public studentName: string = "";

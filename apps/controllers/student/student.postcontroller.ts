@@ -1,4 +1,4 @@
-import { StudentCreateDto } from "../../../src/Student/Application/Dto/StudentCreateDto";
+import { StudentCreateRequest } from "../../../src/Student/Application/Dto/StudentCreateRequest";
 import { StudentCreator } from "../../../src/Student/Application/StudentCreator";
 import { MysqlStudentRepository } from "../../../src/Student/Infrastructure/Persistence/Mysql/MysqlStudentRepository";
 
@@ -30,7 +30,7 @@ export const postStudent = async (req: any, res: any) => {
     legalRepresentativePhone,
     legalRepresentativeCellphone,
   } = req.body;
-  const studentCreateDto = new StudentCreateDto();
+  const studentCreateDto = new StudentCreateRequest();
   studentCreateDto.studentId = studentId;
   studentCreateDto.studentDni = studentDni;
   studentCreateDto.studentName = studentName;
@@ -67,6 +67,8 @@ export const postStudent = async (req: any, res: any) => {
     }
     return res.status(201).json(response);
   } catch (e) {
-    return res.status(500).json({ success: false, message: "Internal server error" });
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
   }
 };

@@ -223,7 +223,7 @@ export class Student extends AggregateRoot<Uuid> {
 
   protected async ensureIsAnExistingStudentByDniAndId(): Promise<Array<Error>> {
     let domainErros: Array<Error> = [];
-    const existsByDni = await this.repository.exists(this.dni.getValue());
+    const existsByDni = await this.repository.existsByDni(this.dni.toString());
     if (!existsByDni) {
       this.addDomainError(
         new Error("Student DNI does not exist in the system")

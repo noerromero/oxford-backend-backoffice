@@ -1,4 +1,4 @@
-import { StudentCreateDto } from "../../../../src/Student/Application/Dto/StudentCreateDto";
+import { StudentCreateRequest } from "../../../../src/Student/Application/Dto/StudentCreateRequest";
 import { StudentCreator } from "../../../../src/Student/Application/StudentCreator";
 import { Uuid } from "../../../../src/Shared/Domain/ValueObject/Primitives/Uuid";
 import { Student } from "../../../../src/Student/Domain/Student";
@@ -11,7 +11,7 @@ describe("StudentFileCreator", () => {
     studentCreator = new StudentCreator(studentRepository as any);
   });
 
-  let studentCreateDto = new StudentCreateDto();
+  let studentCreateDto = new StudentCreateRequest();
   studentCreateDto = {
     studentId: Uuid.random().toString(),
     studentDni: "12345678",

@@ -1,35 +1,34 @@
 import { DomainResponse } from "../../Shared/Domain/DomainResponse";
-import { Dni } from "../../Shared/Domain/ValueObject/PersonalData/Dni";
-import { FirstName } from "../../Shared/Domain/ValueObject/PersonalData/FirstName";
-import { Student } from "../Domain/Student";
-import { IStudentRepository } from "../Domain/IStudentRepository";
-import { Surname } from "../../Shared/Domain/ValueObject/PersonalData/Surname";
-import { Email } from "../../Shared/Domain/ValueObject/PersonalData/Email";
-import { Phone } from "../../Shared/Domain/ValueObject/PersonalData/Phone";
+import { City } from "../../Shared/Domain/ValueObject/Address/City";
+import { Neighborhood } from "../../Shared/Domain/ValueObject/Address/Neighborhood";
+import { Reference } from "../../Shared/Domain/ValueObject/Address/Reference";
+import { State } from "../../Shared/Domain/ValueObject/Address/State";
+import { Street } from "../../Shared/Domain/ValueObject/Address/Street";
+import { AcademicInstitution } from "../../Shared/Domain/ValueObject/EducationalData/AcademicInstitution";
+import { EnglishCertificate } from "../../Shared/Domain/ValueObject/EducationalData/EnglishCertificate";
 import { Birthdate } from "../../Shared/Domain/ValueObject/PersonalData/Birthdate";
 import { Cellphone } from "../../Shared/Domain/ValueObject/PersonalData/Cellphone";
-import { Address } from "../Domain/Address";
-import { StudentCreateRequest } from "./Dto/StudentCreateRequest";
-import { Street } from "../../Shared/Domain/ValueObject/Address/Street";
-import { Neighborhood } from "../../Shared/Domain/ValueObject/Address/Neighborhood";
-import { City } from "../../Shared/Domain/ValueObject/Address/City";
-import { State } from "../../Shared/Domain/ValueObject/Address/State";
-import { Reference } from "../../Shared/Domain/ValueObject/Address/Reference";
-import { AcademicInstitution } from "../../Shared/Domain/ValueObject/EducationalData/AcademicInstitution";
-import { Workplace } from "../../Shared/Domain/ValueObject/Workplace/Workplace";
-import { EnglishCertificate } from "../../Shared/Domain/ValueObject/EducationalData/EnglishCertificate";
-import { Comment } from "../Domain/ValueObject/Comment";
-import { LegalRepresentative } from "../Domain/LegalRepresentative";
+import { Dni } from "../../Shared/Domain/ValueObject/PersonalData/Dni";
+import { Email } from "../../Shared/Domain/ValueObject/PersonalData/Email";
+import { FirstName } from "../../Shared/Domain/ValueObject/PersonalData/FirstName";
+import { Phone } from "../../Shared/Domain/ValueObject/PersonalData/Phone";
+import { Surname } from "../../Shared/Domain/ValueObject/PersonalData/Surname";
 import { Uuid } from "../../Shared/Domain/ValueObject/Primitives/Uuid";
+import { Workplace } from "../../Shared/Domain/ValueObject/Workplace/Workplace";
+import { Address } from "../Domain/Address";
+import { IStudentRepository } from "../Domain/IStudentRepository";
+import { LegalRepresentative } from "../Domain/LegalRepresentative";
+import { Student } from "../Domain/Student";
+import { Comment } from "../Domain/ValueObject/Comment";
+import { StudentUpdateRequest } from "./Dto/StudentUpdateRequest";
 
-export class StudentCreator {
+export class StudentUpdater {
   private repository: IStudentRepository;
 
   constructor(repository: IStudentRepository) {
     this.repository = repository;
   }
-
-  async run(request: StudentCreateRequest): Promise<DomainResponse> {
+  public async run(request: StudentUpdateRequest): Promise<DomainResponse> {
     const legalRepresentative = new LegalRepresentative(
       new FirstName(
         request.legalRepresentativeName,
@@ -61,16 +60,11 @@ export class StudentCreator {
       new Street(request.studentAddressStreet, Address.getDomainTag()),
       new Neighborhood(
         request.studentAddressNeighborhood,
-        Address.getDomainTag(),
-        true
+        Address.getDomainTag()
       ),
       new City(request.studentAddressCity, Address.getDomainTag()),
       new State(request.studentAddressState, Address.getDomainTag()),
-      new Reference(
-        request.studentAddressReference,
-        Address.getDomainTag(),
-        true
-      )
+      new Reference(request.studentAddressReference, Address.getDomainTag())
     );
 
     const student = new Student(
@@ -79,19 +73,11 @@ export class StudentCreator {
       new Dni(request.studentDni, Student.getDomainTag()),
       new FirstName(request.studentName, Student.getDomainTag()),
       new Surname(request.studentSurname, Student.getDomainTag()),
-      new Surname(
-        request.studentSecondSurname,
-        Student.getDomainTag(),
-        true
-      ),
-      new Email(request.studentEmail, Student.getDomainTag(), true),
-      new Phone(request.studentPhone, Student.getDomainTag(), true),
+      new Surname(request.studentSecondSurname, Student.getDomainTag(), true),
+      new Email(request.studentEmail, Student.getDomainTag()),
+      new Phone(request.studentPhone, Student.getDomainTag()),
       new Birthdate(request.studentBirthdate, Student.getDomainTag()),
-      new Cellphone(
-        request.studentCellphone,
-        Student.getDomainTag(),
-        true
-      ),
+      new Cellphone(request.studentCellphone, Student.getDomainTag()),
       new AcademicInstitution(
         request.studentAcademicInstitution,
         Student.getDomainTag()
@@ -106,6 +92,7 @@ export class StudentCreator {
       address,
       legalRepresentative
     );
-    return await student.create();
+
+    return await student.update();
   }
 }
