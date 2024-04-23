@@ -271,14 +271,18 @@ export class Student extends AggregateRoot<Uuid> {
       return Promise.resolve(
         new DomainResponse(
           false,
-          "Something went wrong with the student data",
+          //"Something went wrong with the student data",
           this.toStringArray()
         )
       );
     }
 
     await this.repository.create(this);
-    return new DomainResponse(true, "Student created successfully", []);
+    return new DomainResponse(
+      true,
+      //"Student created successfully",
+      []
+    );
   }
 
   public async update(): Promise<DomainResponse> {
@@ -289,14 +293,17 @@ export class Student extends AggregateRoot<Uuid> {
       return Promise.resolve(
         new DomainResponse(
           false,
-          "Something went wrong with the student data",
+          //"Something went wrong with the student data",
           this.toStringArray()
         )
       );
     }
 
     await this.repository.update(this);
-    return new DomainResponse(true, "Student updated successfully", []);
+    return new DomainResponse(true, 
+      //"Student updated successfully", 
+      []
+    );
   }
 
   //#endregion Operations

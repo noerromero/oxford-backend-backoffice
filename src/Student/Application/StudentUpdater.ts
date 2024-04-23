@@ -1,3 +1,5 @@
+import { ApplicationBase } from "../../Shared/Application/ApplicationBase";
+import { ApplicationResponse } from "../../Shared/Application/ApplicationResponse";
 import { DomainResponse } from "../../Shared/Domain/DomainResponse";
 import { City } from "../../Shared/Domain/ValueObject/Address/City";
 import { Neighborhood } from "../../Shared/Domain/ValueObject/Address/Neighborhood";
@@ -22,10 +24,11 @@ import { Student } from "../Domain/Student";
 import { Comment } from "../Domain/ValueObject/Comment";
 import { StudentUpdateRequest } from "./Dto/StudentUpdateRequest";
 
-export class StudentUpdater {
+export class StudentUpdater extends ApplicationBase {
   private repository: IStudentRepository;
 
   constructor(repository: IStudentRepository) {
+    super();
     this.repository = repository;
   }
   public async run(request: StudentUpdateRequest): Promise<DomainResponse> {
@@ -93,6 +96,21 @@ export class StudentUpdater {
       legalRepresentative
     );
 
-    return await student.update();
+    const domainResponse = await student.update();
+    return this.handleApplicationResponse(domainResponse);
+  }
+
+  protected handleApplicationResponse(
+    domainResponse: DomainResponse<string>
+  ): ApplicationResponse<string> {
+    let message = "Student updated successfully";
+    if (!domainResponse.success) {
+      message = "Something went wrong updating student";
+    }
+    return new ApplicationResponse(
+      domainResponse.success,
+      message,
+      domainResponse.data
+    );
   }
 }

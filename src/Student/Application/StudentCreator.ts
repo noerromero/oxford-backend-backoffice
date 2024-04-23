@@ -1,4 +1,3 @@
-import { DomainResponse } from "../../Shared/Domain/DomainResponse";
 import { Dni } from "../../Shared/Domain/ValueObject/PersonalData/Dni";
 import { FirstName } from "../../Shared/Domain/ValueObject/PersonalData/FirstName";
 import { Student } from "../Domain/Student";
@@ -21,15 +20,19 @@ import { EnglishCertificate } from "../../Shared/Domain/ValueObject/EducationalD
 import { Comment } from "../Domain/ValueObject/Comment";
 import { LegalRepresentative } from "../Domain/LegalRepresentative";
 import { Uuid } from "../../Shared/Domain/ValueObject/Primitives/Uuid";
+import { ApplicationResponse } from "../../Shared/Application/ApplicationResponse";
+import { DomainResponse } from "../../Shared/Domain/DomainResponse";
+import { ApplicationBase } from "../../Shared/Application/ApplicationBase";
 
-export class StudentCreator {
+export class StudentCreator extends ApplicationBase {
   private repository: IStudentRepository;
 
   constructor(repository: IStudentRepository) {
+    super();
     this.repository = repository;
   }
 
-  async run(request: StudentCreateRequest): Promise<DomainResponse> {
+  async run(request: StudentCreateRequest): Promise<ApplicationResponse> {
     const legalRepresentative = new LegalRepresentative(
       new FirstName(
         request.legalRepresentativeName,
@@ -106,6 +109,15 @@ export class StudentCreator {
       address,
       legalRepresentative
     );
-    return await student.create();
+    const domainResponse = await student.create();
+    return this.handleApplicationResponse(domainResponse);
+  }
+
+  protected handleApplicationResponse(domainResponse: DomainResponse): ApplicationResponse {
+    let message = "Student created successfully";
+    if (!domainResponse.success) {
+      message = "Something went wrong creating student";
+    }
+    return new ApplicationResponse(domainResponse.success, message, domainResponse.data);
   }
 }
