@@ -4,7 +4,11 @@ import { Uuid } from "../../../../src/Shared/Domain/ValueObject/Primitives/Uuid"
 import { Student } from "../../../../src/Student/Domain/Student";
 
 describe("StudentFileCreator", () => {
-  let studentRepository = { create: jest.fn() };
+  let studentRepository = {
+    create: jest.fn(),
+    existsByDni: jest.fn(),
+    existsById: jest.fn(),
+  };
   let studentCreator: StudentCreator;
 
   beforeEach(() => {
