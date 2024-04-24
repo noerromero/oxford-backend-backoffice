@@ -26,22 +26,26 @@ describe("StudentFileCreator", () => {
     studentPhone: "123456",
     studentBirthdate: "2019-01-01",
     studentCellphone: "123456789",
-    studentAddressId: Uuid.random().toString(),
-    studentAddressStreet: "Street 123",
-    studentAddressNeighborhood: "",
-    studentAddressCity: "White City",
-    studentAddressState: "New York",
-    studentAddressReference: "at the corner of the street",
+    address: {
+      id: Uuid.random().toString(),
+      street: "Street 123",
+      neighborhood: "",
+      city: "White City",
+      state: "New York",
+      reference: "at the corner of the street",
+    },
     studentAcademicInstitution: "University of New York",
     studentWorkplace: "Google",
     studentIsOtherEnglishCertification: true,
     studentEnglishCertification: "TOEFL",
     studentComment: "Good student",
-    legalRepresentativeName: "Jane",
-    legalRepresentativeSurname: "Doe",
-    legalRepresentativeSecondSurname: "Smith",
-    legalRepresentativePhone: "123456",
-    legalRepresentativeCellphone: "123456789",
+    legalRepresentative: {
+      name: "Jane",
+      surname: "Doe",
+      secondSurname: "Smith",
+      phone: "123456",
+      cellphone: "123456789",
+    }
   };
 
   test("with all the correct data it should response successfully", () => {
@@ -169,11 +173,11 @@ describe("StudentFileCreator", () => {
   test("with adult student and empty legal representative data it should response successfully", () => {
     let studentCreateDtoCopy = structuredClone(studentCreateDto);
     studentCreateDtoCopy.studentBirthdate = "1990-01-01";
-    studentCreateDtoCopy.legalRepresentativeName = "";
-    studentCreateDtoCopy.legalRepresentativeSurname = "";
-    studentCreateDtoCopy.legalRepresentativeSecondSurname = "";
-    studentCreateDtoCopy.legalRepresentativePhone = "";
-    studentCreateDtoCopy.legalRepresentativeCellphone = "";
+    studentCreateDtoCopy.legalRepresentative.name = "";
+    studentCreateDtoCopy.legalRepresentative.surname = "";
+    studentCreateDtoCopy.legalRepresentative.secondSurname = "";
+    studentCreateDtoCopy.legalRepresentative.phone = "";
+    studentCreateDtoCopy.legalRepresentative.cellphone = "";
 
     let response = studentCreator.run(studentCreateDtoCopy);
 
@@ -187,11 +191,11 @@ describe("StudentFileCreator", () => {
   test("with minor student and empty legal representative data it should response with an error", () => {
     let studentCreateDtoCopy = structuredClone(studentCreateDto);
     studentCreateDtoCopy.studentBirthdate = "2010-01-01";
-    studentCreateDtoCopy.legalRepresentativeName = "";
-    studentCreateDtoCopy.legalRepresentativeSurname = "";
-    studentCreateDtoCopy.legalRepresentativeSecondSurname = "";
-    studentCreateDtoCopy.legalRepresentativePhone = "";
-    studentCreateDtoCopy.legalRepresentativeCellphone = "";
+    studentCreateDtoCopy.legalRepresentative.name = "";
+    studentCreateDtoCopy.legalRepresentative.surname = "";
+    studentCreateDtoCopy.legalRepresentative.secondSurname = "";
+    studentCreateDtoCopy.legalRepresentative.phone = "";
+    studentCreateDtoCopy.legalRepresentative.cellphone = "";
 
     let response = studentCreator.run(studentCreateDtoCopy);
 
