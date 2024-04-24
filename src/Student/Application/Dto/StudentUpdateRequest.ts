@@ -1,3 +1,6 @@
+import { AddressRequest } from "./AddressRequest";
+import { LegalRepresentativeRequest } from "./LegalRepresentativeRequest";
+
 export class StudentUpdateRequest {
     public studentId: string = "";
     public studentDni: string = "";
@@ -8,20 +11,24 @@ export class StudentUpdateRequest {
     public studentPhone: string = "";
     public studentBirthdate: string = "";
     public studentCellphone: string = "";
-    public studentAddressId: string = "";
-    public studentAddressStreet: string = "";
-    public studentAddressNeighborhood: string = "";
-    public studentAddressCity: string = "";
-    public studentAddressState: string = "";
-    public studentAddressReference: string = "";
     public studentAcademicInstitution: string = "";
     public studentWorkplace: string = "";
     public studentIsOtherEnglishCertification: boolean = false;
     public studentEnglishCertification: string = "";
     public studentComment: string = "";
-    public legalRepresentativeName: string = "";
-    public legalRepresentativeSurname: string = "";
-    public legalRepresentativeSecondSurname: string = "";
-    public legalRepresentativePhone: string = "";
-    public legalRepresentativeCellphone: string = "";
+    public address: AddressRequest = {
+        id: "",
+        street: "",
+        neighborhood: "",
+        city: "",
+        state: "",
+        reference: "",
+      };
+      public legalRepresentative: LegalRepresentativeRequest = {
+        name: "",
+        surname: "",
+        secondSurname: "",
+        phone: "",
+        cellphone: "",
+      };
 }

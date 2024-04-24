@@ -13,55 +13,48 @@ export const postStudent = async (req: any, res: any) => {
     studentPhone,
     studentBirthdate,
     studentCellphone,
-    studentAddressId,
-    studentAddressStreet,
-    studentAddressNeighborhood,
-    studentAddressCity,
-    studentAddressState,
-    studentAddressReference,
+    address,
     studentAcademicInstitution,
     studentWorkplace,
     studentIsOtherEnglishCertification,
     studentEnglishCertification,
     studentComment,
-    legalRepresentativeName,
-    legalRepresentativeSurname,
-    legalRepresentativeSecondSurname,
-    legalRepresentativePhone,
-    legalRepresentativeCellphone,
+    legalRepresentative,
   } = req.body;
-  const studentCreateDto = new StudentCreateRequest();
-  studentCreateDto.studentId = studentId;
-  studentCreateDto.studentDni = studentDni;
-  studentCreateDto.studentName = studentName;
-  studentCreateDto.studentSurname = studentSurname;
-  studentCreateDto.studentSecondSurname = studentSecondSurname;
-  studentCreateDto.studentEmail = studentEmail;
-  studentCreateDto.studentPhone = studentPhone;
-  studentCreateDto.studentBirthdate = studentBirthdate;
-  studentCreateDto.studentCellphone = studentCellphone;
-  studentCreateDto.studentAddressId = studentAddressId;
-  studentCreateDto.studentAddressStreet = studentAddressStreet;
-  studentCreateDto.studentAddressNeighborhood = studentAddressNeighborhood;
-  studentCreateDto.studentAddressCity = studentAddressCity;
-  studentCreateDto.studentAddressState = studentAddressState;
-  studentCreateDto.studentAddressReference = studentAddressReference;
-  studentCreateDto.studentAcademicInstitution = studentAcademicInstitution;
-  studentCreateDto.studentWorkplace = studentWorkplace;
-  studentCreateDto.studentIsOtherEnglishCertification =
+  const request = new StudentCreateRequest();
+  request.studentId = studentId;
+  request.studentDni = studentDni;
+  request.studentName = studentName;
+  request.studentSurname = studentSurname;
+  request.studentSecondSurname = studentSecondSurname;
+  request.studentEmail = studentEmail;
+  request.studentPhone = studentPhone;
+  request.studentBirthdate = studentBirthdate;
+  request.studentCellphone = studentCellphone;
+  request.address.id = address.id;
+  request.address.street = address.street;
+  request.address.neighborhood = address.neighborhood;
+  request.address.city = address.city;
+  request.address.state = address.state;
+  request.address.reference = address.reference;
+  request.studentAcademicInstitution = studentAcademicInstitution;
+  request.studentWorkplace = studentWorkplace;
+  request.studentIsOtherEnglishCertification =
     studentIsOtherEnglishCertification;
-  studentCreateDto.studentEnglishCertification = studentEnglishCertification;
-  studentCreateDto.studentComment = studentComment;
-  studentCreateDto.legalRepresentativeName = legalRepresentativeName;
-  studentCreateDto.legalRepresentativeSurname = legalRepresentativeSurname;
-  studentCreateDto.legalRepresentativeSecondSurname =
-    legalRepresentativeSecondSurname;
-  studentCreateDto.legalRepresentativePhone = legalRepresentativePhone;
-  studentCreateDto.legalRepresentativeCellphone = legalRepresentativeCellphone;
+  request.studentEnglishCertification =
+    studentEnglishCertification;
+  request.studentComment = studentComment;
+  request.legalRepresentative.name = legalRepresentative.name;
+  request.legalRepresentative.surname = legalRepresentative.surname;
+  request.legalRepresentative.secondSurname =
+    legalRepresentative.secondSurname;
+  request.legalRepresentative.phone = legalRepresentative.phone;
+  request.legalRepresentative.cellphone =
+    legalRepresentative.cellphone;
 
   const studentCreator = new StudentCreator(new MysqlStudentRepository());
   try {
-    const response = await studentCreator.run(studentCreateDto);
+    const response = await studentCreator.run(request);
     if (!response.success) {
       return res.status(400).json(response);
     }

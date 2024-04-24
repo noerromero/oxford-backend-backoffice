@@ -35,42 +35,42 @@ export class StudentCreator extends ApplicationBase {
   async run(request: StudentCreateRequest): Promise<ApplicationResponse> {
     const legalRepresentative = new LegalRepresentative(
       new FirstName(
-        request.legalRepresentativeName,
+        request.legalRepresentative.name,
         LegalRepresentative.getDomainTag()
       ),
       new Surname(
-        request.legalRepresentativeSurname,
+        request.legalRepresentative.surname,
         LegalRepresentative.getDomainTag()
       ),
       new Surname(
-        request.legalRepresentativeSecondSurname,
+        request.legalRepresentative.secondSurname,
         LegalRepresentative.getDomainTag(),
         true
       ),
       new Phone(
-        request.legalRepresentativePhone,
+        request.legalRepresentative.phone,
         LegalRepresentative.getDomainTag(),
         true
       ),
       new Cellphone(
-        request.legalRepresentativeCellphone,
+        request.legalRepresentative.cellphone,
         LegalRepresentative.getDomainTag(),
         true
       )
     );
 
     const address = new Address(
-      new Uuid(request.studentAddressId, Address.getDomainTag()),
-      new Street(request.studentAddressStreet, Address.getDomainTag()),
+      new Uuid(request.address.id, Address.getDomainTag()),
+      new Street(request.address.street, Address.getDomainTag()),
       new Neighborhood(
-        request.studentAddressNeighborhood,
+        request.address.neighborhood,
         Address.getDomainTag(),
         true
       ),
-      new City(request.studentAddressCity, Address.getDomainTag()),
-      new State(request.studentAddressState, Address.getDomainTag()),
+      new City(request.address.city, Address.getDomainTag()),
+      new State(request.address.state, Address.getDomainTag()),
       new Reference(
-        request.studentAddressReference,
+        request.address.reference,
         Address.getDomainTag(),
         true
       )
