@@ -31,7 +31,7 @@ export class StudentUpdater extends ApplicationBase {
     super();
     this.repository = repository;
   }
-  public async run(request: StudentUpdateRequest): Promise<DomainResponse> {
+  public async run(request: StudentUpdateRequest): Promise<ApplicationResponse> {
     const legalRepresentative = new LegalRepresentative(
       new FirstName(
         request.legalRepresentative.name,
