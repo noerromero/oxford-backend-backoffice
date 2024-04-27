@@ -45,7 +45,7 @@ describe("StudentFileCreator", () => {
       secondSurname: "Smith",
       phone: "123456",
       cellphone: "123456789",
-    }
+    },
   };
 
   test("with all the correct data it should response successfully", () => {
@@ -67,9 +67,7 @@ describe("StudentFileCreator", () => {
     response.then((response) => {
       expect(response.success).toBe(false);
       expect(response.data).toEqual([
-        `${Student.getDomainTag()} - DNI ${
-          studentCreateDtoCopy.studentDni
-        } is invalid`,
+        `${Student.tag()} - DNI ${studentCreateDtoCopy.studentDni} is invalid`,
       ]);
       expect(studentRepository.create).toHaveBeenCalled();
     });
@@ -84,7 +82,7 @@ describe("StudentFileCreator", () => {
     response.then((response) => {
       expect(response.success).toBe(false);
       expect(response.data).toEqual([
-        `${Student.getDomainTag()} - Email ${
+        `${Student.tag()} - Email ${
           studentCreateDtoCopy.studentEmail
         } is invalid`,
       ]);
@@ -101,7 +99,7 @@ describe("StudentFileCreator", () => {
     response.then((response) => {
       expect(response.success).toBe(false);
       expect(response.data).toEqual([
-        `${Student.getDomainTag()} - Invalid birthdate format`,
+        `${Student.tag()} - Invalid birthdate format`,
       ]);
       expect(studentRepository.create).toHaveBeenCalled();
     });
@@ -116,7 +114,7 @@ describe("StudentFileCreator", () => {
     response.then((response) => {
       expect(response.success).toBe(false);
       expect(response.data).toEqual([
-        `${Student.getDomainTag()} - Cellphone ${
+        `${Student.tag()} - Cellphone ${
           studentCreateDtoCopy.studentCellphone
         } is invalid`,
       ]);
@@ -134,7 +132,7 @@ describe("StudentFileCreator", () => {
     response.then((response) => {
       expect(response.success).toBe(false);
       expect(response.data).toEqual([
-        `${Student.getDomainTag()} - English certification value is not valid`,
+        `${Student.tag()} - English certification value is not valid`,
       ]);
       expect(studentRepository.create).toHaveBeenCalled();
     });
@@ -154,17 +152,15 @@ describe("StudentFileCreator", () => {
     response.then((response) => {
       expect(response.success).toBe(false);
       expect(response.data).toEqual([
-        `${Student.getDomainTag()} - DNI ${
-          studentCreateDtoCopy.studentDni
-        } is invalid`,
-        `${Student.getDomainTag()} - Email ${
+        `${Student.tag()} - DNI ${studentCreateDtoCopy.studentDni} is invalid`,
+        `${Student.tag()} - Email ${
           studentCreateDtoCopy.studentEmail
         } is invalid`,
-        `${Student.getDomainTag()} - Invalid birthdate format`,
-        `${Student.getDomainTag()} - Cellphone ${
+        `${Student.tag()} - Invalid birthdate format`,
+        `${Student.tag()} - Cellphone ${
           studentCreateDtoCopy.studentCellphone
         } is invalid`,
-        `${Student.getDomainTag()} - English certification value is not valid`,
+        `${Student.tag()} - English certification value is not valid`,
       ]);
       expect(studentRepository.create).toHaveBeenCalled();
     });

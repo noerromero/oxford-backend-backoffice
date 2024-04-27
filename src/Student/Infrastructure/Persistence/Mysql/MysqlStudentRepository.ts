@@ -1,26 +1,9 @@
 import { Pool } from "mysql2/promise";
-import { City } from "../../../../Shared/Domain/ValueObject/Address/City";
-import { Neighborhood } from "../../../../Shared/Domain/ValueObject/Address/Neighborhood";
-import { Reference } from "../../../../Shared/Domain/ValueObject/Address/Reference";
-import { State } from "../../../../Shared/Domain/ValueObject/Address/State";
-import { Street } from "../../../../Shared/Domain/ValueObject/Address/Street";
-import { AcademicInstitution } from "../../../../Shared/Domain/ValueObject/EducationalData/AcademicInstitution";
-import { EnglishCertificate } from "../../../../Shared/Domain/ValueObject/EducationalData/EnglishCertificate";
-import { Birthdate } from "../../../../Shared/Domain/ValueObject/PersonalData/Birthdate";
-import { Cellphone } from "../../../../Shared/Domain/ValueObject/PersonalData/Cellphone";
-import { Dni } from "../../../../Shared/Domain/ValueObject/PersonalData/Dni";
-import { Email } from "../../../../Shared/Domain/ValueObject/PersonalData/Email";
-import { FirstName } from "../../../../Shared/Domain/ValueObject/PersonalData/FirstName";
-import { Phone } from "../../../../Shared/Domain/ValueObject/PersonalData/Phone";
-import { Surname } from "../../../../Shared/Domain/ValueObject/PersonalData/Surname";
-import { Uuid } from "../../../../Shared/Domain/ValueObject/Primitives/Uuid";
-import { Workplace } from "../../../../Shared/Domain/ValueObject/Workplace/Workplace";
 import { connect } from "../../../../Shared/Infrastructure/Persistence/Mysql/Connection";
 import { Address } from "../../../Domain/Address";
 import { IStudentRepository } from "../../../Domain/IStudentRepository";
 import { LegalRepresentative } from "../../../Domain/LegalRepresentative";
 import { Student } from "../../../Domain/Student";
-import { Comment } from "../../../Domain/ValueObject/Comment";
 import { IAddressDb } from "./dbEntity/IAddressDb";
 import IStudentDb from "./dbEntity/IStudentDb";
 
@@ -57,7 +40,7 @@ export class MysqlStudentRepository implements IStudentRepository {
       "SELECT 1 FROM `backoffice.student` WHERE dni = ?",
       [dni]
     );
-    
+
     const studentDbEntity = JSON.parse(JSON.stringify(studentRows[0]));
     if (Object.keys(studentDbEntity).length === 0) {
       return false;
@@ -135,56 +118,45 @@ export class MysqlStudentRepository implements IStudentRepository {
   }
 
   private getStudentFromPrimitives(studentRow: any): Student {
-    return new Student(
-      this,
-      new Uuid(studentRow.id, Student.getDomainTag()),
-      new Dni(studentRow.dni, Student.getDomainTag()),
-      new FirstName(studentRow.name, Student.getDomainTag()),
-      new Surname(studentRow.surname, Student.getDomainTag()),
-      new Surname(studentRow.second_surname, Student.getDomainTag(), true),
-      new Email(studentRow.email, Student.getDomainTag(), true),
-      new Phone(studentRow.phone, Student.getDomainTag(), true),
-      new Birthdate(studentRow.birthdate, Student.getDomainTag()),
-      new Cellphone(studentRow.cellphone, Student.getDomainTag(), true),
-      new AcademicInstitution(
-        studentRow.academic_institution,
-        Student.getDomainTag()
-      ),
-      new Workplace(studentRow.workplace, Student.getDomainTag()),
-      new EnglishCertificate(
-        studentRow.english_certificate,
-        studentRow.is_other_english_certificate,
-        Student.getDomainTag()
-      ),
-      new Comment(studentRow.comment, Student.getDomainTag()),
-      Address.getEmptyObject(),
-      new LegalRepresentative(
-        new FirstName(studentRow.name, LegalRepresentative.getDomainTag()),
-        new Surname(studentRow.surname, LegalRepresentative.getDomainTag()),
-        new Surname(
-          studentRow.second_surname,
-          LegalRepresentative.getDomainTag(),
-          true
-        ),
-        new Phone(studentRow.phone, LegalRepresentative.getDomainTag(), true),
-        new Cellphone(
-          studentRow.cellphone,
-          LegalRepresentative.getDomainTag(),
-          true
-        )
-      )
-    );
+    const legalRepresentative = LegalRepresentative.fromPrimitives({
+      name: studentRow.legal_representative_name,
+      surname: studentRow.legal_representative_surname,
+      secondSurname: studentRow.legal_representative_second_surname,
+      phone: studentRow.legal_representative_phone,
+      cellphone: studentRow.legal_representative_cellphone,
+    });
+
+    let student = Student.fromPrimitives(this, {
+      id: studentRow.id,
+      dni: studentRow.dni,
+      name: studentRow.name,
+      surname: studentRow.surname,
+      secondSurname: studentRow.second_surname,
+      email: studentRow.email,
+      phone: studentRow.phone,
+      birthdate: studentRow.birthdate,
+      cellphone: studentRow.cellphone,
+      academicInstitution: studentRow.academic_institution,
+      workplace: studentRow.workplace,
+      isOtherEnglishCertificate: true,
+      englishCertificate: studentRow.english_certificate,
+      comment: studentRow.comment
+    });
+
+    student.setLegalRepresentative(legalRepresentative);
+
+    return student;
   }
 
   private getAddressFromPrimitives(addressRow: any): Address {
-    return new Address(
-      new Uuid(addressRow.id, Address.getDomainTag()),
-      new Street(addressRow.street, Address.getDomainTag()),
-      new Neighborhood(addressRow.neighborhood, Address.getDomainTag(), true),
-      new City(addressRow.city, Address.getDomainTag()),
-      new State(addressRow.state, Address.getDomainTag()),
-      new Reference(addressRow.reference, Address.getDomainTag(), true)
-    );
+    return Address.fromPrimitives({
+      id: addressRow.id,
+      street: addressRow.street,
+      neighborhood: addressRow.neighborhood,
+      city: addressRow.city,
+      state: addressRow.state,
+      reference: addressRow.reference,
+    });
   }
 
   private getStudentDbEntityFromDomain(student: Student): IStudentDb {

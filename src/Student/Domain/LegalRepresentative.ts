@@ -3,6 +3,7 @@ import { FirstName } from "../../Shared/Domain/ValueObject/PersonalData/FirstNam
 import { Phone } from "../../Shared/Domain/ValueObject/PersonalData/Phone";
 import { Surname } from "../../Shared/Domain/ValueObject/PersonalData/Surname";
 import { ValueObjectBase } from "../../Shared/Domain/ValueObjectBase";
+import { Student } from "./Student";
 
 export class LegalRepresentative extends ValueObjectBase {
   protected name: FirstName;
@@ -11,7 +12,8 @@ export class LegalRepresentative extends ValueObjectBase {
   protected phone: Phone;
   protected cellphone: Cellphone;
 
-  constructor(
+  //#regiont Constructors
+  private constructor(
     name: FirstName,
     surname: Surname,
     secondSurname: Surname,
@@ -27,6 +29,39 @@ export class LegalRepresentative extends ValueObjectBase {
     this.cellphone = cellphone;
     this.checkIfItIsEmpty();
   }
+
+  public static create(
+    name: string,
+    surname: string,
+    secondSurname: string,
+    phone: string,
+    cellphone: string
+  ): LegalRepresentative {
+    return new LegalRepresentative(
+      new FirstName(name, Student.tag()),
+      new Surname(surname, Student.tag()),
+      new Surname(secondSurname, Student.tag(), true),
+      new Phone(phone, Student.tag(), true),
+      new Cellphone(cellphone, Student.tag(), true)
+    );
+  }
+
+  public static fromPrimitives(plainData: {
+    name: string;
+    surname: string;
+    secondSurname: string;
+    phone: string;
+    cellphone: string;
+  }) : LegalRepresentative {
+    return new LegalRepresentative(
+      new FirstName(plainData.name, LegalRepresentative.tag()),
+      new Surname(plainData.surname, LegalRepresentative.tag()),
+      new Surname(plainData.secondSurname, LegalRepresentative.tag(), true),
+      new Phone(plainData.phone, LegalRepresentative.tag(), true),
+      new Cellphone(plainData.cellphone, LegalRepresentative.tag(), true)
+    );
+  }
+  //#endregion Constructors
 
   public getName(): FirstName {
     return this.name;
@@ -70,15 +105,15 @@ export class LegalRepresentative extends ValueObjectBase {
 
   public static getEmptyObject(): LegalRepresentative {
     return new LegalRepresentative(
-      new FirstName("", LegalRepresentative.getDomainTag()),
-      new Surname("", LegalRepresentative.getDomainTag()),
-      new Surname("", LegalRepresentative.getDomainTag()),
-      new Phone("", LegalRepresentative.getDomainTag()),
-      new Cellphone("", LegalRepresentative.getDomainTag())
+      new FirstName("", LegalRepresentative.tag()),
+      new Surname("", LegalRepresentative.tag()),
+      new Surname("", LegalRepresentative.tag()),
+      new Phone("", LegalRepresentative.tag()),
+      new Cellphone("", LegalRepresentative.tag())
     );
   }
 
-  static getDomainTag(): string {
+  static tag(): string {
     return "Legal Representative";
   }
 

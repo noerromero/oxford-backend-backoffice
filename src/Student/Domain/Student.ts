@@ -32,7 +32,8 @@ export class Student extends AggregateRoot<Uuid> {
   protected comment: Comment;
   protected legalRepresentative: LegalRepresentative;
 
-  constructor(
+  //#region Constructors
+  private constructor(
     repository: IStudentRepository,
     id: Uuid,
     dni: Dni,
@@ -67,6 +68,99 @@ export class Student extends AggregateRoot<Uuid> {
     this.legalRepresentative = legalRepresentative;
     this.checkIfItIsEmpty();
   }
+
+  public static create(
+    repository: IStudentRepository,
+    id: string,
+    dni: string,
+    name: string,
+    surname: string,
+    secondSurname: string,
+    email: string,
+    phone: string,
+    birthdate: string,
+    cellphone: string,
+    academicInstitution: string,
+    workplace: string,
+    isOtherEnglishCertificate: boolean,
+    englishCertificate: string,
+    comment: string,
+    address: Address,
+    legalRepresentative: LegalRepresentative
+  ): Student {
+    return new Student(
+      repository,
+      new Uuid(id, Student.tag()),
+      new Dni(dni, Student.tag()),
+      new FirstName(name, Student.tag()),
+      new Surname(surname, Student.tag()),
+      new Surname(secondSurname, Student.tag(), true),
+      new Email(email, Student.tag(), true),
+      new Phone(phone, Student.tag(), true),
+      new Birthdate(birthdate, Student.tag()),
+      new Cellphone(cellphone, Student.tag(), true),
+      new AcademicInstitution(academicInstitution, Student.tag(), true),
+      new Workplace(workplace, Student.tag(), true),
+      new EnglishCertificate(
+        englishCertificate,
+        isOtherEnglishCertificate,
+        Student.tag(),
+        true
+      ),
+      new Comment(comment, Student.tag(), true),
+      address,
+      legalRepresentative
+    );
+  }
+
+  public static fromPrimitives(
+    repository: IStudentRepository,
+    plainData: {
+      id: string;
+      dni: string;
+      name: string;
+      surname: string;
+      secondSurname: string;
+      email: string;
+      phone: string;
+      birthdate: string;
+      cellphone: string;
+      academicInstitution: string;
+      workplace: string;
+      isOtherEnglishCertificate: boolean;
+      englishCertificate: string;
+      comment: string;
+    }
+  ): Student {
+    return new Student(
+      repository,
+      new Uuid(plainData.id, Student.tag()),
+      new Dni(plainData.dni, Student.tag()),
+      new FirstName(plainData.name, Student.tag()),
+      new Surname(plainData.surname, Student.tag()),
+      new Surname(plainData.secondSurname, Student.tag(), true),
+      new Email(plainData.email, Student.tag(), true),
+      new Phone(plainData.phone, Student.tag(), true),
+      new Birthdate(plainData.birthdate, Student.tag()),
+      new Cellphone(plainData.cellphone, Student.tag(), true),
+      new AcademicInstitution(
+        plainData.academicInstitution,
+        Student.tag(),
+        true
+      ),
+      new Workplace(plainData.workplace, Student.tag(), true),
+      new EnglishCertificate(
+        plainData.englishCertificate,
+        plainData.isOtherEnglishCertificate,
+        Student.tag(),
+        true
+      ),
+      new Comment(plainData.comment, Student.tag(), true),
+      Address.getEmptyObject(),
+      LegalRepresentative.getEmptyObject()
+    );
+  }
+  //#endregion Constructors
 
   //#region Getters
   public getId(): Uuid {
@@ -257,7 +351,7 @@ export class Student extends AggregateRoot<Uuid> {
   //#endregion Validations
 
   //#region Static
-  static getDomainTag(): string {
+  static tag(): string {
     return "Student";
   }
   //#endregion Static
@@ -300,8 +394,9 @@ export class Student extends AggregateRoot<Uuid> {
     }
 
     await this.repository.update(this);
-    return new DomainResponse(true, 
-      //"Student updated successfully", 
+    return new DomainResponse(
+      true,
+      //"Student updated successfully",
       []
     );
   }

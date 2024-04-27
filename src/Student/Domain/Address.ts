@@ -13,7 +13,8 @@ export class Address extends EntityBase<Uuid> {
   protected state: State;
   protected reference: Reference;
 
-  constructor(
+  //#region Constructors
+  private constructor(
     id: Uuid,
     street: Street,
     neighborhood: Neighborhood,
@@ -29,6 +30,43 @@ export class Address extends EntityBase<Uuid> {
     this.reference = reference;
     this.checkIfItIsEmpty();
   }
+
+  public static create(
+    id: string,
+    street: string,
+    neighborhood: string,
+    city: string,
+    state: string,
+    reference: string
+  ): Address {
+    return new Address(
+      new Uuid(id, Address.getDomainTag()),
+      new Street(street, Address.getDomainTag()),
+      new Neighborhood(neighborhood, Address.getDomainTag(), true),
+      new City(city, Address.getDomainTag()),
+      new State(state, Address.getDomainTag()),
+      new Reference(reference, Address.getDomainTag(), true)
+    );
+  }
+
+  public static fromPrimitives(plainData: {
+    id: string;
+    street: string;
+    neighborhood: string;
+    city: string;
+    state: string;
+    reference: string;
+  }): Address {
+    return new Address(
+      new Uuid(plainData.id, Address.getDomainTag()),
+      new Street(plainData.street, Address.getDomainTag()),
+      new Neighborhood(plainData.neighborhood, Address.getDomainTag(), true),
+      new City(plainData.city, Address.getDomainTag()),
+      new State(plainData.state, Address.getDomainTag()),
+      new Reference(plainData.reference, Address.getDomainTag(), true)
+    );
+  }
+  //#endregion Constructors
 
   public getId(): Uuid {
     return this.id;
