@@ -1,6 +1,7 @@
 import { StudentCreateRequest } from "../../../src/Student/Application/Dto/StudentCreateRequest";
 import { StudentCreator } from "../../../src/Student/Application/StudentCreator";
 import { MysqlStudentRepository } from "../../../src/Student/Infrastructure/Persistence/Mysql/MysqlStudentRepository";
+import { logger } from "../../../shared/loggin/logger";
 
 export const postStudent = async (req: any, res: any) => {
   const {
@@ -60,6 +61,7 @@ export const postStudent = async (req: any, res: any) => {
     }
     return res.status(201).json(response);
   } catch (e) {
+    logger.log("error", `${e}`);
     return res
       .status(500)
       .json({ success: false, message: "Internal server error" });

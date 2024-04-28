@@ -1,3 +1,4 @@
+import { logger } from "../../../shared/loggin/logger";
 import { StudentUpdateRequest } from "../../../src/Student/Application/Dto/StudentUpdateRequest";
 import { StudentUpdater } from "../../../src/Student/Application/StudentUpdater";
 import { MysqlStudentRepository } from "../../../src/Student/Infrastructure/Persistence/Mysql/MysqlStudentRepository";
@@ -45,11 +46,9 @@ export const putStudent = async (req: any, res: any) => {
   request.studentComment = studentComment;
   request.legalRepresentative.name = legalRepresentative.name;
   request.legalRepresentative.surname = legalRepresentative.surname;
-  request.legalRepresentative.secondSurname =
-    legalRepresentative.secondSurname;
+  request.legalRepresentative.secondSurname = legalRepresentative.secondSurname;
   request.legalRepresentative.phone = legalRepresentative.phone;
-  request.legalRepresentative.cellphone =
-    legalRepresentative.cellphone;
+  request.legalRepresentative.cellphone = legalRepresentative.cellphone;
 
   const studentUpdater = new StudentUpdater(new MysqlStudentRepository());
   try {
@@ -59,6 +58,7 @@ export const putStudent = async (req: any, res: any) => {
     }
     return res.status(201).json(response);
   } catch (e) {
+    logger.log("error", `${e}`);
     return res
       .status(500)
       .json({ success: false, message: "Internal server error" });
