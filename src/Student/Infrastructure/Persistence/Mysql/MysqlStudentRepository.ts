@@ -140,7 +140,7 @@ export class MysqlStudentRepository implements IStudentRepository {
       workplace: studentRow.workplace,
       isOtherEnglishCertificate: true,
       englishCertificate: studentRow.english_certificate,
-      comment: studentRow.comment
+      comment: studentRow.comment,
     });
 
     student.setLegalRepresentative(legalRepresentative);
@@ -160,44 +160,38 @@ export class MysqlStudentRepository implements IStudentRepository {
   }
 
   private getStudentDbEntityFromDomain(student: Student): IStudentDb {
+    const plainStudent = student.toPrimitives();
+
     const studentDbEntity: IStudentDb = {
-      id: student.getId().toString(),
-      dni: student.getDni().toString() ?? null,
-      name: student.getName().toString() ?? null,
-      surname: student.getSurname().toString() ?? null,
-      second_surname: student.getSecondSurname().toString() ?? null,
-      email: student.getEmail().toString() ?? null,
-      phone: student.getPhone().toString() ?? null,
-      bhirtdate: student.getBirthdate().getValue() ?? null,
-      cellphone: student.getCellphone().toString() ?? null,
-      academic_institution: student.getAcademicInstitution().toString() ?? null,
-      workplace: student.getWorkplace().toString() ?? null,
-      english_certificate: student.getEnglishCertification().toString() ?? null,
-      comment: student.getComment().toString() ?? null,
-      legal_representative_name:
-        student.getLegalRepresentative().getName().toString() ?? null,
+      id: plainStudent.id ?? null,
+      dni: plainStudent.dni ?? null,
+      name: plainStudent.name ?? null,
+      surname: plainStudent.surname ?? null,
+      second_surname: plainStudent.secondSurname ?? null,
+      email: plainStudent.email ?? null,
+      phone: plainStudent.phone ?? null,
+      bhirtdate: plainStudent.birthdate ?? null,
+      cellphone: plainStudent.cellphone ?? null,
+      academic_institution: plainStudent.academicInstitution ?? null,
+      workplace: plainStudent.workplace ?? null,
+      english_certificate: plainStudent.englishCertificate ?? null,
+      comment: plainStudent.comment ?? null,
+      legal_representative_name: plainStudent.legalRepresentative.name ?? null,
       legal_representative_surname:
-        student.getLegalRepresentative().getSurname().toString() ?? null,
+        plainStudent.legalRepresentative.surname ?? null,
       legal_representative_second_surname:
-        student.getLegalRepresentative().getSecondSurname().toString() ?? null,
+        plainStudent.legalRepresentative.secondSurname ?? null,
       legal_representative_phone:
-        student.getLegalRepresentative().getPhone().toString() ?? null,
+        plainStudent.legalRepresentative.phone ?? null,
       legal_representative_cellphone:
-        student.getLegalRepresentative().getCellphone().toString() ?? null,
+        plainStudent.legalRepresentative.cellphone ?? null,
     };
     return studentDbEntity;
   }
 
   private getAddressDbEntityFromDomain(student: Student): IAddressDb {
-    const addressDbEntity: IAddressDb = {
-      id: student.getAddress().getId().toString(),
-      street: student.getAddress().getStreet().toString() ?? null,
-      neighborhood: student.getAddress().getNeighborhood().toString() ?? null,
-      city: student.getAddress().getCity().toString() ?? null,
-      state: student.getAddress().getState().toString() ?? null,
-      reference: student.getAddress().getReference().toString() ?? null,
-      student_id: student.getId().toString(),
-    };
+    let addressDbEntity: IAddressDb = student.toPrimitives().address;
+    addressDbEntity.student_id = student.getId().toString();
     return addressDbEntity;
   }
 }

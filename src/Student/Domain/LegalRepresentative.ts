@@ -83,6 +83,16 @@ export class LegalRepresentative extends ValueObjectBase {
     return this.cellphone;
   }
 
+  public toPrimitives() {
+    return {
+      name: this.name.toString() ?? null,
+      surname: this.surname.toString() ?? null,
+      secondSurname: this.secondSurname.toString() ?? null,
+      phone: this.phone.toString() ?? null,
+      cellphone: this.cellphone.toString() ?? null,
+    };
+  }
+
   public recoverCommonDomainErrors(): void {
     if (this.isEmpty()) return;
 

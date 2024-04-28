@@ -92,6 +92,17 @@ export class Address extends EntityBase<Uuid> {
     return this.reference;
   }
 
+  public toPrimitives(): any {
+    return {
+      id: this.id.toString() ?? null,
+      street: this.street.toString() ?? null,
+      neighborhood: this.neighborhood.toString() ?? null,
+      city: this.city.toString() ?? null,
+      state: this.state.toString() ?? null,
+      reference: this.reference.toString() ?? null,
+    };
+  }
+
   public recoverCommonDomainErrors(): void {
     if (this.isEmpty()) return;
 

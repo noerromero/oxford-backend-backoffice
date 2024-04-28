@@ -222,6 +222,28 @@ export class Student extends AggregateRoot<Uuid> {
   public getComment(): Comment {
     return this.comment;
   }
+
+  public toPrimitives(): any {
+    const address = this.getAddress().toPrimitives();
+    const legalRepresentative = this.getLegalRepresentative().toPrimitives();
+    return {
+      id: this.id.toString(),
+      dni: this.dni.toString(),
+      name: this.name.toString(),
+      surname: this.surname.toString(),
+      secondSurname: this.secondSurname.toString(),
+      email: this.email.toString(),
+      phone: this.phone.toString(),
+      birthdate: this.birthdate.getValue(),
+      cellphone: this.cellphone.toString(),
+      academicInstitution: this.academicInstitution.toString(),
+      workplace: this.workplace.toString(),
+      englishCertificate: this.englishCertificate.toString(),
+      comment: this.comment.toString(),
+      legalRepresentative: legalRepresentative,
+      address: address
+    };
+  }
   //#endregion Getters
 
   //#region Setters
