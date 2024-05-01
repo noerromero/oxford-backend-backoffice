@@ -3,7 +3,7 @@ import { StudentCreator } from "../../../../src/Student/Application/StudentCreat
 import { Uuid } from "../../../../src/Shared/Domain/ValueObject/Primitives/Uuid";
 import { Student } from "../../../../src/Student/Domain/Student";
 
-describe("StudentFileCreator", () => {
+describe("StudentCreator", () => {
   let studentRepository = {
     create: jest.fn(),
     existsByDni: jest.fn(),
