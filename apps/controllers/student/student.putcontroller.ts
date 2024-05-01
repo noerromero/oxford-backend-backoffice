@@ -1,6 +1,6 @@
 import { logger } from "../../../shared/loggin/logger";
-import { StudentUpdateRequest } from "../../../src/Student/Application/Dto/StudentUpdateRequest";
-import { StudentUpdater } from "../../../src/Student/Application/StudentUpdater";
+import { StudentUpdateRequest } from "../../../src/Student/Application/Update/StudentUpdateRequest";
+import { StudentUpdater } from "../../../src/Student/Application/Update/StudentUpdater";
 import { MysqlStudentRepository } from "../../../src/Student/Infrastructure/Persistence/Mysql/MysqlStudentRepository";
 
 export const putStudent = async (req: any, res: any) => {

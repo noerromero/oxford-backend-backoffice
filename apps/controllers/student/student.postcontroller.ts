@@ -1,5 +1,5 @@
-import { StudentCreateRequest } from "../../../src/Student/Application/Dto/StudentCreateRequest";
-import { StudentCreator } from "../../../src/Student/Application/StudentCreator";
+import { StudentCreateRequest } from "../../../src/Student/Application/Create/StudentCreateRequest";
+import { StudentCreator } from "../../../src/Student/Application/Create/StudentCreator";
 import { MysqlStudentRepository } from "../../../src/Student/Infrastructure/Persistence/Mysql/MysqlStudentRepository";
 import { logger } from "../../../shared/loggin/logger";
 
@@ -42,16 +42,13 @@ export const postStudent = async (req: any, res: any) => {
   request.studentWorkplace = studentWorkplace;
   request.studentIsOtherEnglishCertification =
     studentIsOtherEnglishCertification;
-  request.studentEnglishCertification =
-    studentEnglishCertification;
+  request.studentEnglishCertification = studentEnglishCertification;
   request.studentComment = studentComment;
   request.legalRepresentative.name = legalRepresentative.name;
   request.legalRepresentative.surname = legalRepresentative.surname;
-  request.legalRepresentative.secondSurname =
-    legalRepresentative.secondSurname;
+  request.legalRepresentative.secondSurname = legalRepresentative.secondSurname;
   request.legalRepresentative.phone = legalRepresentative.phone;
-  request.legalRepresentative.cellphone =
-    legalRepresentative.cellphone;
+  request.legalRepresentative.cellphone = legalRepresentative.cellphone;
 
   const studentCreator = new StudentCreator(new MysqlStudentRepository());
   try {

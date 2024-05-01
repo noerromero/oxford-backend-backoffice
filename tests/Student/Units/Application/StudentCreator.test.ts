@@ -1,5 +1,5 @@
-import { StudentCreateRequest } from "../../../../src/Student/Application/Dto/StudentCreateRequest";
-import { StudentCreator } from "../../../../src/Student/Application/StudentCreator";
+import { StudentCreateRequest } from "../../../../src/Student/Application/Create/StudentCreateRequest";
+import { StudentCreator } from "../../../../src/Student/Application/Create/StudentCreator";
 import { Uuid } from "../../../../src/Shared/Domain/ValueObject/Primitives/Uuid";
 import { Student } from "../../../../src/Student/Domain/Student";
 

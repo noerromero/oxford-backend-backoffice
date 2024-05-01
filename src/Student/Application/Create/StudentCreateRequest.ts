@@ -1,5 +1,5 @@
-import { AddressRequest } from "./AddressRequest";
-import { LegalRepresentativeRequest } from "./LegalRepresentativeRequest";
+import { AddressRequest } from "../Common/AddressRequest";
+import { LegalRepresentativeRequest } from "../Common/LegalRepresentativeRequest";
 
 export class StudentCreateRequest {
   public studentId: string = "";

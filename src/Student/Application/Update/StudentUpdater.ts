@@ -1,11 +1,11 @@
-import { ApplicationBase } from "../../Shared/Application/ApplicationBase";
-import { ApplicationResponse } from "../../Shared/Application/ApplicationResponse";
-import { DomainResponse } from "../../Shared/Domain/DomainResponse";
-import { Address } from "../Domain/Address";
-import { IStudentRepository } from "../Domain/IStudentRepository";
-import { LegalRepresentative } from "../Domain/LegalRepresentative";
-import { Student } from "../Domain/Student";
-import { StudentUpdateRequest } from "./Dto/StudentUpdateRequest";
+import { ApplicationBase } from "../../../Shared/Application/ApplicationBase";
+import { ApplicationResponse } from "../../../Shared/Application/ApplicationResponse";
+import { DomainResponse } from "../../../Shared/Domain/DomainResponse";
+import { Address } from "../../Domain/Address";
+import { IStudentRepository } from "../../Domain/IStudentRepository";
+import { LegalRepresentative } from "../../Domain/LegalRepresentative";
+import { Student } from "../../Domain/Student";
+import { StudentUpdateRequest } from "./StudentUpdateRequest";
 
 export class StudentUpdater extends ApplicationBase {
   private repository: IStudentRepository;
