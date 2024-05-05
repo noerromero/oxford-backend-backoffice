@@ -1,0 +1,44 @@
+import { ApplicationBase } from "../../../Shared/Application/ApplicationBase";
+import { ApplicationResponse } from "../../../Shared/Application/ApplicationResponse";
+import { DomainResponse } from "../../../Shared/Domain/DomainResponse";
+import { IStudentRepository } from "../../Domain/IStudentRepository";
+import { Student } from "../../Domain/Student";
+import { StudentSearchResponse } from "./StudentSearchResponse";
+
+export class StudentSearcherById extends ApplicationBase {
+  private repository: IStudentRepository;
+
+  constructor(repository: IStudentRepository) {
+    super();
+    this.repository = repository;
+  }
+
+  public async run(id: string): Promise<ApplicationResponse> {
+    const student = Student.createForSearchById(this.repository, id);
+
+    const domainResponse = await student.searchById();
+    return this.handleApplicationResponse(domainResponse);
+  }
+
+  protected handleApplicationResponse(
+    domainResponse: DomainResponse
+  ): ApplicationResponse {
+    if (!domainResponse.success) {
+      return new ApplicationResponse(
+        domainResponse.success,
+        "Something went wrong searching student",
+        domainResponse.data
+      );
+    }
+  
+    const student = domainResponse.data;
+    const studentResponse = new StudentSearchResponse();
+    studentResponse.studentId = student.id;
+
+    return new ApplicationResponse(
+      domainResponse.success,
+      "Student found successfully",
+      studentResponse
+    );
+  }
+}

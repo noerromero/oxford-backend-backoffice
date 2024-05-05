@@ -59,8 +59,8 @@ export class StudentUpdater extends ApplicationBase {
   }
 
   protected handleApplicationResponse(
-    domainResponse: DomainResponse<string>
-  ): ApplicationResponse<string> {
+    domainResponse: DomainResponse
+  ): ApplicationResponse {
     let message = "Student updated successfully";
     if (!domainResponse.success) {
       message = "Something went wrong updating student";

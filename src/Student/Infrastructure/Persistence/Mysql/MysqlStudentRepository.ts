@@ -11,7 +11,7 @@ export class MysqlStudentRepository implements IStudentRepository {
   public async findById(id: string): Promise<Student | null> {
     const conn = await connect();
     const studentRows = await conn.query(
-      "SELECT * FROM `backoffice.student` WHERE id = ?",
+      "SELECT * FROM `backoffice.student` WHERE TRIM(id) = ?",
       [id]
     );
     const studentDbEntity = JSON.parse(JSON.stringify(studentRows[0]));
@@ -81,6 +81,10 @@ export class MysqlStudentRepository implements IStudentRepository {
     const conn = await connect();
     await this.insertStudent(studentDbEntity, conn);
     await this.insertAddress(addressDbEntity, conn);
+  }
+
+  public async findAll(): Promise<Student[]> {
+    throw new Error("Method not implemented.");
   }
 
   private async deleteAddress(studentId: string, conn: Pool): Promise<void> {

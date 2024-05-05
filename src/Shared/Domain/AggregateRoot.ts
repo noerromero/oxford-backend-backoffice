@@ -5,8 +5,7 @@ export abstract class AggregateRoot<TId> extends EntityBase<TId> {
 
   constructor(respository: any, id: TId) {
     super(id);
+    if (!respository) throw new Error("Repository is required");
     this.repository = respository;
   }
-
-  protected abstract recoverCommonDomainErrors(): void;
 }

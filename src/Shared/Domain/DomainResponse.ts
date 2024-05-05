@@ -1,15 +1,9 @@
-export class DomainResponse<T = string> {
+export class DomainResponse {
   public success: boolean;
-  public data: Array<T>;
-  //public message: string;
+  public data: any;
 
-  constructor(
-    success: boolean = false,
-    //message: string = "",
-    data: Array<T> = []
-  ) {
+  constructor(success: boolean = false, data: any = null) {
     this.success = success;
-    //this.message = message;
     this.data = data;
   }
 }

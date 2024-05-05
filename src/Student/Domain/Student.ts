@@ -113,6 +113,30 @@ export class Student extends AggregateRoot<Uuid> {
     );
   }
 
+  public static createForSearchById(
+    repository: IStudentRepository,
+    id: string
+  ): Student {
+    return new Student(
+      repository,
+      new Uuid(id, Student.tag()),
+      new Dni("", Student.tag(), true),
+      new FirstName("", Student.tag(), true),
+      new Surname("", Student.tag(), true),
+      new Surname("", Student.tag(), true),
+      new Email("", Student.tag(), true),
+      new Phone("", Student.tag(), true),
+      new Birthdate("", Student.tag()),
+      new Cellphone("", Student.tag(), true),
+      new AcademicInstitution("", Student.tag(), true),
+      new Workplace("", Student.tag(), true),
+      new EnglishCertificate("", false, Student.tag(), true),
+      new Comment("", Student.tag(), true),
+      Address.getEmptyObject(),
+      LegalRepresentative.getEmptyObject()
+    );
+  }
+
   public static fromPrimitives(
     repository: IStudentRepository,
     plainData: {
@@ -241,7 +265,7 @@ export class Student extends AggregateRoot<Uuid> {
       englishCertificate: this.englishCertificate.toString(),
       comment: this.comment.toString(),
       legalRepresentative: legalRepresentative,
-      address: address
+      address: address,
     };
   }
   //#endregion Getters
@@ -294,6 +318,10 @@ export class Student extends AggregateRoot<Uuid> {
 
   protected async recoverDomainErrorsForCreate(): Promise<void> {
     this.addDomainErrors(await this.ensureIsNotAnExistingStudentByDniAndId());
+  }
+
+  protected recoverDomiainErrorsForSearchById(): void {
+    this.addDomainErrors(this.id.getDomainErrors());
   }
 
   protected checkIfItIsEmpty(): void {
@@ -387,7 +415,6 @@ export class Student extends AggregateRoot<Uuid> {
       return Promise.resolve(
         new DomainResponse(
           false,
-          //"Something went wrong with the student data",
           this.toStringArray()
         )
       );
@@ -396,7 +423,6 @@ export class Student extends AggregateRoot<Uuid> {
     await this.repository.create(this);
     return new DomainResponse(
       true,
-      //"Student created successfully",
       []
     );
   }
@@ -406,21 +432,20 @@ export class Student extends AggregateRoot<Uuid> {
     await this.recoverDomainErrorsForUpdate();
 
     if (this.hasDomainErrors()) {
-      return Promise.resolve(
-        new DomainResponse(
-          false,
-          //"Something went wrong with the student data",
-          this.toStringArray()
-        )
-      );
+      return Promise.resolve(new DomainResponse(false, this.toStringArray()));
     }
 
     await this.repository.update(this);
-    return new DomainResponse(
-      true,
-      //"Student updated successfully",
-      []
-    );
+    return new DomainResponse(true, []);
+  }
+
+  public async searchById(): Promise<DomainResponse> {
+    this.recoverDomiainErrorsForSearchById();
+    if (this.hasDomainErrors()) {
+      return Promise.resolve(new DomainResponse(false, this.toStringArray()));
+    }
+    const student = await this.repository.findById(this.getId().toString());
+    return new DomainResponse(true, student);
   }
 
   //#endregion Operations
