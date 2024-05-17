@@ -13,8 +13,8 @@ export const getByIdStuent = async (req: any, res: any) => {
       return res.status(400).json(response);
     }
     return res.status(200).json(response);
-  } catch (e) {
-    logger.log("error", `${e}`);
+  } catch (e: any) {
+    logger.log("error", `${e} stack: ${e.stack}`);
     return res
       .status(500)
       .json({ success: false, message: "Internal server error" });
