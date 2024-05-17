@@ -445,7 +445,7 @@ export class Student extends AggregateRoot<Uuid> {
       return Promise.resolve(new DomainResponse(false, this.toStringArray()));
     }
     const student = await this.repository.findById(this.getId().toString());
-    return new DomainResponse(true, student);
+    return new DomainResponse(true, student.toPrimitives());
   }
 
   //#endregion Operations
