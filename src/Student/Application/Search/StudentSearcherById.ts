@@ -3,7 +3,6 @@ import { ApplicationResponse } from "../../../Shared/Application/ApplicationResp
 import { DomainResponse } from "../../../Shared/Domain/DomainResponse";
 import { IStudentRepository } from "../../Domain/IStudentRepository";
 import { Student } from "../../Domain/Student";
-import { StudentSearchResponse } from "./StudentSearchResponse";
 
 export class StudentSearcherById extends ApplicationBase {
   private repository: IStudentRepository;
@@ -30,15 +29,11 @@ export class StudentSearcherById extends ApplicationBase {
         domainResponse.data
       );
     }
-  
-    const student = domainResponse.data;
-    const studentResponse = new StudentSearchResponse();
-    studentResponse.studentId = student.id;
 
     return new ApplicationResponse(
       domainResponse.success,
       "Student found successfully",
-      studentResponse
+      domainResponse.data
     );
   }
 }
