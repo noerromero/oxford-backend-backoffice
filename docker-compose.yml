@@ -1,0 +1,19 @@
+version: "3.8"
+
+services:
+  oxforddb-host:
+    image: mysql
+    env_file: ./.env
+    environment:
+      - MYSQL_ROOT_PASSWORD=$DB_PASSWORD
+      - MYSQL_DATABASE=$DB_NAME
+    ports:
+      - $DB_DOCKER_PORT:$DB_PORT
+  app:
+    build: .
+    depends_on:
+      - oxforddb-host
+    links:
+      - oxforddb-host
+    ports:
+      - $NODE_PORT:$NODE_PORT
