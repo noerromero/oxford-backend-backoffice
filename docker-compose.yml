@@ -3,6 +3,7 @@ version: "3.8"
 services:
   oxforddb-host:
     image: mysql
+    platform: linux/amd64
     env_file: ./.env
     environment:
       - MYSQL_ROOT_PASSWORD=$DB_PASSWORD
