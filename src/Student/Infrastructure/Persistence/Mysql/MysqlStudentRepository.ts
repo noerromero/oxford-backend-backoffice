@@ -14,9 +14,10 @@ export class MysqlStudentRepository implements IStudentRepository {
       "SELECT * FROM `backoffice.student` WHERE TRIM(id) = ?",
       [id]
     );
+
     const studentDbEntity = JSON.parse(JSON.stringify(studentRows[0]));
 
-    if (!studentDbEntity) {
+    if (studentDbEntity === null || studentDbEntity.length === 0 || studentDbEntity === undefined) { 
       return null;
     }
 

@@ -445,6 +445,11 @@ export class Student extends AggregateRoot<Uuid> {
       return Promise.resolve(new DomainResponse(false, this.toStringArray()));
     }
     const student = await this.repository.findById(this.getId().toString());
+
+    if (student === null) {
+      return new DomainResponse(false, ["Student not found"]);
+    }
+    
     return new DomainResponse(true, student.toPrimitives());
   }
 
