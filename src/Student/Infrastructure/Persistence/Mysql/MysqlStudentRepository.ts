@@ -24,7 +24,15 @@ export class MysqlStudentRepository implements IStudentRepository {
     let student = this.getStudentFromPrimitives(studentDbEntity[0]);
 
     const addressRows = await conn.query(
-      "SELECT * FROM `backoffice.address` WHERE student_id = ?",
+      `SELECT 
+        id as address_id,
+        student_id,
+        street,
+        neighborhood,
+        city,
+        state,
+        reference 
+      FROM \`backoffice.address\` WHERE student_id = ?`,
       [id]
     );
     const addressDbEntity = JSON.parse(JSON.stringify(addressRows[0]));
@@ -87,7 +95,36 @@ export class MysqlStudentRepository implements IStudentRepository {
   public async findAll(): Promise<any | null> {
     const conn = await connect();
     const studentRows = await conn.query(
-      "SELECT * FROM `backoffice.student`",
+      `
+      SELECT 
+      	s.id,
+        s.dni,
+        s.name,
+        s.surname,
+        s.second_surname,
+        s.email,
+        s.phone,
+        s.bhirtdate,
+        s.cellphone,
+        s.academic_institution,
+        s.workplace,
+        s.english_certificate,
+        s.comment,
+        s.legal_representative_name,
+        s.legal_representative_surname,
+        s.legal_representative_second_surname,
+        s.legal_representative_phone,
+        s.legal_representative_cellphone,
+        a.id as address_id,
+        a.student_id,
+        a.street,
+        a.neighborhood,
+        a.city,
+        a.state,
+        a.reference 
+      FROM \`backoffice.student\` s 
+      INNER JOIN \`backoffice.address\` a ON s.id = a.student_id 
+      `,
       []
     );
 
@@ -99,6 +136,8 @@ export class MysqlStudentRepository implements IStudentRepository {
 
     const students = studentDbEntity.map((studentRow: any) => {
       let student = this.getStudentFromPrimitives(studentRow);
+      const address = this.getAddressFromPrimitives(studentRow);
+      student.setAddress(address);
       return student;
     });
 
@@ -172,7 +211,7 @@ export class MysqlStudentRepository implements IStudentRepository {
 
   private getAddressFromPrimitives(addressRow: any): Address {
     return Address.fromPrimitives({
-      id: addressRow.id,
+      id: addressRow.address_id,
       street: addressRow.street,
       neighborhood: addressRow.neighborhood,
       city: addressRow.city,
