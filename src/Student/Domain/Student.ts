@@ -8,7 +8,6 @@ import { Cellphone } from "../../Shared/Domain/ValueObject/PersonalData/Cellphon
 import { Address } from "./Address";
 import { Uuid } from "../../Shared/Domain/ValueObject/Primitives/Uuid";
 import { AggregateRoot } from "../../Shared/Domain/AggregateRoot";
-import { IStudentRepository } from "./IStudentRepository";
 import { DomainResponse } from "../../Shared/Domain/DomainResponse";
 import { LegalRepresentative } from "./LegalRepresentative";
 import { AcademicInstitution } from "../../Shared/Domain/ValueObject/EducationalData/AcademicInstitution";
@@ -34,7 +33,6 @@ export class Student extends AggregateRoot<Uuid> {
 
   //#region Constructors
   private constructor(
-    repository: IStudentRepository,
     id: Uuid,
     dni: Dni,
     name: FirstName,
@@ -51,7 +49,7 @@ export class Student extends AggregateRoot<Uuid> {
     address: Address,
     legalRepresentative: LegalRepresentative
   ) {
-    super(repository, id);
+    super(id);
     this.dni = dni;
     this.name = name;
     this.surname = surname;
@@ -70,7 +68,6 @@ export class Student extends AggregateRoot<Uuid> {
   }
 
   public static create(
-    repository: IStudentRepository,
     id: string,
     dni: string,
     name: string,
@@ -89,7 +86,6 @@ export class Student extends AggregateRoot<Uuid> {
     legalRepresentative: LegalRepresentative
   ): Student {
     return new Student(
-      repository,
       new Uuid(id, Student.tag()),
       new Dni(dni, Student.tag()),
       new FirstName(name, Student.tag()),
@@ -114,11 +110,9 @@ export class Student extends AggregateRoot<Uuid> {
   }
 
   public static createForSearchById(
-    repository: IStudentRepository,
     id: string
   ): Student {
     return new Student(
-      repository,
       new Uuid(id, Student.tag()),
       new Dni("", Student.tag(), true),
       new FirstName("", Student.tag(), true),
@@ -138,7 +132,6 @@ export class Student extends AggregateRoot<Uuid> {
   }
 
   public static fromPrimitives(
-    repository: IStudentRepository,
     plainData: {
       id: string;
       dni: string;
@@ -157,7 +150,6 @@ export class Student extends AggregateRoot<Uuid> {
     }
   ): Student {
     return new Student(
-      repository,
       new Uuid(plainData.id, Student.tag()),
       new Dni(plainData.dni, Student.tag()),
       new FirstName(plainData.name, Student.tag()),
@@ -313,15 +305,22 @@ export class Student extends AggregateRoot<Uuid> {
   }
 
   protected async recoverDomainErrorsForUpdate(): Promise<void> {
+    this.recoverDomainErrorsForTransactionalOperation();
     this.addDomainErrors(await this.ensureIsAnExistingStudentByDniAndId());
   }
 
   protected async recoverDomainErrorsForCreate(): Promise<void> {
+    this.recoverDomainErrorsForTransactionalOperation();
     this.addDomainErrors(await this.ensureIsNotAnExistingStudentByDniAndId());
   }
 
   protected recoverDomiainErrorsForSearchById(): void {
+    this.recoverDomainErrorsForTransactionalOperation();
     this.addDomainErrors(this.id.getDomainErrors());
+  }
+
+  protected recoverDomainErrorsForTransactionalOperation(): void {
+    this.addDomainErrors(this.ensureHasReporitory());
   }
 
   protected checkIfItIsEmpty(): void {
@@ -398,6 +397,14 @@ export class Student extends AggregateRoot<Uuid> {
     }
     return domainErros;
   }
+
+  protected ensureHasReporitory(): Array<Error> {
+    let domainErros: Array<Error> = [];
+    if (this.repository === null) {
+      this.addDomainError(new Error("Repository is required"));
+    }
+    return domainErros;
+  }
   //#endregion Validations
 
   //#region Static
@@ -449,7 +456,7 @@ export class Student extends AggregateRoot<Uuid> {
     if (student === null) {
       return new DomainResponse(false, ["Student not found"]);
     }
-    
+
     return new DomainResponse(true, student.toPrimitives());
   }
 

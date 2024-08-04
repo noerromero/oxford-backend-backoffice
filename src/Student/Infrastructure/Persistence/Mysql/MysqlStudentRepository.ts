@@ -131,7 +131,7 @@ export class MysqlStudentRepository implements IStudentRepository {
       cellphone: studentRow.legal_representative_cellphone,
     });
 
-    let student = Student.fromPrimitives(this, {
+    let student = Student.fromPrimitives({
       id: studentRow.id,
       dni: studentRow.dni,
       name: studentRow.name,

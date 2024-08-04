@@ -33,8 +33,7 @@ export class StudentCreator extends ApplicationBase {
       request.address.reference
     );
 
-    const student = Student.create(
-      this.repository,
+    let student = Student.create(
       request.studentId,
       request.studentDni,
       request.studentName,
@@ -52,6 +51,8 @@ export class StudentCreator extends ApplicationBase {
       address,
       legalRepresentative
     );
+
+    student.setRepository(this.repository);
 
     const domainResponse = await student.create();
     return this.handleApplicationResponse(domainResponse);

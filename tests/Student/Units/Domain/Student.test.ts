@@ -27,7 +27,6 @@ describe("Student - isAdult Property", () => {
     );
 
     student = Student.create(
-      studentRepository as any,
       Uuid.random().toString(),
       "12345678",
       "John",
@@ -45,6 +44,8 @@ describe("Student - isAdult Property", () => {
       address,
       legalRepresentative
     );
+
+    student.setRepository(studentRepository);
   });
 
   test("with minor birthdate it should response false", () => {
