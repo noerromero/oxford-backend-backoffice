@@ -13,7 +13,9 @@ export class StudentSearcherById extends ApplicationBase {
   }
 
   public async run(id: string): Promise<ApplicationResponse> {
-    const student = Student.createForSearchById(this.repository, id);
+    let student = Student.createForSearchById(id);
+
+    student.setRepository(this.repository);
 
     const domainResponse = await student.searchById();
     return this.handleApplicationResponse(domainResponse);

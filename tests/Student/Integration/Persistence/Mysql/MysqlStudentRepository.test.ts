@@ -11,7 +11,6 @@ describe("MysqlStudentRepository - save Method", () => {
   beforeEach(() => {
     studentRepository = new MysqlStudentRepository();
     student = Student.create(
-      studentRepository,
       Uuid.random().toString(),
       "12345678",
       "John",
@@ -29,6 +28,8 @@ describe("MysqlStudentRepository - save Method", () => {
       Address.getEmptyObject(),
       LegalRepresentative.getEmptyObject()
     );
+
+    student.setRepository(studentRepository);
   });
 
   test.skip("should save a student successfully", async () => {

@@ -34,8 +34,7 @@ export class StudentUpdater extends ApplicationBase {
       request.address.reference
     );
 
-    const student = Student.create(
-      this.repository,
+    let student = Student.create(
       request.studentId,
       request.studentDni,
       request.studentName,
@@ -53,6 +52,8 @@ export class StudentUpdater extends ApplicationBase {
       address,
       legalRepresentative
     );
+
+    student.setRepository(this.repository);
 
     const domainResponse = await student.update();
     return this.handleApplicationResponse(domainResponse);
