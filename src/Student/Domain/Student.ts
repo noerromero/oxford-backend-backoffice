@@ -14,6 +14,7 @@ import { AcademicInstitution } from "../../Shared/Domain/ValueObject/Educational
 import { Workplace } from "../../Shared/Domain/ValueObject/Workplace/Workplace";
 import { EnglishCertificate } from "../../Shared/Domain/ValueObject/EducationalData/EnglishCertificate";
 import { Comment } from "./ValueObject/Comment";
+import { StringUtils } from "../../Shared/Infrastructure/Utils/StringUtils";
 
 export class Student extends AggregateRoot<Uuid> {
   protected dni: Dni;
@@ -68,86 +69,44 @@ export class Student extends AggregateRoot<Uuid> {
   }
 
   public static create(
-    id: string,
-    dni: string,
-    name: string,
-    surname: string,
-    secondSurname: string,
-    email: string,
-    phone: string,
-    birthdate: string,
-    cellphone: string,
-    academicInstitution: string,
-    workplace: string,
-    isOtherEnglishCertificate: boolean,
-    englishCertificate: string,
-    comment: string,
-    address: Address,
-    legalRepresentative: LegalRepresentative
+    id: string = "",
+    dni: string = "",
+    name: string = "",
+    surname: string = "",
+    secondSurname: string = "",
+    email: string = "",
+    phone: string = "",
+    birthdate: string = "",
+    cellphone: string = "",
+    academicInstitution: string = "",
+    workplace: string = "",
+    isOtherEnglishCertificate: boolean = false,
+    englishCertificate: string = "",
+    comment: string = "",
+    address: Address = Address.getEmptyObject(),
+    legalRepresentative: LegalRepresentative = LegalRepresentative.getEmptyObject()
   ): Student {
     return new Student(
-      new Uuid(id, Student.tag()),
-      new Dni(dni, Student.tag()),
-      new FirstName(name, Student.tag()),
-      new Surname(surname, Student.tag()),
-      new Surname(secondSurname, Student.tag(), true),
-      new Email(email, Student.tag(), true),
-      new Phone(phone, Student.tag(), true),
-      new Birthdate(birthdate, Student.tag()),
-      new Cellphone(cellphone, Student.tag(), true),
-      new AcademicInstitution(academicInstitution, Student.tag(), true),
-      new Workplace(workplace, Student.tag(), true),
+      new Uuid(StringUtils.isEmpty(id) ? Uuid.random().toString() : id, Student.tag()),
+      new Dni(StringUtils.isEmpty(dni) ? "" : dni , Student.tag()),
+      new FirstName(StringUtils.isEmpty(name) ? "" : name, Student.tag()),
+      new Surname(StringUtils.isEmpty(surname) ? "" : surname, Student.tag()),
+      new Surname(StringUtils.isEmpty(secondSurname) ? "" : secondSurname, Student.tag(), true),
+      new Email(StringUtils.isEmpty(email) ? "" : email, Student.tag(), true),
+      new Phone(StringUtils.isEmpty(phone) ? "" : phone, Student.tag(), true),
+      new Birthdate(StringUtils.isEmpty(birthdate) ? "" : birthdate, Student.tag()),
+      new Cellphone(StringUtils.isEmpty(cellphone) ? "" : cellphone, Student.tag(), true),
+      new AcademicInstitution(StringUtils.isEmpty(academicInstitution) ? "" : academicInstitution, Student.tag(), true),
+      new Workplace(StringUtils.isEmpty(workplace) ? "" : workplace, Student.tag(), true),
       new EnglishCertificate(
-        englishCertificate,
+        StringUtils.isEmpty(englishCertificate) ? "" : englishCertificate,
         isOtherEnglishCertificate,
         Student.tag(),
         true
       ),
-      new Comment(comment, Student.tag(), true),
+      new Comment(StringUtils.isEmpty(comment) ? "" : comment, Student.tag(), true),
       address,
       legalRepresentative
-    );
-  }
-
-  public static createForSearchById(
-    id: string
-  ): Student {
-    return new Student(
-      new Uuid(id, Student.tag()),
-      new Dni("", Student.tag(), true),
-      new FirstName("", Student.tag(), true),
-      new Surname("", Student.tag(), true),
-      new Surname("", Student.tag(), true),
-      new Email("", Student.tag(), true),
-      new Phone("", Student.tag(), true),
-      new Birthdate("", Student.tag()),
-      new Cellphone("", Student.tag(), true),
-      new AcademicInstitution("", Student.tag(), true),
-      new Workplace("", Student.tag(), true),
-      new EnglishCertificate("", false, Student.tag(), true),
-      new Comment("", Student.tag(), true),
-      Address.getEmptyObject(),
-      LegalRepresentative.getEmptyObject()
-    );
-  }
-
-  public static createEmpty(): Student {
-    return new Student(
-      new Uuid(Uuid.random().toString(), Student.tag()),
-      new Dni("", Student.tag(), true),
-      new FirstName("", Student.tag(), true),
-      new Surname("", Student.tag(), true),
-      new Surname("", Student.tag(), true),
-      new Email("", Student.tag(), true),
-      new Phone("", Student.tag(), true),
-      new Birthdate("", Student.tag()),
-      new Cellphone("", Student.tag(), true),
-      new AcademicInstitution("", Student.tag(), true),
-      new Workplace("", Student.tag(), true),
-      new EnglishCertificate("", false, Student.tag(), true),
-      new Comment("", Student.tag(), true),
-      Address.getEmptyObject(),
-      LegalRepresentative.getEmptyObject()
     );
   }
 

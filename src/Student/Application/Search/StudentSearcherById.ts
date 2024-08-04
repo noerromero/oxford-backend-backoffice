@@ -13,7 +13,7 @@ export class StudentSearcherById extends ApplicationBase {
   }
 
   public async run(id: string): Promise<ApplicationResponse> {
-    let student = Student.createForSearchById(id);
+    let student = Student.create(id);
 
     student.setRepository(this.repository);
 

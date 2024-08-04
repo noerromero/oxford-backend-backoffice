@@ -14,7 +14,7 @@ export class StudentSearcherAll extends ApplicationBase{
     }
 
     public async run() {
-        let student = Student.createEmpty();
+        let student = Student.create();
 
         student.setRepository(this.repository);
 
