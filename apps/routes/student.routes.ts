@@ -1,15 +1,13 @@
 import express from "express";
 import { postStudent } from "../controllers/student/student.postcontroller";
 import { putStudent } from "../controllers/student/student.putcontroller";
-import { getByIdStuent } from "../controllers/student/student.getcontroller";
+import { getByIdStudent } from "../controllers/student/student.getcontroller";
+import { getAllStudents } from "../controllers/student/student.getcontroller";
 
 const router = express.Router();
 
-router.get("/", (_req, res) => {
-  res.send("get students");
-});
-
-router.get("/:id", getByIdStuent);
+router.get("/", getAllStudents);
+router.get("/:id", getByIdStudent);
 router.post("/", postStudent);
 router.put("/", putStudent);
 

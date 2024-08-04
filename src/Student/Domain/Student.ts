@@ -131,6 +131,26 @@ export class Student extends AggregateRoot<Uuid> {
     );
   }
 
+  public static createEmpty(): Student {
+    return new Student(
+      new Uuid(Uuid.random().toString(), Student.tag()),
+      new Dni("", Student.tag(), true),
+      new FirstName("", Student.tag(), true),
+      new Surname("", Student.tag(), true),
+      new Surname("", Student.tag(), true),
+      new Email("", Student.tag(), true),
+      new Phone("", Student.tag(), true),
+      new Birthdate("", Student.tag()),
+      new Cellphone("", Student.tag(), true),
+      new AcademicInstitution("", Student.tag(), true),
+      new Workplace("", Student.tag(), true),
+      new EnglishCertificate("", false, Student.tag(), true),
+      new Comment("", Student.tag(), true),
+      Address.getEmptyObject(),
+      LegalRepresentative.getEmptyObject()
+    );
+  }
+
   public static fromPrimitives(
     plainData: {
       id: string;
@@ -319,6 +339,11 @@ export class Student extends AggregateRoot<Uuid> {
     this.addDomainErrors(this.id.getDomainErrors());
   }
 
+  protected recoverDomiainErrorsForSearchAll(): void {
+    this.recoverDomainErrorsForTransactionalOperation();
+    this.addDomainErrors(this.id.getDomainErrors());
+  }
+
   protected recoverDomainErrorsForTransactionalOperation(): void {
     this.addDomainErrors(this.ensureHasReporitory());
   }
@@ -458,6 +483,22 @@ export class Student extends AggregateRoot<Uuid> {
     }
 
     return new DomainResponse(true, student.toPrimitives());
+  }
+
+  public async searchAll(): Promise<DomainResponse> {
+    this.recoverDomiainErrorsForSearchAll();
+    if (this.hasDomainErrors()) {
+      return Promise.resolve(new DomainResponse(false, this.toStringArray()));
+    }
+    const students = await this.repository.findAll();
+
+    if (students === null) {
+      return new DomainResponse(false, ["Students not found"]);
+    }
+
+    const studentsPrimitives = students.map((student: Student) => student.toPrimitives());
+
+    return new DomainResponse(true, studentsPrimitives);
   }
 
   //#endregion Operations

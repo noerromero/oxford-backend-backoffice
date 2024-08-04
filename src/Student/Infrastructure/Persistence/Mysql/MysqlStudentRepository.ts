@@ -84,8 +84,25 @@ export class MysqlStudentRepository implements IStudentRepository {
     await this.insertAddress(addressDbEntity, conn);
   }
 
-  public async findAll(): Promise<Student[]> {
-    throw new Error("Method not implemented.");
+  public async findAll(): Promise<any | null> {
+    const conn = await connect();
+    const studentRows = await conn.query(
+      "SELECT * FROM `backoffice.student`",
+      []
+    );
+
+    const studentDbEntity = JSON.parse(JSON.stringify(studentRows[0]));
+
+    if (studentDbEntity === undefined) { 
+      return null;
+    }
+
+    const students = studentDbEntity.map((studentRow: any) => {
+      let student = this.getStudentFromPrimitives(studentRow);
+      return student;
+    });
+
+    return students;
   }
 
   private async deleteAddress(studentId: string, conn: Pool): Promise<void> {
