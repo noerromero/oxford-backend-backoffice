@@ -36,7 +36,6 @@ describe("StudentCreator", () => {
     },
     studentAcademicInstitution: "University of New York",
     studentWorkplace: "Google",
-    studentIsOtherEnglishCertification: true,
     studentEnglishCertification: "TOEFL",
     studentComment: "Good student",
     legalRepresentative: {
@@ -125,7 +124,6 @@ describe("StudentCreator", () => {
   test("with incorrect english certification it should response with an error", () => {
     let studentCreateDtoCopy = structuredClone(studentCreateDto);
     studentCreateDtoCopy.studentEnglishCertification = "TOEFL";
-    studentCreateDtoCopy.studentIsOtherEnglishCertification = false;
 
     let response = studentCreator.run(studentCreateDtoCopy);
 
@@ -145,7 +143,6 @@ describe("StudentCreator", () => {
     studentCreateDtoCopy.studentBirthdate = "2019-13-01";
     studentCreateDtoCopy.studentCellphone = "12345";
     studentCreateDtoCopy.studentEnglishCertification = "TOEFL";
-    studentCreateDtoCopy.studentIsOtherEnglishCertification = false;
 
     let response = studentCreator.run(studentCreateDtoCopy);
 

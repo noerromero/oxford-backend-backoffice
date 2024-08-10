@@ -10,9 +10,9 @@ export class EnglishCertificate extends StringValueObject {
 
   private readonly isOther: boolean;
 
-  constructor(value: string, isOther: boolean, ownerEntity: string, isOptional: boolean = false) {
+  constructor(value: string, ownerEntity: string, isOptional: boolean = false) {
     super(value, ownerEntity, isOptional);
-    this.isOther = isOther;
+    
     if (!this.hasValidLenght()) {
       this.addDomainError(
         new InvalidArgumentException(
@@ -22,30 +22,18 @@ export class EnglishCertificate extends StringValueObject {
         )
       );
     }
-    if (!this.hasValidValue()) {
-      this.addDomainError(
-        new InvalidArgumentException(
-          this.formatErrorMessage("English certification value is not valid")
-        )
-      );
-    }
+    this.isOther = this.isAKnownCertificate();
+  }
+
+  public isOtherCertificate(): boolean {
+    return this.isOther;
   }
 
   protected hasValidLenght(): boolean {
     return this.value.length > 0 && this.value.length <= 100;
   }
 
-  protected hasValidValue(): boolean {
-    if (this.isOther) {
-      return (
-        this.value !== EnglishCertificate.FCE &&
-        this.value !== EnglishCertificate.CPE &&
-        this.value !== EnglishCertificate.PET &&
-        this.value !== EnglishCertificate.CAE &&
-        this.value !== EnglishCertificate.KET
-      );
-    }
-
+  protected isAKnownCertificate(): boolean {
     return (
       this.value === EnglishCertificate.FCE ||
       this.value === EnglishCertificate.CPE ||

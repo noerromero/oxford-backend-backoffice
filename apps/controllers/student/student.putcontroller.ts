@@ -17,7 +17,6 @@ export const putStudent = async (req: any, res: any) => {
     address,
     studentAcademicInstitution,
     studentWorkplace,
-    studentIsOtherEnglishCertification,
     studentEnglishCertification,
     studentComment,
     legalRepresentative,
@@ -40,8 +39,6 @@ export const putStudent = async (req: any, res: any) => {
   request.address.reference = address.reference;
   request.studentAcademicInstitution = studentAcademicInstitution;
   request.studentWorkplace = studentWorkplace;
-  request.studentIsOtherEnglishCertification =
-    studentIsOtherEnglishCertification;
   request.studentEnglishCertification = studentEnglishCertification;
   request.studentComment = studentComment;
   request.legalRepresentative.name = legalRepresentative.name;

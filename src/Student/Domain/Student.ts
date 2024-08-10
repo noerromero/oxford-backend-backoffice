@@ -80,7 +80,6 @@ export class Student extends AggregateRoot<Uuid> {
     cellphone: string = "",
     academicInstitution: string = "",
     workplace: string = "",
-    isOtherEnglishCertificate: boolean = false,
     englishCertificate: string = "",
     comment: string = "",
     address: Address = Address.getEmptyObject(),
@@ -100,7 +99,6 @@ export class Student extends AggregateRoot<Uuid> {
       new Workplace(StringUtils.isEmpty(workplace) ? "" : workplace, Student.tag(), true),
       new EnglishCertificate(
         StringUtils.isEmpty(englishCertificate) ? "" : englishCertificate,
-        isOtherEnglishCertificate,
         Student.tag(),
         true
       ),
@@ -123,7 +121,6 @@ export class Student extends AggregateRoot<Uuid> {
       cellphone: string;
       academicInstitution: string;
       workplace: string;
-      isOtherEnglishCertificate: boolean;
       englishCertificate: string;
       comment: string;
     }
@@ -146,7 +143,6 @@ export class Student extends AggregateRoot<Uuid> {
       new Workplace(plainData.workplace, Student.tag(), true),
       new EnglishCertificate(
         plainData.englishCertificate,
-        plainData.isOtherEnglishCertificate,
         Student.tag(),
         true
       ),

@@ -13,7 +13,6 @@ export class StudentCreateRequest {
   public studentCellphone: string = "";
   public studentAcademicInstitution: string = "";
   public studentWorkplace: string = "";
-  public studentIsOtherEnglishCertification: boolean = false;
   public studentEnglishCertification: string = "";
   public studentComment: string = "";
   public address: AddressRequest = {

@@ -46,7 +46,6 @@ export class StudentUpdater extends ApplicationBase {
       request.studentCellphone,
       request.studentAcademicInstitution,
       request.studentWorkplace,
-      request.studentIsOtherEnglishCertification,
       request.studentEnglishCertification,
       request.studentComment,
       address,

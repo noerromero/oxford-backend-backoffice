@@ -199,7 +199,6 @@ export class MysqlStudentRepository implements IStudentRepository {
       cellphone: studentRow.cellphone,
       academicInstitution: studentRow.academic_institution,
       workplace: studentRow.workplace,
-      isOtherEnglishCertificate: true,
       englishCertificate: studentRow.english_certificate,
       comment: studentRow.comment,
     });

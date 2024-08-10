@@ -22,7 +22,6 @@ describe("MysqlStudentRepository - save Method", () => {
       "123456789",
       "University of New York",
       "Google",
-      false,
       "TOEFL",
       "Good student",
       Address.getEmptyObject(),
