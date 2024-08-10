@@ -1,7 +1,20 @@
 import express from "express";
 import studentRouter from "./apps/routes/student.routes";
+import cors, { CorsOptions } from "cors";
 
 const app = express();
+
+const corsOptions: CorsOptions = {
+  origin: function (origin, callback) {
+    if (origin === process.env.FRONTEND_URL) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  }
+};
+app.use(cors(corsOptions));
+
 app.use(express.json());
 
 const PORT = 3000;
