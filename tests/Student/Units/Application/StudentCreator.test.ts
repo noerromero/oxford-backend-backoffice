@@ -17,15 +17,15 @@ describe("StudentCreator", () => {
 
   let studentCreateDto = new StudentCreateRequest();
   studentCreateDto = {
-    studentId: Uuid.random().toString(),
-    studentDni: "12345678",
-    studentName: "John",
-    studentSurname: "Doe",
-    studentSecondSurname: "Smith",
-    studentEmail: "jhon.smith@gmail.com",
-    studentPhone: "123456",
-    studentBirthdate: "2019-01-01",
-    studentCellphone: "123456789",
+    id: Uuid.random().toString(),
+    dni: "12345678",
+    name: "John",
+    surname: "Doe",
+    secondSurname: "Smith",
+    email: "jhon.smith@gmail.com",
+    phone: "123456",
+    birthdate: "2019-01-01",
+    cellphone: "123456789",
     address: {
       id: Uuid.random().toString(),
       street: "Street 123",
@@ -34,10 +34,10 @@ describe("StudentCreator", () => {
       state: "New York",
       reference: "at the corner of the street",
     },
-    studentAcademicInstitution: "University of New York",
-    studentWorkplace: "Google",
-    studentEnglishCertification: "TOEFL",
-    studentComment: "Good student",
+    academicInstitution: "University of New York",
+    workplace: "Google",
+    englishCertification: "TOEFL",
+    comment: "Good student",
     legalRepresentative: {
       name: "Jane",
       surname: "Doe",
@@ -59,14 +59,14 @@ describe("StudentCreator", () => {
 
   test("with incorrect dni it should response with an error", () => {
     let studentCreateDtoCopy = structuredClone(studentCreateDto);
-    studentCreateDtoCopy.studentDni = "1234567";
+    studentCreateDtoCopy.dni = "1234567";
 
     let response = studentCreator.run(studentCreateDtoCopy);
 
     response.then((response) => {
       expect(response.success).toBe(false);
       expect(response.data).toEqual([
-        `${Student.tag()} - DNI ${studentCreateDtoCopy.studentDni} is invalid`,
+        `${Student.tag()} - DNI ${studentCreateDtoCopy.dni} is invalid`,
       ]);
       expect(studentRepository.create).toHaveBeenCalled();
     });
@@ -74,7 +74,7 @@ describe("StudentCreator", () => {
 
   test("with incorrect email it should response with an error", () => {
     let studentCreateDtoCopy = structuredClone(studentCreateDto);
-    studentCreateDtoCopy.studentEmail = "jhon.smithgmail.com";
+    studentCreateDtoCopy.email = "jhon.smithgmail.com";
 
     let response = studentCreator.run(studentCreateDtoCopy);
 
@@ -82,7 +82,7 @@ describe("StudentCreator", () => {
       expect(response.success).toBe(false);
       expect(response.data).toEqual([
         `${Student.tag()} - Email ${
-          studentCreateDtoCopy.studentEmail
+          studentCreateDtoCopy.email
         } is invalid`,
       ]);
       expect(studentRepository.create).toHaveBeenCalled();
@@ -91,7 +91,7 @@ describe("StudentCreator", () => {
 
   test("with incorrect birthdate it should response with an error", () => {
     let studentCreateDtoCopy = structuredClone(studentCreateDto);
-    studentCreateDtoCopy.studentBirthdate = "2019-13-01";
+    studentCreateDtoCopy.birthdate = "2019-13-01";
 
     let response = studentCreator.run(studentCreateDtoCopy);
 
@@ -106,7 +106,7 @@ describe("StudentCreator", () => {
 
   test("with incorrect cellphone it should response with an error", () => {
     let studentCreateDtoCopy = structuredClone(studentCreateDto);
-    studentCreateDtoCopy.studentCellphone = "12345";
+    studentCreateDtoCopy.cellphone = "12345";
 
     let response = studentCreator.run(studentCreateDtoCopy);
 
@@ -114,7 +114,7 @@ describe("StudentCreator", () => {
       expect(response.success).toBe(false);
       expect(response.data).toEqual([
         `${Student.tag()} - Cellphone ${
-          studentCreateDtoCopy.studentCellphone
+          studentCreateDtoCopy.cellphone
         } is invalid`,
       ]);
       expect(studentRepository.create).toHaveBeenCalled();
@@ -123,7 +123,7 @@ describe("StudentCreator", () => {
 
   test("with incorrect english certification it should response with an error", () => {
     let studentCreateDtoCopy = structuredClone(studentCreateDto);
-    studentCreateDtoCopy.studentEnglishCertification = "TOEFL";
+    studentCreateDtoCopy.englishCertification = "TOEFL";
 
     let response = studentCreator.run(studentCreateDtoCopy);
 
@@ -138,24 +138,24 @@ describe("StudentCreator", () => {
 
   test("with more than one error it should response with all the errors", () => {
     let studentCreateDtoCopy = structuredClone(studentCreateDto);
-    studentCreateDtoCopy.studentDni = "1234567";
-    studentCreateDtoCopy.studentEmail = "jhon.smithgmail.com";
-    studentCreateDtoCopy.studentBirthdate = "2019-13-01";
-    studentCreateDtoCopy.studentCellphone = "12345";
-    studentCreateDtoCopy.studentEnglishCertification = "TOEFL";
+    studentCreateDtoCopy.dni = "1234567";
+    studentCreateDtoCopy.email = "jhon.smithgmail.com";
+    studentCreateDtoCopy.birthdate = "2019-13-01";
+    studentCreateDtoCopy.cellphone = "12345";
+    studentCreateDtoCopy.englishCertification = "TOEFL";
 
     let response = studentCreator.run(studentCreateDtoCopy);
 
     response.then((response) => {
       expect(response.success).toBe(false);
       expect(response.data).toEqual([
-        `${Student.tag()} - DNI ${studentCreateDtoCopy.studentDni} is invalid`,
+        `${Student.tag()} - DNI ${studentCreateDtoCopy.dni} is invalid`,
         `${Student.tag()} - Email ${
-          studentCreateDtoCopy.studentEmail
+          studentCreateDtoCopy.email
         } is invalid`,
         `${Student.tag()} - Invalid birthdate format`,
         `${Student.tag()} - Cellphone ${
-          studentCreateDtoCopy.studentCellphone
+          studentCreateDtoCopy.cellphone
         } is invalid`,
         `${Student.tag()} - English certification value is not valid`,
       ]);
@@ -165,7 +165,7 @@ describe("StudentCreator", () => {
 
   test("with adult student and empty legal representative data it should response successfully", () => {
     let studentCreateDtoCopy = structuredClone(studentCreateDto);
-    studentCreateDtoCopy.studentBirthdate = "1990-01-01";
+    studentCreateDtoCopy.birthdate = "1990-01-01";
     studentCreateDtoCopy.legalRepresentative.name = "";
     studentCreateDtoCopy.legalRepresentative.surname = "";
     studentCreateDtoCopy.legalRepresentative.secondSurname = "";
@@ -183,7 +183,7 @@ describe("StudentCreator", () => {
 
   test("with minor student and empty legal representative data it should response with an error", () => {
     let studentCreateDtoCopy = structuredClone(studentCreateDto);
-    studentCreateDtoCopy.studentBirthdate = "2010-01-01";
+    studentCreateDtoCopy.birthdate = "2010-01-01";
     studentCreateDtoCopy.legalRepresentative.name = "";
     studentCreateDtoCopy.legalRepresentative.surname = "";
     studentCreateDtoCopy.legalRepresentative.secondSurname = "";

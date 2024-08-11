@@ -35,19 +35,19 @@ export class StudentUpdater extends ApplicationBase {
     );
 
     let student = Student.create(
-      request.studentId,
-      request.studentDni,
-      request.studentName,
-      request.studentSurname,
-      request.studentSecondSurname,
-      request.studentEmail,
-      request.studentPhone,
-      request.studentBirthdate,
-      request.studentCellphone,
-      request.studentAcademicInstitution,
-      request.studentWorkplace,
-      request.studentEnglishCertification,
-      request.studentComment,
+      request.id,
+      request.dni,
+      request.name,
+      request.surname,
+      request.secondSurname,
+      request.email,
+      request.phone,
+      request.birthdate,
+      request.cellphone,
+      request.academicInstitution,
+      request.workplace,
+      request.englishCertification,
+      request.comment,
       address,
       legalRepresentative
     );

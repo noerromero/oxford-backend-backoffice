@@ -2,19 +2,19 @@ import { AddressRequest } from "../Common/AddressRequest";
 import { LegalRepresentativeRequest } from "../Common/LegalRepresentativeRequest";
 
 export class StudentUpdateRequest {
-  public studentId: string = "";
-  public studentDni: string = "";
-  public studentName: string = "";
-  public studentSurname: string = "";
-  public studentSecondSurname: string = "";
-  public studentEmail: string = "";
-  public studentPhone: string = "";
-  public studentBirthdate: string = "";
-  public studentCellphone: string = "";
-  public studentAcademicInstitution: string = "";
-  public studentWorkplace: string = "";
-  public studentEnglishCertification: string = "";
-  public studentComment: string = "";
+  public id: string = "";
+  public dni: string = "";
+  public name: string = "";
+  public surname: string = "";
+  public secondSurname: string = "";
+  public email: string = "";
+  public phone: string = "";
+  public birthdate: string = "";
+  public cellphone: string = "";
+  public academicInstitution: string = "";
+  public workplace: string = "";
+  public englishCertification: string = "";
+  public comment: string = "";
   public address: AddressRequest = {
     id: "",
     street: "",

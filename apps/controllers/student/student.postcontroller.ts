@@ -5,42 +5,42 @@ import { logger } from "../../../shared/loggin/logger";
 
 export const postStudent = async (req: any, res: any) => {
   const {
-    studentId,
-    studentDni,
-    studentName,
-    studentSurname,
-    studentSecondSurname,
-    studentEmail,
-    studentPhone,
-    studentBirthdate,
-    studentCellphone,
+    id,
+    dni,
+    name,
+    surname,
+    secondSurname,
+    email,
+    phone,
+    birthdate,
+    cellphone,
     address,
-    studentAcademicInstitution,
-    studentWorkplace,
-    studentEnglishCertification,
-    studentComment,
+    academicInstitution,
+    workplace,
+    englishCertification,
+    comment,
     legalRepresentative,
   } = req.body;
   const request = new StudentCreateRequest();
-  request.studentId = studentId;
-  request.studentDni = studentDni;
-  request.studentName = studentName;
-  request.studentSurname = studentSurname;
-  request.studentSecondSurname = studentSecondSurname;
-  request.studentEmail = studentEmail;
-  request.studentPhone = studentPhone;
-  request.studentBirthdate = studentBirthdate;
-  request.studentCellphone = studentCellphone;
+  request.id = id;
+  request.dni = dni;
+  request.name = name;
+  request.surname = surname;
+  request.secondSurname = secondSurname;
+  request.email = email;
+  request.phone = phone;
+  request.birthdate = birthdate;
+  request.cellphone = cellphone;
   request.address.id = address.id;
   request.address.street = address.street;
   request.address.neighborhood = address.neighborhood;
   request.address.city = address.city;
   request.address.state = address.state;
   request.address.reference = address.reference;
-  request.studentAcademicInstitution = studentAcademicInstitution;
-  request.studentWorkplace = studentWorkplace;
-  request.studentEnglishCertification = studentEnglishCertification;
-  request.studentComment = studentComment;
+  request.academicInstitution = academicInstitution;
+  request.workplace = workplace;
+  request.englishCertification = englishCertification;
+  request.comment = comment;
   request.legalRepresentative.name = legalRepresentative.name;
   request.legalRepresentative.surname = legalRepresentative.surname;
   request.legalRepresentative.secondSurname = legalRepresentative.secondSurname;
