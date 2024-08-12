@@ -175,7 +175,7 @@ export class Student extends AggregateRoot<Uuid> {
   }
 
   public getCompleteName(): string {
-    return `${this.name.toString()} ${this.surname.toString()} ${this.secondSurname.toString()}`.trim();
+    return `${this.surname.toString()} ${this.secondSurname.toString()}, ${this.name.toString()}`.trim();
   }
 
   public getEmail(): Email {
@@ -230,7 +230,7 @@ export class Student extends AggregateRoot<Uuid> {
       completeName: this.getCompleteName(),
       email: this.email.toString(),
       phone: this.phone.toString(),
-      birthdate: this.birthdate.getValue(),
+      birthdate: this.birthdate.getValue().toString(),
       cellphone: this.cellphone.toString(),
       academicInstitution: this.academicInstitution.toString(),
       workplace: this.workplace.toString(),
