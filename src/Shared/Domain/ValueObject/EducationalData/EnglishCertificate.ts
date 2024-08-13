@@ -17,7 +17,7 @@ export class EnglishCertificate extends StringValueObject {
       this.addDomainError(
         new InvalidArgumentException(
           this.formatErrorMessage(
-            "English certification must have a valid length"
+            "English certificate must have a valid length"
           )
         )
       );
@@ -30,6 +30,9 @@ export class EnglishCertificate extends StringValueObject {
   }
 
   protected hasValidLenght(): boolean {
+    if (!this.shouldBeValidated()) {
+      return true;
+    }
     return this.value.length > 0 && this.value.length <= 100;
   }
 

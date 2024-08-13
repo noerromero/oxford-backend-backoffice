@@ -39,7 +39,7 @@ export const postStudent = async (req: any, res: any) => {
   request.address.reference = address.reference;
   request.academicInstitution = academicInstitution;
   request.workplace = workplace;
-  request.englishCertification = englishCertification;
+  request.englishCertificate = englishCertification;
   request.comment = comment;
   request.legalRepresentative.name = legalRepresentative.name;
   request.legalRepresentative.surname = legalRepresentative.surname;

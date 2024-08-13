@@ -45,7 +45,7 @@ export class StudentCreator extends ApplicationBase {
       request.cellphone,
       request.academicInstitution,
       request.workplace,
-      request.englishCertification,
+      request.englishCertificate,
       request.comment,
       address,
       legalRepresentative
