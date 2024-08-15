@@ -6,7 +6,7 @@ export default interface IStudentDb {
   second_surname?: string;
   email?: string;
   phone?: string;
-  bhirtdate?: Date;
+  birthdate?: Date;
   cellphone?: string;
   academic_institution?: string;
   workplace?: string;
