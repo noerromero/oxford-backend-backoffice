@@ -230,7 +230,7 @@ export class Student extends AggregateRoot<Uuid> {
       completeName: this.getCompleteName(),
       email: this.email.toString(),
       phone: this.phone.toString(),
-      birthdate: this.birthdate.getValue().toString(),
+      birthdate: this.birthdate.toShortString(),
       cellphone: this.cellphone.toString(),
       academicInstitution: this.academicInstitution.toString(),
       workplace: this.workplace.toString(),

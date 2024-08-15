@@ -58,4 +58,16 @@ export abstract class DateValueObject extends ValueObject<Date> {
   public getMonth(): number {
     return this.value.getMonth();
   }
+
+  public getDay(): number {
+    return this.value.getDate();
+  }
+
+  public toShortString(): string {
+    const year = this.getYear();
+    const month = String(this.getMonth() + 1).padStart(2, '0');
+    const day = String(this.getDay()).padStart(2, '0');
+    const formattedDate = `${year}-${month}-${day}`;
+    return formattedDate;
+  }
 }
