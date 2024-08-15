@@ -14,6 +14,9 @@ export class Comment extends StringValueObject {
   }
 
   protected hasValidLenght(): boolean {
+    if (!this.shouldBeValidated()) {
+      return true;
+    }
     return this.value.length > 0 && this.value.length <= 1000;
   }
 }
