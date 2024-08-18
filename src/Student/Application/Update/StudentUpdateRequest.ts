@@ -13,7 +13,7 @@ export class StudentUpdateRequest {
   public cellphone: string = "";
   public academicInstitution: string = "";
   public workplace: string = "";
-  public englishCertification: string = "";
+  public englishCertificate: string = "";
   public comment: string = "";
   public address: AddressRequest = {
     id: "",
