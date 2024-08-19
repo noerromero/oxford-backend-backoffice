@@ -1,4 +1,4 @@
-import { Birthdate } from "../../../../src/Shared/Domain/ValueObject/PersonalData/Birthdate";
+import { Birthday } from "../../../../src/Shared/Domain/ValueObject/PersonalData/Birthday";
 import { Uuid } from "../../../../src/Shared/Domain/ValueObject/Primitives/Uuid";
 import { Address } from "../../../../src/Student/Domain/Address";
 import { LegalRepresentative } from "../../../../src/Student/Domain/LegalRepresentative";
@@ -47,21 +47,21 @@ describe("Student - isAdult Property", () => {
     student.setRepository(studentRepository);
   });
 
-  test("with minor birthdate it should response false", () => {
+  test("with minor birthday it should response false", () => {
     let date: Date = new Date();
     date.setFullYear(date.getFullYear() - 17);
     let formattedDate: string = date.toISOString().slice(0, 10);
 
-    student.setBirthdate(new Birthdate(formattedDate, Student.tag()));
+    student.setBirthday(new Birthday(formattedDate, Student.tag()));
     expect(student.isAdult()).toBe(false);
   });
 
-  test("with adult birthdate it should response true", () => {
+  test("with adult birthday it should response true", () => {
     let date: Date = new Date();
     date.setFullYear(date.getFullYear() - 18);
     let formattedDate: string = date.toISOString().slice(0, 10);
 
-    student.setBirthdate(new Birthdate(formattedDate, Student.tag()));
+    student.setBirthday(new Birthday(formattedDate, Student.tag()));
     expect(student.isAdult()).toBe(true);
   });
 });

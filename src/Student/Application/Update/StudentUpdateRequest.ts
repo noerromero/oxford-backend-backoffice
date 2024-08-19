@@ -9,7 +9,7 @@ export class StudentUpdateRequest {
   public secondSurname: string = "";
   public email: string = "";
   public phone: string = "";
-  public birthdate: string = "";
+  public birthday: string = "";
   public cellphone: string = "";
   public academicInstitution: string = "";
   public workplace: string = "";

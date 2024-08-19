@@ -3,7 +3,7 @@ import { FirstName } from "../../Shared/Domain/ValueObject/PersonalData/FirstNam
 import { Surname } from "../../Shared/Domain/ValueObject/PersonalData/Surname";
 import { Email } from "../../Shared/Domain/ValueObject/PersonalData/Email";
 import { Phone } from "../../Shared/Domain/ValueObject/PersonalData/Phone";
-import { Birthdate } from "../../Shared/Domain/ValueObject/PersonalData/Birthdate";
+import { Birthday } from "../../Shared/Domain/ValueObject/PersonalData/Birthday";
 import { Cellphone } from "../../Shared/Domain/ValueObject/PersonalData/Cellphone";
 import { Address } from "./Address";
 import { Uuid } from "../../Shared/Domain/ValueObject/Primitives/Uuid";
@@ -23,7 +23,7 @@ export class Student extends AggregateRoot<Uuid> {
   protected secondSurname: Surname;
   protected email: Email;
   protected phone: Phone;
-  protected birthdate: Birthdate;
+  protected birthday: Birthday;
   protected cellphone: Cellphone;
   protected address: Address;
   protected academicInstitution: AcademicInstitution;
@@ -41,7 +41,7 @@ export class Student extends AggregateRoot<Uuid> {
     secondSurname: Surname,
     email: Email,
     phone: Phone,
-    birthdate: Birthdate,
+    birthday: Birthday,
     cellphone: Cellphone,
     academicInstitution: AcademicInstitution,
     workplace: Workplace,
@@ -57,7 +57,7 @@ export class Student extends AggregateRoot<Uuid> {
     this.secondSurname = secondSurname;
     this.email = email;
     this.phone = phone;
-    this.birthdate = birthdate;
+    this.birthday = birthday;
     this.cellphone = cellphone;
     this.academicInstitution = academicInstitution;
     this.workplace = workplace;
@@ -76,7 +76,7 @@ export class Student extends AggregateRoot<Uuid> {
     secondSurname: string = "",
     email: string = "",
     phone: string = "",
-    birthdate: string = "",
+    birthday: string = "",
     cellphone: string = "",
     academicInstitution: string = "",
     workplace: string = "",
@@ -93,7 +93,7 @@ export class Student extends AggregateRoot<Uuid> {
       new Surname(StringUtils.isEmpty(secondSurname) ? "" : secondSurname, Student.tag(), true),
       new Email(StringUtils.isEmpty(email) ? "" : email, Student.tag(), true),
       new Phone(StringUtils.isEmpty(phone) ? "" : phone, Student.tag(), true),
-      new Birthdate(StringUtils.isEmpty(birthdate) ? "" : birthdate, Student.tag()),
+      new Birthday(StringUtils.isEmpty(birthday) ? "" : birthday, Student.tag()),
       new Cellphone(StringUtils.isEmpty(cellphone) ? "" : cellphone, Student.tag(), true),
       new AcademicInstitution(StringUtils.isEmpty(academicInstitution) ? "" : academicInstitution, Student.tag(), true),
       new Workplace(StringUtils.isEmpty(workplace) ? "" : workplace, Student.tag(), true),
@@ -117,7 +117,7 @@ export class Student extends AggregateRoot<Uuid> {
       secondSurname: string;
       email: string;
       phone: string;
-      birthdate: string;
+      birthday: string;
       cellphone: string;
       academicInstitution: string;
       workplace: string;
@@ -133,7 +133,7 @@ export class Student extends AggregateRoot<Uuid> {
       new Surname(plainData.secondSurname, Student.tag(), true),
       new Email(plainData.email, Student.tag(), true),
       new Phone(plainData.phone, Student.tag(), true),
-      new Birthdate(plainData.birthdate, Student.tag()),
+      new Birthday(plainData.birthday, Student.tag()),
       new Cellphone(plainData.cellphone, Student.tag(), true),
       new AcademicInstitution(
         plainData.academicInstitution,
@@ -186,8 +186,8 @@ export class Student extends AggregateRoot<Uuid> {
     return this.phone;
   }
 
-  public getBirthdate(): Birthdate {
-    return this.birthdate;
+  public getBirthday(): Birthday {
+    return this.birthday;
   }
 
   public getCellphone(): Cellphone {
@@ -230,7 +230,7 @@ export class Student extends AggregateRoot<Uuid> {
       completeName: this.getCompleteName(),
       email: this.email.toString(),
       phone: this.phone.toString(),
-      birthdate: this.birthdate.toShortString(),
+      birthday: this.birthday.toShortString(),
       cellphone: this.cellphone.toString(),
       academicInstitution: this.academicInstitution.toString(),
       workplace: this.workplace.toString(),
@@ -243,8 +243,8 @@ export class Student extends AggregateRoot<Uuid> {
   //#endregion Getters
 
   //#region Setters
-  public setBirthdate(birthdate: Birthdate): void {
-    this.birthdate = birthdate;
+  public setBirthday(birthday: Birthday): void {
+    this.birthday = birthday;
   }
 
   public setAddress(address: Address): void {
@@ -272,7 +272,7 @@ export class Student extends AggregateRoot<Uuid> {
     this.addDomainErrors(this.secondSurname.getDomainErrors());
     this.addDomainErrors(this.email.getDomainErrors());
     this.addDomainErrors(this.phone.getDomainErrors());
-    this.addDomainErrors(this.birthdate.getDomainErrors());
+    this.addDomainErrors(this.birthday.getDomainErrors());
     this.addDomainErrors(this.cellphone.getDomainErrors());
     this.addDomainErrors(this.academicInstitution.getDomainErrors());
     this.addDomainErrors(this.workplace.getDomainErrors());
@@ -294,18 +294,18 @@ export class Student extends AggregateRoot<Uuid> {
     this.addDomainErrors(await this.ensureIsNotAnExistingStudentByDniAndId());
   }
 
-  protected recoverDomiainErrorsForSearchById(): void {
+  protected recoverDomainErrorsForSearchById(): void {
     this.recoverDomainErrorsForTransactionalOperation();
     this.addDomainErrors(this.id.getDomainErrors());
   }
 
-  protected recoverDomiainErrorsForSearchAll(): void {
+  protected recoverDomainErrorsForSearchAll(): void {
     this.recoverDomainErrorsForTransactionalOperation();
     this.addDomainErrors(this.id.getDomainErrors());
   }
 
   protected recoverDomainErrorsForTransactionalOperation(): void {
-    this.addDomainErrors(this.ensureHasReporitory());
+    this.addDomainErrors(this.ensureHasRepository());
   }
 
   protected checkIfItIsEmpty(): void {
@@ -317,7 +317,7 @@ export class Student extends AggregateRoot<Uuid> {
         this.secondSurname.isEmpty() &&
         this.email.isEmpty() &&
         this.phone.isEmpty() &&
-        this.birthdate.isEmpty() &&
+        this.birthday.isEmpty() &&
         this.cellphone.isEmpty() &&
         this.address.isEmpty() &&
         this.legalRepresentative.isEmpty()
@@ -338,15 +338,15 @@ export class Student extends AggregateRoot<Uuid> {
 
   public isAdult(): boolean {
     const now = new Date();
-    const age = now.getFullYear() - this.birthdate.getYear();
-    const month = now.getMonth() - this.birthdate.getMonth();
+    const age = now.getFullYear() - this.birthday.getYear();
+    const month = now.getMonth() - this.birthday.getMonth();
     if (
       month < 0 ||
-      (month === 0 && now.getDate() < this.birthdate.getValue().getDate())
+      (month === 0 && now.getDate() < this.birthday.getValue().getDate())
     ) {
-      return age - 1 >= Birthdate.ADULT_AGE;
+      return age - 1 >= Birthday.ADULT_AGE;
     }
-    return age >= Birthdate.ADULT_AGE;
+    return age >= Birthday.ADULT_AGE;
   }
 
   protected async ensureIsAnExistingStudentByDniAndId(): Promise<Array<Error>> {
@@ -383,7 +383,7 @@ export class Student extends AggregateRoot<Uuid> {
     return domainErros;
   }
 
-  protected ensureHasReporitory(): Array<Error> {
+  protected ensureHasRepository(): Array<Error> {
     let domainErros: Array<Error> = [];
     if (this.repository === null) {
       this.addDomainError(new Error("Repository is required"));
@@ -432,7 +432,7 @@ export class Student extends AggregateRoot<Uuid> {
   }
 
   public async searchById(): Promise<DomainResponse> {
-    this.recoverDomiainErrorsForSearchById();
+    this.recoverDomainErrorsForSearchById();
     if (this.hasDomainErrors()) {
       return Promise.resolve(new DomainResponse(false, this.toStringArray()));
     }
@@ -446,7 +446,7 @@ export class Student extends AggregateRoot<Uuid> {
   }
 
   public async searchAll(): Promise<DomainResponse> {
-    this.recoverDomiainErrorsForSearchAll();
+    this.recoverDomainErrorsForSearchAll();
     if (this.hasDomainErrors()) {
       return Promise.resolve(new DomainResponse(false, this.toStringArray()));
     }

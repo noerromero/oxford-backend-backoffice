@@ -42,7 +42,7 @@ export class StudentUpdater extends ApplicationBase {
       request.secondSurname,
       request.email,
       request.phone,
-      request.birthdate,
+      request.birthday,
       request.cellphone,
       request.academicInstitution,
       request.workplace,

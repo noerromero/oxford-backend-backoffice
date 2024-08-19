@@ -12,7 +12,7 @@ export const putStudent = async (req: any, res: any) => {
     secondSurname,
     email,
     phone,
-    birthdate,
+    birthday,
     cellphone,
     address,
     academicInstitution,
@@ -29,7 +29,7 @@ export const putStudent = async (req: any, res: any) => {
   request.secondSurname = secondSurname;
   request.email = email;
   request.phone = phone;
-  request.birthdate = birthdate;
+  request.birthday = birthday;
   request.cellphone = cellphone;
   request.address.id = address.id;
   request.address.street = address.street;
