@@ -10,4 +10,12 @@ export abstract class AggregateRoot<TId> extends EntityBase<TId> {
   public setRepository(repository: any): void {
     this.repository = repository;
   }
+
+  protected ensureHasRepository(): Array<Error> {
+    let domainErrors: Array<Error> = [];
+    if (this.repository === null) {
+      this.addDomainError(new Error("Repository is required"));
+    }
+    return domainErrors;
+  }
 }

@@ -382,14 +382,6 @@ export class Student extends AggregateRoot<Uuid> {
     }
     return domainErrors;
   }
-
-  protected ensureHasRepository(): Array<Error> {
-    let domainErrors: Array<Error> = [];
-    if (this.repository === null) {
-      this.addDomainError(new Error("Repository is required"));
-    }
-    return domainErrors;
-  }
   //#endregion Validations
 
   //#region Static
