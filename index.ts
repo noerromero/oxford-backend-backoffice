@@ -1,5 +1,6 @@
 import express from "express";
 import studentRouter from "./apps/routes/student.routes";
+import professorRouter from "./apps/routes/professor.routes";
 import cors, { CorsOptions } from "cors";
 
 const app = express();
@@ -28,6 +29,7 @@ app.get("/", (_req, res) => {
 });
 
 app.use("/api/students", studentRouter);
+app.use("/api/professors", professorRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is running at http://localhost:${PORT}`);
