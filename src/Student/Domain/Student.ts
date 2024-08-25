@@ -325,15 +325,15 @@ export class Student extends AggregateRoot<Uuid> {
   }
 
   private ensureMinorStudentHasLegalRepresentative(): Array<Error> {
-    let domainErros: Array<Error> = [];
+    let domainErrors: Array<Error> = [];
     if (!this.isAdult()) {
       if (this.legalRepresentative.isEmpty()) {
-        domainErros.push(
+        domainErrors.push(
           new Error("Legal representative is required for minor students")
         );
       }
     }
-    return domainErros;
+    return domainErrors;
   }
 
   public isAdult(): boolean {
@@ -350,7 +350,7 @@ export class Student extends AggregateRoot<Uuid> {
   }
 
   protected async ensureIsAnExistingStudentByDniAndId(): Promise<Array<Error>> {
-    let domainErros: Array<Error> = [];
+    let domainErrors: Array<Error> = [];
     const existsByDni = await this.repository.existsByDni(this.dni.toString());
     if (!existsByDni) {
       this.addDomainError(
@@ -361,13 +361,13 @@ export class Student extends AggregateRoot<Uuid> {
     if (!existsById) {
       this.addDomainError(new Error("Student ID does not exist in the system"));
     }
-    return domainErros;
+    return domainErrors;
   }
 
   protected async ensureIsNotAnExistingStudentByDniAndId(): Promise<
     Array<Error>
   > {
-    let domainErros: Array<Error> = [];
+    let domainErrors: Array<Error> = [];
     const existsByDni = await this.repository.existsByDni(this.dni.toString());
     if (existsByDni) {
       this.addDomainError(
@@ -380,15 +380,7 @@ export class Student extends AggregateRoot<Uuid> {
         new Error("Student ID is already registered in the system")
       );
     }
-    return domainErros;
-  }
-
-  protected ensureHasRepository(): Array<Error> {
-    let domainErros: Array<Error> = [];
-    if (this.repository === null) {
-      this.addDomainError(new Error("Repository is required"));
-    }
-    return domainErros;
+    return domainErrors;
   }
   //#endregion Validations
 

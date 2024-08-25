@@ -1,9 +1,11 @@
-export interface ILegalRepresentativeDb {
+export default interface IProfessorDb {
     id: string;
+    dni?: string;
     name?: string;
     surname?: string;
     second_surname?: string;
-    phone?: string;
+    email?: string;
+    birthday?: Date;
     cellphone?: string;
-    student_id?: string;
-}
+  }
+  
