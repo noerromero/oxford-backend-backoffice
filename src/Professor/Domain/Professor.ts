@@ -128,6 +128,27 @@ export class Professor extends AggregateRoot<Uuid> {
     );
   }
 
+  public async searchAll(): Promise<DomainResponse> {
+    this.recoverDomainErrorsForSearchAll();
+    if (this.hasDomainErrors()) {
+      return Promise.resolve(new DomainResponse(false, this.toStringArray()));
+    }
+    const professors = await this.repository.findAll();
+
+    if (professors === null) {
+      return new DomainResponse(false, ["Professors not found"]);
+    }
+
+    const professorsPrimitives = professors.map((professor: Professor) => professor.toPrimitives());
+
+    return new DomainResponse(true, professorsPrimitives);
+  }
+
+  protected recoverDomainErrorsForSearchAll(): void {
+    this.recoverDomainErrorsForTransactionalOperation();
+    this.addDomainErrors(this.id.getDomainErrors());
+  }
+
   public static fromPrimitives(
     plainData: {
       id: string;
