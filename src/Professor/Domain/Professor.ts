@@ -32,6 +32,10 @@ export class Professor extends AggregateRoot<Uuid> {
     this.checkIfItIsEmpty();
   }
 
+  public getId(): Uuid {
+    return this.id;
+  }
+
   public static create(
     id: string = "",
     dni: string = "",
@@ -89,6 +93,26 @@ export class Professor extends AggregateRoot<Uuid> {
     this.addDomainErrors(await this.ensureIsNotAnExistingProfessorByDniAndId());
   }
 
+  protected async recoverDomainErrorsForUpdate(): Promise<void> {
+    this.recoverDomainErrorsForTransactionalOperation();
+    this.addDomainErrors(await this.ensureIsAnExistingProfessorByDniAndId());
+  }
+
+  protected async ensureIsAnExistingProfessorByDniAndId(): Promise<Array<Error>> {
+    let domainErrors: Array<Error> = [];
+    const existsByDni = await this.repository.existsByDni(this.dni.toString());
+    if (!existsByDni) {
+      this.addDomainError(
+        new Error("Professor DNI does not exist in the system")
+      );
+    }
+    const existsById = await this.repository.existsById(this.id.toString());
+    if (!existsById) {
+      this.addDomainError(new Error("Professor ID does not exist in the system"));
+    }
+    return domainErrors;
+  }
+
   protected async ensureIsNotAnExistingProfessorByDniAndId(): Promise<
     Array<Error>
   > {
@@ -126,6 +150,74 @@ export class Professor extends AggregateRoot<Uuid> {
       true,
       []
     );
+  }
+
+  public async searchById(): Promise<DomainResponse> {
+    this.recoverDomainErrorsForSearchById();
+    if (this.hasDomainErrors()) {
+      return Promise.resolve(new DomainResponse(false, this.toStringArray()));
+    }
+    const student = await this.repository.findById(this.getId().toString());
+
+    if (student === null) {
+      return new DomainResponse(false, ["Professor not found"]);
+    }
+
+    return new DomainResponse(true, student.toPrimitives());
+  }
+
+  public async searchAll(): Promise<DomainResponse> {
+    this.recoverDomainErrorsForSearchAll();
+    if (this.hasDomainErrors()) {
+      return Promise.resolve(new DomainResponse(false, this.toStringArray()));
+    }
+    const professors = await this.repository.findAll();
+
+    if (professors === null) {
+      return new DomainResponse(false, ["Professors not found"]);
+    }
+
+    const professorsPrimitives = professors.map((professor: Professor) => professor.toPrimitives());
+
+    return new DomainResponse(true, professorsPrimitives);
+  }
+
+  public async update(): Promise<DomainResponse> {
+    this.recoverCommonDomainErrors();
+    await this.recoverDomainErrorsForUpdate();
+
+    if (this.hasDomainErrors()) {
+      return Promise.resolve(new DomainResponse(false, this.toStringArray()));
+    }
+
+    await this.repository.update(this);
+    return new DomainResponse(true, []);
+  }
+
+  public async delete(): Promise<DomainResponse> {
+    this.recoverDomainErrorsForDelete();
+    if (this.hasDomainErrors()) {
+      return Promise.resolve(new DomainResponse(false, this.toStringArray()));
+    }
+    await this.repository.delete(this.getId().toString());
+
+    return new DomainResponse(true, []);
+  }
+
+
+  protected recoverDomainErrorsForSearchById(): void {
+    this.recoverDomainErrorsForTransactionalOperation();
+    this.addDomainErrors(this.id.getDomainErrors());
+  }
+
+  protected recoverDomainErrorsForDelete(): void {
+    this.recoverDomainErrorsForTransactionalOperation();
+    this.addDomainErrors(this.id.getDomainErrors());
+  }
+
+  protected recoverDomainErrorsForSearchAll(): void {
+    this.recoverDomainErrorsForTransactionalOperation();
+    this.addDomainErrors(this.id.getDomainErrors());
   }
 
   public static fromPrimitives(
