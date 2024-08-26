@@ -194,7 +194,23 @@ export class Professor extends AggregateRoot<Uuid> {
     return new DomainResponse(true, []);
   }
 
+  public async delete(): Promise<DomainResponse> {
+    this.recoverDomainErrorsForDelete();
+    if (this.hasDomainErrors()) {
+      return Promise.resolve(new DomainResponse(false, this.toStringArray()));
+    }
+    await this.repository.delete(this.getId().toString());
+
+    return new DomainResponse(true, []);
+  }
+
+
   protected recoverDomainErrorsForSearchById(): void {
+    this.recoverDomainErrorsForTransactionalOperation();
+    this.addDomainErrors(this.id.getDomainErrors());
+  }
+
+  protected recoverDomainErrorsForDelete(): void {
     this.recoverDomainErrorsForTransactionalOperation();
     this.addDomainErrors(this.id.getDomainErrors());
   }

@@ -96,6 +96,13 @@ export class MysqlProfessorRepository implements IProfessorRepository {
         return professors;
       }
 
+      public async delete(professorId: string): Promise<void> {
+        const conn = await connect();
+        await conn.query("DELETE FROM `backoffice.professor` WHERE id = ?", [
+          professorId,
+        ]);
+      }
+
       private getProfessorFromPrimitives(professorRow: any): Professor {
         const professor = Professor.fromPrimitives({
           id: professorRow.id,
