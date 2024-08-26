@@ -32,6 +32,10 @@ export class Professor extends AggregateRoot<Uuid> {
     this.checkIfItIsEmpty();
   }
 
+  public getId(): Uuid {
+    return this.id;
+  }
+
   public static create(
     id: string = "",
     dni: string = "",
@@ -128,6 +132,20 @@ export class Professor extends AggregateRoot<Uuid> {
     );
   }
 
+  public async searchById(): Promise<DomainResponse> {
+    this.recoverDomainErrorsForSearchById();
+    if (this.hasDomainErrors()) {
+      return Promise.resolve(new DomainResponse(false, this.toStringArray()));
+    }
+    const student = await this.repository.findById(this.getId().toString());
+
+    if (student === null) {
+      return new DomainResponse(false, ["Professor not found"]);
+    }
+
+    return new DomainResponse(true, student.toPrimitives());
+  }
+
   public async searchAll(): Promise<DomainResponse> {
     this.recoverDomainErrorsForSearchAll();
     if (this.hasDomainErrors()) {
@@ -142,6 +160,11 @@ export class Professor extends AggregateRoot<Uuid> {
     const professorsPrimitives = professors.map((professor: Professor) => professor.toPrimitives());
 
     return new DomainResponse(true, professorsPrimitives);
+  }
+
+  protected recoverDomainErrorsForSearchById(): void {
+    this.recoverDomainErrorsForTransactionalOperation();
+    this.addDomainErrors(this.id.getDomainErrors());
   }
 
   protected recoverDomainErrorsForSearchAll(): void {
