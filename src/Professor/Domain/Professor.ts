@@ -22,7 +22,6 @@ export class Professor extends AggregateRoot<Uuid> {
     protected birthday: Birthday
   ) {
     super(id);
-    this.id = id;
     this.name = name;
     this.surname = surname;
     this.secondSurname = secondSurname;
