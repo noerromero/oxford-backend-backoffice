@@ -1,20 +1,41 @@
 version: "3.8"
 
 services:
-  oxforddb-host:
+  db:
     image: mysql
     platform: linux/amd64
     env_file: ./.env
+    container_name: oxforddb
     environment:
       - MYSQL_ROOT_PASSWORD=$DB_PASSWORD
       - MYSQL_DATABASE=$DB_NAME
     ports:
       - $DB_DOCKER_PORT:$DB_PORT
   app:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: oxfordapp
+    environment:
+      DB_HOST: db
     depends_on:
-      - oxforddb-host
+      - db
     links:
-      - oxforddb-host
+      - db
     ports:
       - $NODE_PORT:$NODE_PORT
+  migrations:
+    build: .
+    container_name: oxfordmigrations
+    environment:
+      DB_HOST: db
+      DB_USER: $DB_USERNAME
+      DB_PASS: $DB_PASSWORD
+      DB_NAME: $DB_NAME
+    depends_on:
+      - db
+    command: >
+      sh -c "
+      npm install &&
+      npm run migrate
+      "
