@@ -1,12 +1,14 @@
 import express from "express";
 import studentRouter from "./apps/routes/student.routes";
 import professorRouter from "./apps/routes/professor.routes";
+import courseRouter from "./apps/routes/course.routes";
 import cors, { CorsOptions } from "cors";
 
 const app = express();
 
 const env = process.env.NODE_ENV;
 
+app.use(cors());
 if (env === 'production') {
   const corsOptions: CorsOptions = {
     origin: function (origin, callback) {
@@ -30,6 +32,7 @@ app.get("/", (_req, res) => {
 
 app.use("/api/students", studentRouter);
 app.use("/api/professors", professorRouter);
+app.use("/api/courses", courseRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is running at http://localhost:${PORT}`);
